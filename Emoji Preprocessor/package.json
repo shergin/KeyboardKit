@@ -1,0 +1,19 @@
+{
+  "name": "emoji-data-swift",
+  "version": "1.0.0",
+  "description": "Creates code in Swift that cointains all Emojis which can be used as data-source",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "emoji",
+    "datasource",
+    "swift"
+  ],
+  "author": "Valentin Shergin",
+  "license": "ISC",
+  "scripts": {
+    "build": "node index.js"
+  }
+}
