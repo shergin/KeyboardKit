@@ -1,5 +1,5 @@
 //
-//  KeyboardShiftStatusManager.swift
+//  KeyboardShiftStatusController.swift
 //  KeyboardKit
 //
 //  Created by Valentin Shergin on 4/19/16.
@@ -9,8 +9,8 @@
 import Foundation
 
 
-class KeyboardShiftStatusManager {
-    private var ignoreTextDocumentEvents: Bool = false
+public final class KeyboardShiftStatusController {
+    private var ignoresTextDocumentEvents: Bool = false
 
     private var textDocumentProxy: UITextDocumentProxy {
         return UIInputViewController.rootInputViewController.textDocumentProxy
@@ -22,11 +22,14 @@ class KeyboardShiftStatusManager {
         }
     }
 
-    init() {
+    public var revertsShiftStateOnBackspace: Bool = true
+    public var enablesShiftStateAtSentenceBeginning: Bool = true
+
+    internal init() {
         KeyboardTextDocumentCoordinator.sharedInstance.addObserver(self)
     }
 
-    var shiftMode: KeyboardShiftMode {
+    private var shiftMode: KeyboardShiftMode {
         get {
             return self.keyboardViewController!.keyboardMode.shiftMode
         }
@@ -35,12 +38,16 @@ class KeyboardShiftStatusManager {
         }
     }
 
-    func willDeleteBackward() {
+    private func revertShiftStateOnBackspaceIfNeeded() {
+        guard self.revertsShiftStateOnBackspace else {
+            return
+        }
+
         guard let lastCharacter = self.textDocumentProxy.documentContextBeforeInput?.utf16.last else {
             return
         }
 
-        guard self.shiftMode != .Locked else {
+        guard self.shiftMode == .Disabled else {
             return
         }
 
@@ -49,8 +56,12 @@ class KeyboardShiftStatusManager {
         self.shiftMode = isLastCharacterUppercaseLetter ? .Enabled : .Disabled
     }
 
-    func whitespaceDidBeInsertedInTextDocument() {
-        guard self.shiftMode != .Locked else {
+    private func enableShiftStateAtSentenceBeginningIfNeeded() {
+        guard self.enablesShiftStateAtSentenceBeginning else {
+            return
+        }
+
+        guard self.shiftMode == .Disabled else {
             return
         }
 
@@ -62,10 +73,12 @@ class KeyboardShiftStatusManager {
             return
         }
 
+        let lastCharacter = utf16View[utf16View.endIndex.advancedBy(-1)]
         let secondLastCharacter = utf16View[utf16View.endIndex.advancedBy(-2)]
         let thirdLastCharacter = utf16View[utf16View.endIndex.advancedBy(-3)]
 
         if
+            NSCharacterSet.whitespaceAndNewlineCharacterSet().characterIsMember(lastCharacter) &&
             NSCharacterSet.alphanumericCharacterSet().characterIsMember(thirdLastCharacter) &&
             NSCharacterSet(charactersInString: ".?!").characterIsMember(secondLastCharacter)
         {
@@ -73,7 +86,11 @@ class KeyboardShiftStatusManager {
         }
     }
 
-    func textDocumentDidChanged() {
+    private func textDocumentDidChanged() {
+        guard self.enablesShiftStateAtSentenceBeginning else {
+            return
+        }
+
         guard self.shiftMode == .Disabled else {
             return
         }
@@ -87,32 +104,27 @@ class KeyboardShiftStatusManager {
 }
 
 
-extension KeyboardShiftStatusManager: KeyboardTextDocumentObserver {
+extension KeyboardShiftStatusController: KeyboardTextDocumentObserver {
+
+    public var observesTextDocumentEvents: Bool {
+        return
+            !self.ignoresTextDocumentEvents &&
+            self.revertsShiftStateOnBackspace &&
+            self.enablesShiftStateAtSentenceBeginning
+    }
 
     public func keyboardTextDocumentDidInsertText(text: String) {
-        guard !self.ignoreTextDocumentEvents else {
-            return
-        }
-
         guard let lastCharacter = text.utf16.last else {
             return
         }
 
-        if self.shiftMode != .Locked {
-            self.shiftMode = .Disabled
-        }
-
         if NSCharacterSet.whitespaceAndNewlineCharacterSet().characterIsMember(lastCharacter) {
-            self.whitespaceDidBeInsertedInTextDocument()
+            self.enableShiftStateAtSentenceBeginningIfNeeded()
         }
     }
 
     public func keyboardTextDocumentWillDeleteBackward() {
-        guard !self.ignoreTextDocumentEvents else {
-            return
-        }
-
-        self.willDeleteBackward()
+        self.revertShiftStateOnBackspaceIfNeeded()
     }
 
     public func keyboardTextInputTraitsDidChange(textInputTraits: UITextInputTraits) {

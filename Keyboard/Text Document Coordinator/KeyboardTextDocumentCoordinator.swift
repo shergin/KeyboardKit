@@ -31,6 +31,7 @@ public final class KeyboardTextDocumentCoordinator {
 
         self.textInputTraitsObserver = KeyboardTextInputTraitsObserver(handler: { [unowned self] textInputTraits in
             for observer in self.observers {
+                guard observer.observesTextDocumentEvents else { continue }
                 observer.keyboardTextInputTraitsDidChange(textInputTraits)
             }
         })
@@ -62,6 +63,7 @@ public final class KeyboardTextDocumentCoordinator {
         textDocumentWillInsertText = { [unowned self] text in
             //print("textDocumentWillInsertText(\(text))")
             for observer in self.observers {
+                guard observer.observesTextDocumentEvents else { continue }
                 observer.keyboardTextDocumentWillInsertText(text)
             }
         }
@@ -69,6 +71,7 @@ public final class KeyboardTextDocumentCoordinator {
         textDocumentDidInsertText = { [unowned self] text in
             //print("textDocumentDidInsertText(\(text))")
             for observer in self.observers {
+                guard observer.observesTextDocumentEvents else { continue }
                 observer.keyboardTextDocumentDidInsertText(text)
             }
         }
@@ -101,6 +104,7 @@ public final class KeyboardTextDocumentCoordinator {
         textDocumentWillDeleteBackward = { [unowned self] text in
             //print("textDocumentWillDeleteBackward()")
             for observer in self.observers {
+                guard observer.observesTextDocumentEvents else { continue }
                 observer.keyboardTextDocumentWillDeleteBackward()
             }
         }
@@ -108,6 +112,7 @@ public final class KeyboardTextDocumentCoordinator {
         textDocumentDidDeleteBackward = { [unowned self] text in
             //print("textDocumentDidDeleteBackward()")
             for observer in self.observers {
+                guard observer.observesTextDocumentEvents else { continue }
                 observer.keyboardTextDocumentDidDeleteBackward()
             }
         }

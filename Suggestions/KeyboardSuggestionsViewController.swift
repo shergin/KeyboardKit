@@ -194,11 +194,12 @@ public class KeyboardSuggestionsViewController: UIViewController {
 }
 
 extension KeyboardSuggestionsViewController: KeyboardTextDocumentObserver {
-    public func keyboardTextDocumentWillInsertText(text: String) {
-        guard !self.ignoreTextDocumentEvents else {
-            return
-        }
 
+    public var observesTextDocumentEvents: Bool {
+        return !self.ignoreTextDocumentEvents
+    }
+
+    public func keyboardTextDocumentWillInsertText(text: String) {
         guard !text.isEmpty else {
             return
         }
@@ -209,10 +210,6 @@ extension KeyboardSuggestionsViewController: KeyboardTextDocumentObserver {
     }
 
     public func keyboardTextDocumentDidInsertText(text: String) {
-        guard !self.ignoreTextDocumentEvents else {
-            return
-        }
-
         if !NSCharacterSet.separatorChracterSet().characterIsMember(text.utf16.first!) {
             self.lastAppliedGuess = nil
         }
@@ -221,19 +218,10 @@ extension KeyboardSuggestionsViewController: KeyboardTextDocumentObserver {
     }
 
     public func keyboardTextDocumentWillDeleteBackward() {
-        guard !self.ignoreTextDocumentEvents else {
-            return
-        }
-
         self.revertAppliedSuggestionItemIfNeeded()
-        //self.textDidChange()
     }
 
     public func keyboardTextDocumentDidDeleteBackward() {
-        guard !self.ignoreTextDocumentEvents else {
-            return
-        }
-
         self.textDidChange()
     }
 }

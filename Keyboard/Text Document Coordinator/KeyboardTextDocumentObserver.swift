@@ -9,6 +9,8 @@
 import Foundation
 
 public protocol KeyboardTextDocumentObserver {
+    var observesTextDocumentEvents: Bool {get}
+
     func keyboardTextDocumentWillInsertText(text: String)
     func keyboardTextDocumentDidInsertText(text: String)
 
@@ -20,6 +22,10 @@ public protocol KeyboardTextDocumentObserver {
 
 // # Making these methods optional
 extension KeyboardTextDocumentObserver {
+    public var observesTextDocumentEvents: Bool {
+        return true
+    }
+
     public func keyboardTextDocumentWillInsertText(text: String) {}
     public func keyboardTextDocumentDidInsertText(text: String) {}
 
