@@ -19,12 +19,26 @@ public struct KeyboardSuggestionGuess {
 
 
 extension KeyboardSuggestionGuess {
-    public init(query: KeyboardSuggestionQuery, type: KeyboardSuggestionGuessType, replacement: String) {
+    public init(query: KeyboardSuggestionQuery, type: KeyboardSuggestionGuessType, replacement: String, automatic: Bool = false) {
         self.query = query
         self.type = type
         self.replacement = replacement
+        self.automatic = automatic
 
-        self.appearance = KeyboardSuggestionGuessAppearance(type: self.type)
+        self.adjustAppearance()
+    }
+
+    public func deautomated() -> KeyboardSuggestionGuess {
+        var guess = self
+        guess.automatic = false
+        guess.adjustAppearance()
+        return guess
+    }
+
+    public mutating func adjustAppearance() {
+        self.appearance.compact = self.type == .Emoji
+        self.appearance.quoted = self.type == .Learning
+        self.appearance.highlighted = self.automatic
     }
 }
 
@@ -37,5 +51,7 @@ public func ==(lhs: KeyboardSuggestionGuess, rhs: KeyboardSuggestionGuess) -> Bo
     return
         lhs.query == rhs.query &&
         lhs.replacement == rhs.replacement &&
-        lhs.automatic == rhs.automatic
+        lhs.type == rhs.type &&
+        lhs.automatic == rhs.automatic &&
+        lhs.appearance == rhs.appearance
 }

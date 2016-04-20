@@ -9,16 +9,6 @@
 import Foundation
 
 
-let separatorChracterSet: NSCharacterSet = {
-    var characterSet = NSMutableCharacterSet()
-    characterSet.formUnionWithCharacterSet(NSCharacterSet.whitespaceCharacterSet())
-    characterSet.formUnionWithCharacterSet(NSCharacterSet.newlineCharacterSet())
-    characterSet.formUnionWithCharacterSet(NSCharacterSet.punctuationCharacterSet())
-    characterSet.formUnionWithCharacterSet(NSCharacterSet.controlCharacterSet())
-    return characterSet
-} ()
-
-
 public final class KeyboardSuggestionModel {
 
     private var keyViewSetHashValue: Int = 0
@@ -35,7 +25,7 @@ public final class KeyboardSuggestionModel {
     public var isEmojiSuggestionsEnabled = true
     public var isBackspaceRevertCorrection = true
 
-    private var spellingSuggestionSource = KeyboardWordSuggestionSource()
+    private var spellingSuggestionSource = KeyboardSpellingSuggestionSource()
     private var emojiSuggestionSource = KeyboardEmojiSuggestionSource()
 
     internal init() {
@@ -64,7 +54,7 @@ public final class KeyboardSuggestionModel {
     }
     
     private func lastWordFragmentRange(context: NSString) -> NSRange {
-        let lastSeparatorRange = context.rangeOfCharacterFromSet(separatorChracterSet, options: .BackwardsSearch)
+        let lastSeparatorRange = context.rangeOfCharacterFromSet(NSCharacterSet.separatorChracterSet(), options: .BackwardsSearch)
 
         if lastSeparatorRange.location == NSNotFound {
             return NSMakeRange(0, context.length)
@@ -150,7 +140,7 @@ public final class KeyboardSuggestionModel {
 
         var reduceGuesses = guesses.filter { (guess: KeyboardSuggestionGuess) -> Bool in
             switch guess.type {
-            case .Learning:
+            case .Learning, .Autoreplacement, .Prediction, .Other:
                 return true
             case .Correction:
                 correctionsLimit -= 1
@@ -166,14 +156,28 @@ public final class KeyboardSuggestionModel {
                 emojisLimit -= 1
                 return emojisLimit >= 0
                 break
-            default:
-                break
             }
 
             return false
         }
 
-        if self.isSpellingAutocorrectionEnabled {
+        //
+        var automated = !self.shouldAutocorrectSpelling()
+        reduceGuesses = reduceGuesses.map { guess in
+            guard guess.automatic else {
+                return guess
+            }
+
+            if automated {
+                return guess.deautomated()
+            }
+
+            automated = true
+            return guess
+        }
+
+        /*
+        if self.shouldAutocorrectSpelling() {
             var automated = false
             var hasLearningGuess = false
 
@@ -182,7 +186,7 @@ public final class KeyboardSuggestionModel {
                     hasLearningGuess = true
                 }
 
-                if !automated && hasLearningGuess && guess.type == .Correction {
+                if !automated && hasLearningGuess && guess.type.isKindOfCorrection {
                     var automatedGuess = guess
                     automated = true
                     automatedGuess.automatic = true
@@ -193,6 +197,7 @@ public final class KeyboardSuggestionModel {
                 return guess
             }
         }
+        */
 
         return reduceGuesses
     }

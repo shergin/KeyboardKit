@@ -8,6 +8,7 @@
 
 import Foundation
 
+
 internal final class KeyboardShiftController: KeyboardListenerProtocol {
 
     internal func keyViewDidSendEvent(keyEvent: KeyboardKeyEvent) {
@@ -34,7 +35,9 @@ internal final class KeyboardShiftController: KeyboardListenerProtocol {
         if
             controlEvents == .TouchUpInside &&
             keyboardViewController.keyboardMode.shiftMode == .Enabled &&
-            key.type != .Shift
+            key.type != .Shift &&
+            key.type != .Space &&
+            key.type != .Backspace
         {
             keyboardViewController.keyboardMode.shiftMode = .Disabled
         }

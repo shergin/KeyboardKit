@@ -40,6 +40,12 @@ internal final class KeyboardTextInputTraitsObserver: NSObject {
             return
         }
 
+        let strange = String(sharedInputViewController.dynamicType) == "UICompatibilityInputViewController"
+        if strange {
+            fatalError("UICompatibilityInputViewController")
+        }
+
+
         let textInputTraits = sharedInputViewController.textDocumentProxy as UITextInputTraits
 
         if self.previousKeyboardAppearance != nil {

@@ -203,7 +203,7 @@ extension KeyboardSuggestionsViewController: KeyboardTextDocumentObserver {
             return
         }
 
-        if separatorChracterSet.characterIsMember(text.utf16.first!) {
+        if NSCharacterSet.separatorChracterSet().characterIsMember(text.utf16.first!) {
             self.separatorWillBeInsertedInTextDocument()
         }
     }
@@ -213,7 +213,7 @@ extension KeyboardSuggestionsViewController: KeyboardTextDocumentObserver {
             return
         }
 
-        if !separatorChracterSet.characterIsMember(text.utf16.first!) {
+        if !NSCharacterSet.separatorChracterSet().characterIsMember(text.utf16.first!) {
             self.lastAppliedGuess = nil
         }
 

@@ -15,6 +15,8 @@ public class KeyboardViewController: UIViewController {
     private var pageLayoutControllers: [KeyboardPageLayoutController] = []
     private var lastLayoutBounds = CGSizeZero
 
+    private var shiftStatusManager: KeyboardShiftStatusManager!
+
     // # Internal
     internal let keyViewSet = KeyboardKeyViewSet()
     internal var keyboardView: KeyboardView { return self.view as! KeyboardView }
@@ -56,6 +58,10 @@ public class KeyboardViewController: UIViewController {
         self.listenerCoordinator.addListener(KeyboardPagesController())
         self.listenerCoordinator.addListener(KeyboardShiftController())
         self.listenerCoordinator.addListener(KeyboardPeriodShortcutController())
+
+
+        self.shiftStatusManager = KeyboardShiftStatusManager()
+        self.shiftStatusManager.keyboardViewController = self
     }
 
     public required init?(coder aDecoder: NSCoder) {

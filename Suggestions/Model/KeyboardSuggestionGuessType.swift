@@ -12,8 +12,19 @@ import Foundation
 public enum KeyboardSuggestionGuessType: Int {
     case Correction
     case Completion
+    case Autoreplacement
     case Prediction
     case Emoji
     case Learning
     case Other
+}
+
+
+extension KeyboardSuggestionGuessType {
+    var isKindOfCorrection: Bool {
+        return
+            self == .Correction ||
+            self == .Completion ||
+            self == .Autoreplacement
+    }
 }
