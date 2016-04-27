@@ -10,7 +10,8 @@ import Foundation
 
 
 private var waitTimerToken: Int = 0
-private let waitTimerInterval: NSTimeInterval = 0.5
+private let longWaitTimerInterval: NSTimeInterval = 0.2
+private let veryLongwaitTimerInterval: NSTimeInterval = 1.5
 
 
 extension UIControlEvents {
@@ -21,11 +22,14 @@ extension UIControlEvents {
 
 public protocol KeyboardListenerProtocol: class {
     func keyViewDidSendEvent(event: KeyboardKeyEvent)
+    // Temporary!
     func keyViewDidSendEvents(controlEvents: UIControlEvents, keyView: KeyboardKeyView, key: KeyboardKey, keyboardMode: KeyboardMode)
 }
 
 
 extension KeyboardListenerProtocol {
+
+    // Temporary!
     public func keyViewDidSendEvent(event: KeyboardKeyEvent) {
         self.keyViewDidSendEvents(
             event.controlEvents,
@@ -59,15 +63,15 @@ extension KeyboardListenerProtocol {
 
             let capturedWaitTimerCounter = waitTimerCounter
             let capturedEvent = event
-            let when = dispatch_time(DISPATCH_TIME_NOW, Int64(waitTimerInterval * NSTimeInterval(NSEC_PER_SEC)))
-            dispatch_after(when, dispatch_get_main_queue()) { [weak self] in
+
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(longWaitTimerInterval * NSTimeInterval(NSEC_PER_SEC))), dispatch_get_main_queue()) { [weak self] in
                 guard capturedWaitTimerCounter == self?.waitTimerCounter else {
                     return
                 }
 
                 self?.keyViewDidSendEvent(
                     KeyboardKeyEvent(
-                        controlEvents: capturedEvent.controlEvents.union(.TouchDownLong),
+                        controlEvents: .TouchDownLong,//capturedEvent.controlEvents.union(.TouchDownLong),
                         event: capturedEvent.event,
                         key: capturedEvent.key,
                         keyView: capturedEvent.keyView,
@@ -77,6 +81,24 @@ extension KeyboardListenerProtocol {
                 )
             }
 
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(veryLongwaitTimerInterval * NSTimeInterval(NSEC_PER_SEC))), dispatch_get_main_queue()) { [weak self] in
+                guard capturedWaitTimerCounter == self?.waitTimerCounter else {
+                    return
+                }
+
+                dispatch_async(dispatch_get_main_queue(), { [weak self] in
+                    self?.keyViewDidSendEvent(
+                        KeyboardKeyEvent(
+                            controlEvents: .TouchDownVeryLong, //capturedEvent.controlEvents.union(.TouchDownVeryLong),
+                            event: capturedEvent.event,
+                            key: capturedEvent.key,
+                            keyView: capturedEvent.keyView,
+                            keyboardMode: capturedEvent.keyboardMode,
+                            keyboardViewController: capturedEvent.keyboardViewController
+                        )
+                    )
+                    })
+            }
         }
         else if [.TouchDragExit, .TouchCancel, .TouchUpInside, .TouchUpOutside, .TouchDragOutside].contains(controlEvents) {
             self.invalidateWaitTimer()
