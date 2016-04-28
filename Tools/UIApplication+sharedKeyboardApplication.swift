@@ -11,7 +11,7 @@ import UIKit
 
 extension UIApplication {
 
-    public static func sharedKeyboardApplication() -> UIApplication {
+    public static func 🚀sharedApplication() -> UIApplication {
         guard UIApplication.respondsToSelector("sharedApplication") else {
             fatalError("UIApplication.sharedKeyboardApplication(): `UIApplication` does not respond to selector `sharedApplication`.")
         }
@@ -20,7 +20,7 @@ extension UIApplication {
             fatalError("UIApplication.sharedKeyboardApplication(): `UIApplication.sharedApplication()` returned `nil`.")
         }
 
-        guard let sharedApplication = unmanagedSharedApplication.takeRetainedValue() as? UIApplication else {
+        guard let sharedApplication = unmanagedSharedApplication.takeUnretainedValue() as? UIApplication else {
             fatalError("UIApplication.sharedKeyboardApplication(): `UIApplication.sharedApplication()` returned not `UIApplication` instance.")
         }
 
@@ -31,7 +31,7 @@ extension UIApplication {
 
 extension UIApplication {
 
-    public func keyboardOpenURL(url: NSURL) -> Bool {
+    public func 🚀openURL(url: NSURL) -> Bool {
         return self.performSelector("openURL:", withObject: url) != nil
     }
     

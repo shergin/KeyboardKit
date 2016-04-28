@@ -14,7 +14,7 @@ extension UIResponder {
 
     static func firstResponder() -> UIResponder {
         currentFirstResponder = nil
-        UIApplication.sharedKeyboardApplication().sendAction("findFirstResponder:", to: nil, from: nil, forEvent: nil)
+        UIApplication.🚀sharedApplication().sendAction("findFirstResponder:", to: nil, from: nil, forEvent: nil)
         return currentFirstResponder!
     }
 
