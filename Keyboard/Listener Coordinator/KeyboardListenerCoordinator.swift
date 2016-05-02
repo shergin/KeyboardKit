@@ -29,11 +29,11 @@ public final class KeyboardListenerCoordinator {
 
     public func removeListener(listener: KeyboardListenerProtocol) {
         // TODO: Implement me!
-//        guard let index = self.listeners.indexOf(listener) else {
-//            fatalError("The listener not found.")
-//        }
-//
-//        self.listeners.removeAtIndex(index)
+        guard let index = self.listeners.indexOf({ $0 == listener }) else {
+            fatalError("The listener not found.")
+        }
+
+        self.listeners.removeAtIndex(index)
     }
 
     // # Internal

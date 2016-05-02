@@ -12,6 +12,7 @@ import Foundation
 public enum KeyboardSuggestionGuessType: Int {
     case Correction
     case Completion
+    case Capitalization
     case Autoreplacement
     case Prediction
     case Emoji
@@ -25,6 +26,7 @@ extension KeyboardSuggestionGuessType {
         return
             self == .Correction ||
             self == .Completion ||
+            self == .Capitalization ||
             self == .Autoreplacement
     }
 }

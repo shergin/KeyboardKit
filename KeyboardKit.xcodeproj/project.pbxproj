@@ -131,7 +131,7 @@
 		A7A24FD91C8F6DA100E2ED18 /* KeyboardKeyPreviewPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A24FD81C8F6DA100E2ED18 /* KeyboardKeyPreviewPopupView.swift */; };
 		A7C5E0C31C87BBDD0099C2C0 /* KeyboardKeyColorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C5E0C21C87BBDD0099C2C0 /* KeyboardKeyColorType.swift */; };
 		A7CF9BAB1CC6F95F0085A700 /* KeyboardShiftStatusController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CF9BAA1CC6F95F0085A700 /* KeyboardShiftStatusController.swift */; };
-		A7CF9BAD1CC6FFFA0085A700 /* NSCharacterSet+Separators.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CF9BAC1CC6FFFA0085A700 /* NSCharacterSet+Separators.swift */; };
+		A7CF9BAD1CC6FFFA0085A700 /* NSCharacterSet+AdditionalSets.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CF9BAC1CC6FFFA0085A700 /* NSCharacterSet+AdditionalSets.swift */; };
 		A7D30DA31C9788B80010F36E /* KeyboardBackspaceKeyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D30DA21C9788B80010F36E /* KeyboardBackspaceKeyController.swift */; };
 		A7D30DA71C98B9190010F36E /* arabicKeyboardLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D30DA61C98B9190010F36E /* arabicKeyboardLayout.swift */; };
 		A7D30DB31C9B5CF00010F36E /* KeyboardKeyListenerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D30DB21C9B5CEF0010F36E /* KeyboardKeyListenerProtocol.swift */; };
@@ -142,6 +142,7 @@
 		A7E4C56E1C84CCDD006AF488 /* KeyboardStandardTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E4C56D1C84CCDD006AF488 /* KeyboardStandardTheme.swift */; };
 		A7E814421C9B84E9003B4B3C /* klingonKeyboardLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E814411C9B84E8003B4B3C /* klingonKeyboardLayout.swift */; };
 		A7FA0ABE1C90B82700C3EC2D /* KeyboardAlternateKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA0ABD1C90B82700C3EC2D /* KeyboardAlternateKeyView.swift */; };
+		A7FCC15E1CD41E8900008EC7 /* WeakBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FCC15D1CD41E8900008EC7 /* WeakBox.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -273,7 +274,7 @@
 		A7C24FBD1CB8932D004E417B /* KeyboardSuggestionGuessesSortingModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardSuggestionGuessesSortingModel.swift; sourceTree = "<group>"; };
 		A7C5E0C21C87BBDD0099C2C0 /* KeyboardKeyColorType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardKeyColorType.swift; sourceTree = "<group>"; };
 		A7CF9BAA1CC6F95F0085A700 /* KeyboardShiftStatusController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardShiftStatusController.swift; sourceTree = "<group>"; };
-		A7CF9BAC1CC6FFFA0085A700 /* NSCharacterSet+Separators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSCharacterSet+Separators.swift"; sourceTree = "<group>"; };
+		A7CF9BAC1CC6FFFA0085A700 /* NSCharacterSet+AdditionalSets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSCharacterSet+AdditionalSets.swift"; sourceTree = "<group>"; };
 		A7D30DA21C9788B80010F36E /* KeyboardBackspaceKeyController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardBackspaceKeyController.swift; sourceTree = "<group>"; };
 		A7D30DA61C98B9190010F36E /* arabicKeyboardLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = arabicKeyboardLayout.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		A7D30DB21C9B5CEF0010F36E /* KeyboardKeyListenerProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardKeyListenerProtocol.swift; sourceTree = "<group>"; };
@@ -284,6 +285,7 @@
 		A7E4C56D1C84CCDD006AF488 /* KeyboardStandardTheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardStandardTheme.swift; sourceTree = "<group>"; };
 		A7E814411C9B84E8003B4B3C /* klingonKeyboardLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = klingonKeyboardLayout.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		A7FA0ABD1C90B82700C3EC2D /* KeyboardAlternateKeyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardAlternateKeyView.swift; sourceTree = "<group>"; };
+		A7FCC15D1CD41E8900008EC7 /* WeakBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeakBox.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -510,7 +512,8 @@
 				A78319F21C7FD6BE0099C307 /* UIApplication+sharedKeyboardApplication.swift */,
 				A78319F31C7FD6BE0099C307 /* UIInputViewController+rootInputViewController.swift */,
 				A78319F41C7FD6BE0099C307 /* UIResponder+firstResponder.swift */,
-				A7CF9BAC1CC6FFFA0085A700 /* NSCharacterSet+Separators.swift */,
+				A7CF9BAC1CC6FFFA0085A700 /* NSCharacterSet+AdditionalSets.swift */,
+				A7FCC15D1CD41E8900008EC7 /* WeakBox.swift */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -907,7 +910,7 @@
 				A78320CC1C7FD6C20099C307 /* KeyboardKeyShapeView.swift in Sources */,
 				A78320F31C7FD6C20099C307 /* KeyboardShiftController.swift in Sources */,
 				A78320D51C7FD6C20099C307 /* KeyboardKeyBackspaceSymbolView.swift in Sources */,
-				A7CF9BAD1CC6FFFA0085A700 /* NSCharacterSet+Separators.swift in Sources */,
+				A7CF9BAD1CC6FFFA0085A700 /* NSCharacterSet+AdditionalSets.swift in Sources */,
 				A78327261C7FD6C30099C307 /* WeakSet.swift in Sources */,
 				A78320E41C7FD6C20099C307 /* KeyboardKeyCompoundModificationMode.swift in Sources */,
 				A7A24FD91C8F6DA100E2ED18 /* KeyboardKeyPreviewPopupView.swift in Sources */,
@@ -936,6 +939,7 @@
 				A78320FE1C7FD6C20099C307 /* UIApplication+sharedKeyboardApplication.swift in Sources */,
 				A78320FB1C7FD6C20099C307 /* KeyboardSuggestionKey.swift in Sources */,
 				A78320EA1C7FD6C20099C307 /* KeyboardKeyPopupMode.swift in Sources */,
+				A7FCC15E1CD41E8900008EC7 /* WeakBox.swift in Sources */,
 				A728ADCE1CBC2936002093F1 /* KeyboardSuggestionGuessesSortingModel.swift in Sources */,
 				A797F1E41CADDA91005CB9CD /* frenchQwertyKeyboardLayout.swift in Sources */,
 				A78320CB1C7FD6C20099C307 /* KeyboardKeyShape.swift in Sources */,

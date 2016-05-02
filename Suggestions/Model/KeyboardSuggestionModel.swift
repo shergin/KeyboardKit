@@ -22,6 +22,7 @@ public final class KeyboardSuggestionModel {
 
     public var isSpellingSuggestionsEnabled = true
     public var isSpellingAutocorrectionEnabled = true
+    public var isSpellingCapitalizationEnabled = true
     public var isEmojiSuggestionsEnabled = true
     public var isBackspaceRevertCorrection = true
 
@@ -46,13 +47,20 @@ public final class KeyboardSuggestionModel {
             self.textDocumentProxy.spellCheckingType != .No
     }
 
-    internal func shouldAutocorrectSpelling() -> Bool {
+    internal func shouldСorrectSpelling() -> Bool {
         return
             self.shouldSuggestSpelling() &&
             self.isSpellingAutocorrectionEnabled &&
             self.textDocumentProxy.autocorrectionType != .No
     }
-    
+
+    internal func shouldCapitalizeSpelling() -> Bool {
+        return
+            self.shouldSuggestSpelling() &&
+            self.isSpellingCapitalizationEnabled &&
+            self.textDocumentProxy.autocorrectionType != .No
+    }
+
     private func lastWordFragmentRange(context: NSString) -> NSRange {
         let lastSeparatorRange = context.rangeOfCharacterFromSet(NSCharacterSet.separatorChracterSet(), options: .BackwardsSearch)
 
@@ -140,7 +148,7 @@ public final class KeyboardSuggestionModel {
 
         var reduceGuesses = guesses.filter { (guess: KeyboardSuggestionGuess) -> Bool in
             switch guess.type {
-            case .Learning, .Autoreplacement, .Prediction, .Other:
+            case .Learning, .Autoreplacement, .Capitalization, .Prediction, .Other:
                 return true
             case .Correction:
                 correctionsLimit -= 1
@@ -162,13 +170,21 @@ public final class KeyboardSuggestionModel {
         }
 
         //
-        var automated = !self.shouldAutocorrectSpelling()
+        let capitalizeSpelling = self.shouldCapitalizeSpelling()
+        let correctSpelling = self.shouldСorrectSpelling()
+
+        var automated = !correctSpelling && !capitalizeSpelling
+
         reduceGuesses = reduceGuesses.map { guess in
             guard guess.automatic else {
                 return guess
             }
 
-            if automated {
+            if
+                automated ||
+                (guess.type == .Correction && !correctSpelling) ||
+                (guess.type == .Capitalization && !capitalizeSpelling)
+            {
                 return guess.deautomated()
             }
 
@@ -177,7 +193,7 @@ public final class KeyboardSuggestionModel {
         }
 
         /*
-        if self.shouldAutocorrectSpelling() {
+        if self.shouldСorrectSpelling() {
             var automated = false
             var hasLearningGuess = false
 

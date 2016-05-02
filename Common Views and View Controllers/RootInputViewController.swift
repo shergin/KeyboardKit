@@ -123,7 +123,7 @@ public class RootInputViewController: UIInputViewController {
     }
 
 
-    private func updateKeyboardWindowHeight() {
+    public func updateKeyboardWindowHeight() {
         print("updateKeyboardWindowHeight")
 
         self.setupKludge()

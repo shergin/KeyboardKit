@@ -42,11 +42,11 @@ public final class KeyboardTextDocumentCoordinator {
     // # Public
 
     public func addObserver(observer: KeyboardTextDocumentObserver) {
-        self.observers.addObject(observer)
+        self.observers.insert(observer)
     }
 
     public func removeObserver(observer: KeyboardTextDocumentObserver) {
-        self.observers.removeObject(observer)
+        self.observers.remove(observer)
     }
 
     // # Private

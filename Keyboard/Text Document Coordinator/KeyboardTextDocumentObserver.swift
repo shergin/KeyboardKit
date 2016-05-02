@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol KeyboardTextDocumentObserver {
+public protocol KeyboardTextDocumentObserver: AnyObject {
     var observesTextDocumentEvents: Bool {get}
 
     func keyboardTextDocumentWillInsertText(text: String)

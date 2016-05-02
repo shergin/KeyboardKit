@@ -47,7 +47,7 @@ public final class KeyboardShiftStatusController {
             return
         }
 
-        guard self.shiftMode == .Disabled else {
+        guard self.shiftMode != .Locked else {
             return
         }
 
@@ -66,23 +66,38 @@ public final class KeyboardShiftStatusController {
         }
 
         guard let utf16View = self.textDocumentProxy.documentContextBeforeInput?.utf16 else {
-            return
-        }
-
-        guard utf16View.count > 3 else {
-            return
-        }
-
-        let lastCharacter = utf16View[utf16View.endIndex.advancedBy(-1)]
-        let secondLastCharacter = utf16View[utf16View.endIndex.advancedBy(-2)]
-        let thirdLastCharacter = utf16View[utf16View.endIndex.advancedBy(-3)]
-
-        if
-            NSCharacterSet.whitespaceAndNewlineCharacterSet().characterIsMember(lastCharacter) &&
-            NSCharacterSet.alphanumericCharacterSet().characterIsMember(thirdLastCharacter) &&
-            NSCharacterSet(charactersInString: ".?!").characterIsMember(secondLastCharacter)
-        {
+            // Case: Completely empty prefix.
             self.shiftMode = .Enabled
+            return
+        }
+
+        var isEnableShift = false
+
+        var wasWhitespaceCharacterFound = false
+        var wasNewLineCharacterFound = false
+        var wasEndOfSentenceCharacterFound = false
+
+        var areAllCharactersBeforeEndOfSentenceWhitespaces = false
+        for character in utf16View.reverse() {
+            let isWhitespaceCharacter = cachedWhitespaceCharacterSet.characterIsMember(character)
+            let isNewLineCharacter = cachedNewLineCharacterSet.characterIsMember(character)
+            let isEndOfSentenceCharacter = cachedEndOfSentenceChracterSet.characterIsMember(character)
+
+            wasWhitespaceCharacterFound = wasWhitespaceCharacterFound || isWhitespaceCharacter
+            wasNewLineCharacterFound = wasNewLineCharacterFound || isNewLineCharacter
+            wasEndOfSentenceCharacterFound = wasEndOfSentenceCharacterFound || isEndOfSentenceCharacter
+
+            if !isWhitespaceCharacter && !isNewLineCharacter && !isEndOfSentenceCharacter {
+                break
+            }
+
+            if
+                (isEndOfSentenceCharacter && wasWhitespaceCharacterFound) ||
+                isNewLineCharacter
+            {
+                self.shiftMode = .Enabled
+                return
+            }
         }
     }
 
@@ -127,8 +142,12 @@ extension KeyboardShiftStatusController: KeyboardTextDocumentObserver {
         self.revertShiftStateOnBackspaceIfNeeded()
     }
 
+    public func keyboardTextDocumentDidDeleteBackward() {
+        self.enableShiftStateAtSentenceBeginningIfNeeded()
+    }
+
     public func keyboardTextInputTraitsDidChange(textInputTraits: UITextInputTraits) {
-        self.textDocumentDidChanged()
+        self.enableShiftStateAtSentenceBeginningIfNeeded()
     }
 
 }

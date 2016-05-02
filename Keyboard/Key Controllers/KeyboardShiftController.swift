@@ -35,8 +35,12 @@ internal final class KeyboardShiftController: KeyboardListenerProtocol {
         if
             controlEvents == .TouchUpInside &&
             keyboardViewController.keyboardMode.shiftMode == .Enabled &&
+
+            // TODO: Rethink: This is not universal workaround.
             key.type != .Shift &&
             key.type != .Space &&
+            key.type != .Return &&
+            key.type != .AdvanceToNextInputMode &&
             key.type != .Backspace
         {
             keyboardViewController.keyboardMode.shiftMode = .Disabled

@@ -27,6 +27,14 @@ public protocol KeyboardListenerProtocol: class {
 }
 
 
+extension Equatable where Self: KeyboardListenerProtocol {
+}
+
+public func ==(lhs: KeyboardListenerProtocol, rhs: KeyboardListenerProtocol) -> Bool {
+    return unsafeAddressOf(lhs) == unsafeAddressOf(rhs)
+}
+
+
 extension KeyboardListenerProtocol {
 
     // Temporary!
