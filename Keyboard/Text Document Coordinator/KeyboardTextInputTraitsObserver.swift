@@ -42,7 +42,11 @@ internal final class KeyboardTextInputTraitsObserver: NSObject {
 
         let strange = String(sharedInputViewController.dynamicType) == "UICompatibilityInputViewController"
         if strange {
-            fatalError("UICompatibilityInputViewController")
+            #if DEBUG
+                fatalError("UICompatibilityInputViewController")
+            #else
+                return
+            #endif
         }
 
 
