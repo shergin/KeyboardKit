@@ -17,6 +17,9 @@ public protocol KeyboardTextDocumentObserver: AnyObject {
     func keyboardTextDocumentWillDeleteBackward()
     func keyboardTextDocumentDidDeleteBackward()
 
+    func keyboardTextDocumentWillChange()
+    func keyboardTextDocumentDidChange()
+
     func keyboardTextInputTraitsDidChange(textInputTraits: UITextInputTraits)
 }
 
@@ -31,6 +34,9 @@ extension KeyboardTextDocumentObserver {
 
     public func keyboardTextDocumentWillDeleteBackward() {}
     public func keyboardTextDocumentDidDeleteBackward() {}
+
+    public func keyboardTextDocumentWillChange() {}
+    public func keyboardTextDocumentDidChange() {}
 
     public func keyboardTextInputTraitsDidChange(textInputTraits: UITextInputTraits) {}
 }

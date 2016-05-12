@@ -128,17 +128,15 @@ public class KeyboardSuggestionsViewController: UIViewController {
     }
 
     private func applyGuest(guess: KeyboardSuggestionGuess, addSpace: Bool = false) {
-        self.ignoreTextDocumentEvents = true
+        let textDocumentProxy = self.textDocumentProxy
 
-        defer {
-            self.ignoreTextDocumentEvents = false
+        textDocumentProxy.performWithoutNotifications { 
+            for _ in 0..<guess.query.placement.characters.count {
+                textDocumentProxy.deleteBackward()
+            }
+
+            textDocumentProxy.insertText(guess.replacement + (addSpace ? " " : ""))
         }
-
-        for _ in 0..<guess.query.placement.characters.count {
-            self.textDocumentProxy.deleteBackward()
-        }
-
-        self.textDocumentProxy.insertText(guess.replacement + (addSpace ? " " : ""))
 
         self.lastAppliedGuess = guess
     }
@@ -153,29 +151,39 @@ public class KeyboardSuggestionsViewController: UIViewController {
         }
 
         let context = self.textDocumentProxy.documentContextBeforeInput ?? ""
-        let contextTail = context.substringFromIndex(context.endIndex.predecessor())
-        let contextWithoutTail = context.substringToIndex(context.endIndex.predecessor())
 
-        guard contextWithoutTail.hasSuffix(guess.replacement) else {
+        var contextTailLength: Int = 0
+
+        // And now two cases for tailes:
+        if context.hasSuffix(". ") {
+            contextTailLength = 2
+        }
+        else if context.hasSuffix(" ") {
+            contextTailLength = 1
+        }
+
+        let contextTailIndex = context.endIndex.advancedBy(-contextTailLength)
+        let contextTail = context.substringFromIndex(contextTailIndex)
+        let contextHead = context.substringToIndex(contextTailIndex)
+
+        guard contextHead.hasSuffix(guess.replacement) else {
             return
         }
 
         self.lastAppliedGuess = nil
 
-        self.ignoreTextDocumentEvents = true
+        let textDocumentProxy = self.textDocumentProxy
 
-        defer {
-            self.ignoreTextDocumentEvents = false
+        textDocumentProxy.performWithoutNotifications { 
+            // TODO: Optimize replacement!
+            for _ in 0..<(guess.replacement.characters.count + contextTailLength) {
+                textDocumentProxy.deleteBackward()
+            }
+            textDocumentProxy.insertText(guess.query.placement)
+
+            textDocumentProxy.insertText(contextTail)
+            textDocumentProxy.insertText("\u{200B}") // ZERO WIDTH SPACE, fake symbol which will be removed by waiting backspace.
         }
-
-        // TODO: Optimize replacement!
-        for _ in 0..<(guess.replacement.characters.count + contextTail.characters.count) {
-            self.textDocumentProxy.deleteBackward()
-        }
-        self.textDocumentProxy.insertText(guess.query.placement)
-
-        self.textDocumentProxy.insertText(contextTail)
-        self.textDocumentProxy.insertText("\u{200B}") // ZERO WIDTH SPACE, fake symbol which will be removed by waiting backspace.
 
         self.suggestionModel.learnWord(guess.replacement.trim())
     }

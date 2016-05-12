@@ -56,14 +56,28 @@ public final class KeyboardShiftStatusController {
         self.shiftMode = isLastCharacterUppercaseLetter ? .Enabled : .Disabled
     }
 
-    private func enableShiftStateAtSentenceBeginningIfNeeded() {
+    private func toggleShiftIfNeeded() {
         guard self.enablesShiftStateAtSentenceBeginning else {
             return
         }
 
-        guard self.shiftMode == .Disabled else {
+        guard self.shiftMode != .Locked else {
             return
         }
+
+        // # Cases:
+        // # ⬆️-cases:
+        //
+        //  *  Abc abc. ⦚⬆️
+        //  *  ↩⦚⬆️
+        //
+        //
+        // # ⬇️-cases:
+        //  *  A⦚⬇️
+
+        var wasShiftEnable = self.shiftMode == .Enabled
+        var wantsEnableShift = !wasShiftEnable
+        var wantsDisableShift = wasShiftEnable
 
         guard let utf16View = self.textDocumentProxy.documentContextBeforeInput?.utf16 else {
             // Case: Completely empty prefix.
@@ -71,32 +85,66 @@ public final class KeyboardShiftStatusController {
             return
         }
 
-        var isEnableShift = false
-
         var wasWhitespaceCharacterFound = false
         var wasNewLineCharacterFound = false
         var wasEndOfSentenceCharacterFound = false
+        var wasUppercaseCharacterFound = false
+        var wasLowercaseCharacterFound = false
 
         var areAllCharactersBeforeEndOfSentenceWhitespaces = false
         for character in utf16View.reverse() {
+            guard wantsEnableShift || wantsDisableShift else {
+                break
+            }
+
             let isWhitespaceCharacter = cachedWhitespaceCharacterSet.characterIsMember(character)
             let isNewLineCharacter = cachedNewLineCharacterSet.characterIsMember(character)
             let isEndOfSentenceCharacter = cachedEndOfSentenceChracterSet.characterIsMember(character)
+            let isLowercaseCharacter = cachedLowercaseLetterCharacterSet.characterIsMember(character)
+            let isUppercaseCharacter = cachedUppercaseLetterCharacterSet.characterIsMember(character)
+            let isCharacter = isLowercaseCharacter || isUppercaseCharacter
 
             wasWhitespaceCharacterFound = wasWhitespaceCharacterFound || isWhitespaceCharacter
             wasNewLineCharacterFound = wasNewLineCharacterFound || isNewLineCharacter
             wasEndOfSentenceCharacterFound = wasEndOfSentenceCharacterFound || isEndOfSentenceCharacter
+            wasUppercaseCharacterFound = wasUppercaseCharacterFound || isUppercaseCharacter
+            wasLowercaseCharacterFound = wasLowercaseCharacterFound || isLowercaseCharacter
 
-            if !isWhitespaceCharacter && !isNewLineCharacter && !isEndOfSentenceCharacter {
+            // # Positive cases
+            if
+                wantsEnableShift &&
+                (
+                    (isEndOfSentenceCharacter && wasWhitespaceCharacterFound) ||
+                    isNewLineCharacter
+                )
+            {
+                self.shiftMode = .Enabled
                 break
             }
 
             if
-                (isEndOfSentenceCharacter && wasWhitespaceCharacterFound) ||
-                isNewLineCharacter
+                wantsDisableShift &&
+                (
+                    isCharacter
+                )
             {
-                self.shiftMode = .Enabled
-                return
+                self.shiftMode = .Disabled
+                break
+            }
+
+            // # Stop cases
+            if
+                wantsEnableShift &&
+                (isNewLineCharacter || isEndOfSentenceCharacter)
+            {
+                wantsEnableShift = false
+            }
+
+            if
+                wantsDisableShift &&
+                (isNewLineCharacter || isEndOfSentenceCharacter || isLowercaseCharacter || isUppercaseCharacter)
+            {
+                wantsDisableShift = false
             }
         }
     }
@@ -134,7 +182,7 @@ extension KeyboardShiftStatusController: KeyboardTextDocumentObserver {
         }
 
         if NSCharacterSet.whitespaceAndNewlineCharacterSet().characterIsMember(lastCharacter) {
-            self.enableShiftStateAtSentenceBeginningIfNeeded()
+            self.toggleShiftIfNeeded()
         }
     }
 
@@ -143,11 +191,10 @@ extension KeyboardShiftStatusController: KeyboardTextDocumentObserver {
     }
 
     public func keyboardTextDocumentDidDeleteBackward() {
-        self.enableShiftStateAtSentenceBeginningIfNeeded()
+        self.toggleShiftIfNeeded()
     }
 
-    public func keyboardTextInputTraitsDidChange(textInputTraits: UITextInputTraits) {
-        self.enableShiftStateAtSentenceBeginningIfNeeded()
+    public func keyboardTextDocumentDidChange() {
+        self.toggleShiftIfNeeded()
     }
-
 }

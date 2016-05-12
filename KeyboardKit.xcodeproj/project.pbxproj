@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A70B412A1CE3CB2F00C80054 /* log.swift in Sources */ = {isa = PBXBuildFile; fileRef = A70B41291CE3CB2F00C80054 /* log.swift */; };
 		A722DB201C8E0BBD00804C5C /* KeyboardPeriodShortcutController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A722DB1F1C8E0BBD00804C5C /* KeyboardPeriodShortcutController.swift */; };
 		A722DB221C8E1BFF00804C5C /* KeyboardEmojiSuggestionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A722DB211C8E1BFF00804C5C /* KeyboardEmojiSuggestionModel.swift */; };
 		A722DB241C8E44E700804C5C /* String+trim.swift in Sources */ = {isa = PBXBuildFile; fileRef = A722DB231C8E44E700804C5C /* String+trim.swift */; };
@@ -146,6 +147,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A70B41291CE3CB2F00C80054 /* log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = log.swift; sourceTree = "<group>"; };
 		A722DB1F1C8E0BBD00804C5C /* KeyboardPeriodShortcutController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardPeriodShortcutController.swift; sourceTree = "<group>"; };
 		A722DB211C8E1BFF00804C5C /* KeyboardEmojiSuggestionModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardEmojiSuggestionModel.swift; sourceTree = "<group>"; };
 		A722DB231C8E44E700804C5C /* String+trim.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+trim.swift"; sourceTree = "<group>"; };
@@ -514,6 +516,7 @@
 				A78319F41C7FD6BE0099C307 /* UIResponder+firstResponder.swift */,
 				A7CF9BAC1CC6FFFA0085A700 /* NSCharacterSet+AdditionalSets.swift */,
 				A7FCC15D1CD41E8900008EC7 /* WeakBox.swift */,
+				A70B41291CE3CB2F00C80054 /* log.swift */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -902,6 +905,7 @@
 				A7E4C56C1C8133B3006AF488 /* KeyboardTheme.swift in Sources */,
 				A797F1EB1CADDB9B005CB9CD /* qwertyKeyboardLayout.swift in Sources */,
 				A78320CF1C7FD6C20099C307 /* KeyboardRectangleShape.swift in Sources */,
+				A70B412A1CE3CB2F00C80054 /* log.swift in Sources */,
 				A78320F01C7FD6C20099C307 /* KeyboardPageLayoutController.swift in Sources */,
 				A7808EA61C87C19600265F8C /* KeyboardKeyLabel.swift in Sources */,
 				A728ADC71CBC2936002093F1 /* KeyboardSuggestionGuess.swift in Sources */,

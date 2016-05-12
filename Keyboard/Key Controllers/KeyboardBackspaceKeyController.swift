@@ -63,7 +63,7 @@ public final class KeyboardBackspaceKeyController: KeyboardListenerProtocol {
 
     internal dynamic func repeatHandler() {
         self.deleteBackward()
-        KeyboardSoundService.playInputSound()
+        KeyboardSoundService.sharedInstance.playInputSound()
     }
 
 }

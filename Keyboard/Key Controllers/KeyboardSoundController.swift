@@ -14,21 +14,33 @@ internal final class KeyboardSoundController: KeyboardListenerProtocol {
 
     internal func keyViewDidSendEvents(controlEvents: UIControlEvents, keyView: KeyboardKeyView, key: KeyboardKey, keyboardMode: KeyboardMode) {
         if controlEvents.contains(.TouchDown) {
-            KeyboardSoundService.playInputSound()
+            KeyboardSoundService.sharedInstance.playInputSound()
         }
         else if controlEvents == .TouchDragEnter {
-            KeyboardSoundService.playInputSound()
+            KeyboardSoundService.sharedInstance.playInputSound()
         }
     }
     
 }
 
 
-internal final class KeyboardSoundService {
+public final class KeyboardSoundService {
 
-    static let queue = dispatch_queue_create("com.keyboard-kit.sounds", DISPATCH_QUEUE_SERIAL)
+    public static var sharedInstance = KeyboardSoundService()
 
-    static var isTapticEngineAvailable: Bool = {
+    public var enablesTapticEngine: Bool = true
+    public var enablesSound: Bool = true
+
+    private let soundQueue = dispatch_queue_create("com.keyboard-kit.sound-sound", DISPATCH_QUEUE_SERIAL)
+    private let tapticQueue = dispatch_queue_create("com.keyboard-kit.taptic-feedback", DISPATCH_QUEUE_SERIAL)
+
+    private var soundQueueLength: Int = 0
+    private var soundMaxQueueLength: Int = 2
+
+    private var tapticQueueLength: Int = 0
+    private var tapticMaxQueueLength: Int = 2
+
+    public lazy var isTapticEngineAvailable: Bool = {
         if #available(iOS 9.0, *) {
             return UIInputViewController.rootInputViewController.traitCollection.forceTouchCapability == .Available
         }
@@ -36,29 +48,24 @@ internal final class KeyboardSoundService {
         return false
     } ()
 
-    static var inputSoundId: SystemSoundID = {
-        return isTapticEngineAvailable ? 1519 : 1104
-    } ()
-
-    static func playInputSound() {
-        self.playSoundWithId(self.inputSoundId)
-    }
-
-    static func playAlternateInputSound() {
-        self.playSoundWithId(1521)
-    }
-
-    static var queueLength: Int = 0
-    static var maxQueueLength: Int = 2
-
-    static func playSoundWithId(soundId: SystemSoundID) {
-        if self.queueLength >= self.maxQueueLength {
-            return
+    public func playInputSound() {
+        if self.enablesSound {
+            self.playSoundWithId(1104)
         }
 
-        self.queueLength += 1
+        if self.enablesTapticEngine && self.isTapticEngineAvailable {
+            self.playTapticWithId(1519)
+        }
+    }
 
-        dispatch_async(self.queue) {
+    public func playAlternateInputSound() {
+        if self.enablesTapticEngine && self.isTapticEngineAvailable {
+            self.playTapticWithId(1521)
+        }
+    }
+
+    private func playSoundWithId(soundId: SystemSoundID, queue: dispatch_queue_t, callback: () -> Void) {
+        dispatch_async(queue) {
             if #available(iOS 9.0, *) {
                 let semaphore = dispatch_semaphore_create(0)
                 AudioServicesPlaySystemSoundWithCompletion(soundId) {
@@ -71,8 +78,32 @@ internal final class KeyboardSoundService {
             }
 
             dispatch_async(dispatch_get_main_queue()) {
-                self.queueLength -= 1
+                callback()
             }
+        }
+    }
+
+    private func playSoundWithId(soundId: SystemSoundID) {
+        if self.soundQueueLength >= self.soundMaxQueueLength {
+            return
+        }
+
+        self.soundQueueLength += 1
+
+        self.playSoundWithId(soundId, queue: self.soundQueue) {
+            self.soundQueueLength -= 1
+        }
+    }
+
+    private func playTapticWithId(soundId: SystemSoundID) {
+        if self.tapticQueueLength >= self.tapticMaxQueueLength {
+            return
+        }
+
+        self.tapticQueueLength += 1
+
+        self.playSoundWithId(soundId, queue: self.tapticQueue) {
+            self.tapticQueueLength -= 1
         }
     }
 

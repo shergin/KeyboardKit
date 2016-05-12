@@ -39,10 +39,12 @@ private let bodyColor_SelectedState_DarkColorMode: UIColor = UIColor(red: CGFloa
 
 
 
-struct KeyboardStandardTheme: KeyboardStructuredTheme {
+public struct KeyboardStandardTheme: KeyboardStructuredTheme {
+
+    public init() {}
 
     // # Keycap
-    var keycapBodyColor: KeyboardThemeColorOptional =
+    public var keycapBodyColor: KeyboardThemeColorOptional =
         .SpecifiedKeyColorType([
             .Regular: .SpecifiedColorMode([
                 .Light: .SpecifiedVibrancyMode([
@@ -66,7 +68,7 @@ struct KeyboardStandardTheme: KeyboardStructuredTheme {
             ]),
         ])
 
-    var keycapTextColor: KeyboardThemeColorOptional =
+    public var keycapTextColor: KeyboardThemeColorOptional =
         .IdenticalKeyColorType(
             .SpecifiedColorMode([
                 .Light: .IdenticalVibrancyMode(textColor_LightColorMode),
@@ -74,21 +76,21 @@ struct KeyboardStandardTheme: KeyboardStructuredTheme {
             ])
         )
 
-    var keycapBorderColor: KeyboardThemeColorOptional =
+    public var keycapBorderColor: KeyboardThemeColorOptional =
         .IdenticalKeyColorType(
             .IdenticalColorMode(
                 .IdenticalVibrancyMode(UIColor.clearColor())
             )
         )
 
-    var keycapBorderSize: KeyboardThemeFloatOptional =
+    public var keycapBorderSize: KeyboardThemeFloatOptional =
         .IdenticalKeyColorType(
             .IdenticalColorMode(
                 .IdenticalVibrancyMode(CGFloat(0))
             )
         )
 
-    var keycapOuterShadowColor: KeyboardThemeColorOptional =
+    public var keycapOuterShadowColor: KeyboardThemeColorOptional =
         .IdenticalKeyColorType(
             .SpecifiedColorMode([
                 .Light: .IdenticalVibrancyMode(underColor_LightColorMode),
@@ -96,7 +98,7 @@ struct KeyboardStandardTheme: KeyboardStructuredTheme {
             ])
         )
 
-    var keycapOuterShadowOffset: KeyboardThemePointOptional =
+    public var keycapOuterShadowOffset: KeyboardThemePointOptional =
         .IdenticalKeyColorType(
             .IdenticalColorMode(
                 .IdenticalVibrancyMode(CGPoint(x: 0, y: 6))
@@ -105,7 +107,7 @@ struct KeyboardStandardTheme: KeyboardStructuredTheme {
 
     // # Popup
 
-    var popupBodyColor: KeyboardThemeColorOptional =
+    public var popupBodyColor: KeyboardThemeColorOptional =
         .IdenticalKeyColorType(
             .SpecifiedColorMode([
                 .Light: .SpecifiedVibrancyMode([
@@ -119,7 +121,7 @@ struct KeyboardStandardTheme: KeyboardStructuredTheme {
             ])
         )
 
-    var popupBorderColor: KeyboardThemeColorOptional =
+    public var popupBorderColor: KeyboardThemeColorOptional =
         .IdenticalKeyColorType(
             .SpecifiedColorMode([
                 .Light: .IdenticalVibrancyMode(borderColor_LightColorMode),
@@ -127,7 +129,7 @@ struct KeyboardStandardTheme: KeyboardStructuredTheme {
             ])
         )
 
-    var popupBorderSize: KeyboardThemeFloatOptional =
+    public var popupBorderSize: KeyboardThemeFloatOptional =
         .IdenticalKeyColorType(
             .IdenticalColorMode(
                 .IdenticalVibrancyMode(CGFloat(0.5))
@@ -136,7 +138,7 @@ struct KeyboardStandardTheme: KeyboardStructuredTheme {
 
     // Custom hooks
 
-    func keycapBodyColorWithAppearanceVariant(appearanceVariant: KeyboardKeyAppearanceVariant) -> UIColor {
+    public func keycapBodyColorWithAppearanceVariant(appearanceVariant: KeyboardKeyAppearanceVariant) -> UIColor {
         // Idea: Selected Shift key in dark color mode looks differently.
         if
             appearanceVariant.keyMode.selectionMode == .Selected &&

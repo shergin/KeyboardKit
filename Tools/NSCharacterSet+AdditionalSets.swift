@@ -11,6 +11,8 @@ import Foundation
 internal let cachedNewLineCharacterSet = NSCharacterSet.newlineCharacterSet()
 internal let cachedWhitespaceCharacterSet = NSCharacterSet.whitespaceCharacterSet()
 
+internal let cachedLowercaseLetterCharacterSet = NSCharacterSet.lowercaseLetterCharacterSet()
+internal let cachedUppercaseLetterCharacterSet = NSCharacterSet.uppercaseLetterCharacterSet()
 
 internal let cachedSeparatorChracterSet: NSCharacterSet = {
     var characterSet = NSMutableCharacterSet()

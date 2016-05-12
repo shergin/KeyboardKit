@@ -24,7 +24,7 @@ internal final class KeyboardKeyPopupTypeController: KeyboardListenerProtocol {
             if popupShowEvents.contains(controlEvents) {
                 self.setTimeout(keyView.hashValue) {
 
-                    KeyboardSoundService.playAlternateInputSound()
+                    KeyboardSoundService.sharedInstance.playAlternateInputSound()
 
                     keyView.keyMode.popupMode = .AlternateKeys
                     keyView.updateIfNeeded()

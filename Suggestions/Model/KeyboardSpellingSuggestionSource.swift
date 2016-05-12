@@ -76,6 +76,9 @@ internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource 
                 }
             }
 
+            // Move outside.
+            replacementPhrases["i"] = "I"
+
             self?.replacementPhrases = replacementPhrases
             self?.replacementNames = replacementNames
         }
@@ -131,6 +134,7 @@ internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource 
             var automatic = false
             var hasAutoreplacement = false
 
+            log("placement: \(query.placement), misspelled: \(isMisspelled), corrections: \(corrections), completions: \(completions)")
 //            print("unsortedCorrections: \(unsortedCorrections)")
 //            print("query.placement: \(query.placement)")
 //            print("corrections: \(corrections)")
@@ -142,7 +146,7 @@ internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource 
                 let replacement = replacementPhrase
                 replacements.insert(replacement)
 
-                automatic = isPlacementLongEnough
+                automatic = true//isPlacementLongEnough
 
                 guesses.append(
                     KeyboardSuggestionGuess(

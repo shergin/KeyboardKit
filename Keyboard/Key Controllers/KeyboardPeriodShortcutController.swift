@@ -63,9 +63,11 @@ internal class KeyboardPeriodShortcutController: KeyboardListenerProtocol {
                 return
             }
 
-            textDocumentProxy.deleteBackward()
-            textDocumentProxy.deleteBackward()
-            textDocumentProxy.insertText(". ")
+            textDocumentProxy.performWithoutNotifications {
+                textDocumentProxy.deleteBackward()
+                textDocumentProxy.deleteBackward()
+                textDocumentProxy.insertText(". ")
+            }
         }
     }
     

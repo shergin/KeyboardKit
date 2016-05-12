@@ -124,8 +124,6 @@ public class RootInputViewController: UIInputViewController {
 
 
     public func updateKeyboardWindowHeight() {
-        print("updateKeyboardWindowHeight")
-
         self.setupKludge()
 
 //        self.contentView.subviews.first!.frame = CGRect(origin: CGPointZero, size: UILayoutFittingExpandedSize)
