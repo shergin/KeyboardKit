@@ -9,7 +9,7 @@
 import Foundation
 
 
-internal func log<T>(argument: T, file: String = __FILE__, line: Int = __LINE__, function: String = __FUNCTION__) {
+internal func log<T>(argument: T, file: String = #file, line: Int = #line, function: String = #function) {
     guard _isDebugAssertConfiguration() else {
         return
     }
