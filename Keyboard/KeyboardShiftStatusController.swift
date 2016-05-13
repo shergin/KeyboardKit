@@ -135,14 +135,14 @@ public final class KeyboardShiftStatusController {
             // # Stop cases
             if
                 wantsEnableShift &&
-                (isNewLineCharacter || isEndOfSentenceCharacter)
+                (isNewLineCharacter || isEndOfSentenceCharacter || isCharacter)
             {
                 wantsEnableShift = false
             }
 
             if
                 wantsDisableShift &&
-                (isNewLineCharacter || isEndOfSentenceCharacter || isLowercaseCharacter || isUppercaseCharacter)
+                (isNewLineCharacter || isEndOfSentenceCharacter || isCharacter)
             {
                 wantsDisableShift = false
             }
