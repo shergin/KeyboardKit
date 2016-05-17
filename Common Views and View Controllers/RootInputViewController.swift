@@ -39,6 +39,8 @@ public class RootInputViewController: UIInputViewController {
 
     public override init(nibName: String?, bundle: NSBundle?) {
         super.init(nibName: nibName, bundle: bundle)
+
+        log("RootInputViewController was created")
         self.dynamicType.sharedInstance = self
     }
 

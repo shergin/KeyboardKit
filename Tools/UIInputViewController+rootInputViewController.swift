@@ -67,12 +67,14 @@ extension UIInputViewController {
         }
     }
 
-    public static var rootInputViewController: UIInputViewController! {
-        let application = UIApplication.🚀sharedApplication()
-        return storedInputViewController
+    public static var rootInputViewController: UIInputViewController {
+        return storedInputViewController!
+    }
+
+    internal static var isRootInputViewControllerAvailable: Bool {
+        return storedInputViewController != nil
     }
 }
-
 
 class InputWindowObserver: NSObject {
     override init() {

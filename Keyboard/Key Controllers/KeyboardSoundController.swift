@@ -40,6 +40,9 @@ public final class KeyboardSoundService {
     private var tapticQueueLength: Int = 0
     private var tapticMaxQueueLength: Int = 2
 
+    private init() {
+    }
+
     public lazy var isTapticEngineAvailable: Bool = {
         if #available(iOS 9.0, *) {
             return UIInputViewController.rootInputViewController.traitCollection.forceTouchCapability == .Available

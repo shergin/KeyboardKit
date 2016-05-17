@@ -218,6 +218,10 @@ extension KeyboardSuggestionsViewController: KeyboardTextDocumentObserver {
     }
 
     public func keyboardTextDocumentDidInsertText(text: String) {
+        guard !text.isEmpty else {
+            return
+        }
+
         if !NSCharacterSet.separatorChracterSet().characterIsMember(text.utf16.first!) {
             self.lastAppliedGuess = nil
         }

@@ -48,9 +48,7 @@ internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource 
                 return
             }
 
-            guard let inputViewController = UIInputViewController.rootInputViewController else {
-                return
-            }
+            let inputViewController = UIInputViewController.rootInputViewController
 
             let semaphore = dispatch_semaphore_create(0)
             var lexicon: UILexicon!
