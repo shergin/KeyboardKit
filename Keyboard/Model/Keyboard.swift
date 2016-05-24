@@ -42,6 +42,7 @@ extension KeyboardLayout {
 }
 
 extension KeyboardLayout {
+
     public var spaceKey: KeyboardKey? {
         get {
             return self.pages[0].rows[3][2]
@@ -49,6 +50,16 @@ extension KeyboardLayout {
 
         set {
             self.pages[0].rows[3][2] = newValue!
+        }
+    }
+
+    public var submitKey: KeyboardKey? {
+        get {
+            return self.pages[0].rows[3][3]
+        }
+
+        set {
+            self.pages[0].rows[3][3] = newValue!
         }
     }
 }

@@ -22,7 +22,14 @@ public class KeyboardViewController: UIViewController {
     internal var keyboardView: KeyboardView { return self.view as! KeyboardView }
 
     // # Public
-    public let keyboardLayout: KeyboardLayout
+    public var keyboardLayout: KeyboardLayout {
+        didSet {
+            self.initializePageLayoutControllers()
+            self.establishKeyViews(pageNumber: self.pageNumber)
+            self.layoutKeyViews()
+        }
+    }
+
     public var appearanceManager: KeyboardAppearanceManager
     public var pageNumber: Int = 0 {
         didSet {
@@ -33,7 +40,7 @@ public class KeyboardViewController: UIViewController {
     }
 
     public var keyboardMode: KeyboardMode { didSet { self.keyboardModeDidSet(oldValue) } }
-    public private(set) var listenerCoordinator: KeyboardListenerCoordinator!
+    public private(set) var listenerCoordinator: KeyboardKeyListenerCoordinator!
 
     public init(keyboardLayout: KeyboardLayout) {
         self.keyboardLayout = keyboardLayout
@@ -48,7 +55,7 @@ public class KeyboardViewController: UIViewController {
 
         KeyboardTextDocumentCoordinator.sharedInstance.addObserver(self)
 
-        self.listenerCoordinator = KeyboardListenerCoordinator(keyboardViewController: self)
+        self.listenerCoordinator = KeyboardKeyListenerCoordinator(keyboardViewController: self)
 
         self.listenerCoordinator.addListener(KeyboardSoundController())
         self.listenerCoordinator.addListener(KeyboardCharacterKeyListener())

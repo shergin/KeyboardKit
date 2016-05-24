@@ -9,7 +9,7 @@
 import UIKit
 
 
-internal final class KeyboardKeyPopupTypeController: KeyboardListenerProtocol {
+internal final class KeyboardKeyPopupTypeController: KeyboardKeyListenerProtocol {
     let popupShowEvents: UIControlEvents = [.TouchDown, .TouchDragInside, .TouchDragEnter]
     let popupHideEvents: UIControlEvents = [.TouchDragExit, .TouchCancel]
     let popupDelayedHideEvents: UIControlEvents = [.TouchUpInside, .TouchUpOutside, .TouchDragOutside]
@@ -117,8 +117,7 @@ extension UIControlEvents {
 }
 
 
-extension KeyboardListenerProtocol {
-
+extension KeyboardKeyListenerProtocol {
 
     internal func handleLongPresses(controlEvents: UIControlEvents, keyView: KeyboardKeyView, key: KeyboardKey, keyboardMode: KeyboardMode) {
 

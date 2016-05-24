@@ -20,22 +20,29 @@ extension UIControlEvents {
 }
 
 
-public protocol KeyboardListenerProtocol: class {
+public protocol KeyboardKeyListenerProtocol: AnyObject {
     func keyViewDidSendEvent(event: KeyboardKeyEvent)
     // Temporary!
     func keyViewDidSendEvents(controlEvents: UIControlEvents, keyView: KeyboardKeyView, key: KeyboardKey, keyboardMode: KeyboardMode)
 }
 
 
-extension Equatable where Self: KeyboardListenerProtocol {
+extension Equatable where Self: KeyboardKeyListenerProtocol {
 }
 
-public func ==(lhs: KeyboardListenerProtocol, rhs: KeyboardListenerProtocol) -> Bool {
+public func ==(lhs: KeyboardKeyListenerProtocol, rhs: KeyboardKeyListenerProtocol) -> Bool {
     return unsafeAddressOf(lhs) == unsafeAddressOf(rhs)
 }
 
 
-extension KeyboardListenerProtocol {
+extension Hashable where Self: KeyboardKeyListenerProtocol {
+    public var hashValue: Int {
+        return unsafeAddressOf(self).hashValue
+    }
+}
+
+
+extension KeyboardKeyListenerProtocol {
 
     // Temporary!
     public func keyViewDidSendEvent(event: KeyboardKeyEvent) {
@@ -113,11 +120,3 @@ extension KeyboardListenerProtocol {
         }
     }
 }
-
-
-//extension Equatable where Self : KeyboardListenerProtocol {
-//}
-
-//func ==<T: KeyboardListenerProtocol>(lhs: T, rhs: T) -> Bool {
-//    return unsafeAddressOf(lhs) == unsafeAddressOf(rhs)
-//}

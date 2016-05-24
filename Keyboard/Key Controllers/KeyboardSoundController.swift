@@ -10,7 +10,7 @@ import UIKit
 import AudioToolbox
 
 
-internal final class KeyboardSoundController: KeyboardListenerProtocol {
+internal final class KeyboardSoundController: KeyboardKeyListenerProtocol {
 
     internal func keyViewDidSendEvents(controlEvents: UIControlEvents, keyView: KeyboardKeyView, key: KeyboardKey, keyboardMode: KeyboardMode) {
         if controlEvents.contains(.TouchDown) {

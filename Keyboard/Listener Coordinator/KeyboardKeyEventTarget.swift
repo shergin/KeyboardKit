@@ -10,9 +10,9 @@ import UIKit
 
 
 internal class KeyboardKeyEventTarget: NSObject {
-    private unowned var listenerCoordinator: KeyboardListenerCoordinator
+    private unowned var listenerCoordinator: KeyboardKeyListenerCoordinator
 
-    internal init(listenerCoordinator: KeyboardListenerCoordinator) {
+    internal init(listenerCoordinator: KeyboardKeyListenerCoordinator) {
         self.listenerCoordinator = listenerCoordinator
     }
 

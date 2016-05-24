@@ -8,7 +8,7 @@
 
 import Foundation
 
-public final class KeyboardCommonActionKeyListener: KeyboardListenerProtocol {
+public final class KeyboardCommonActionKeyListener: KeyboardKeyListenerProtocol {
     public func keyViewDidSendEvents(controlEvents: UIControlEvents, keyView: KeyboardKeyView, key: KeyboardKey, keyboardMode: KeyboardMode) {
 
         //let isTouchDown = controlEvents.contains(.TouchDown)

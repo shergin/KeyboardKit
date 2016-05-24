@@ -11,7 +11,7 @@ import Foundation
 
 private let timeIntervalBetweenSpacesThreshold = 0.7
 
-internal class KeyboardPeriodShortcutController: KeyboardListenerProtocol {
+internal class KeyboardPeriodShortcutController: KeyboardKeyListenerProtocol {
     var numberConsequencesSpaces: Int = 0
     var lastSpacePressedTime: NSTimeInterval?
 

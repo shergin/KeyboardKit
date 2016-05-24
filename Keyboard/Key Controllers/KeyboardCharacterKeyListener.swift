@@ -9,7 +9,7 @@
 import UIKit
 
 
-public final class KeyboardCharacterKeyListener: KeyboardListenerProtocol {
+public final class KeyboardCharacterKeyListener: KeyboardKeyListenerProtocol {
     public func keyViewDidSendEvents(controlEvents: UIControlEvents, keyView: KeyboardKeyView, key: KeyboardKey, keyboardMode: KeyboardMode) {
         guard controlEvents.contains(.TouchUpInside) else {
             return

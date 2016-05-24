@@ -9,7 +9,7 @@
 import Foundation
 
 
-internal final class KeyboardKeyHighlightController: KeyboardListenerProtocol {
+internal final class KeyboardKeyHighlightController: KeyboardKeyListenerProtocol {
 
     let highlightOnEvents: UIControlEvents = [.TouchDown, .TouchDragInside, .TouchDragEnter]
     let highlightOffEvents: UIControlEvents = [.TouchDragExit, .TouchCancel, .TouchUpInside, .TouchUpOutside, .TouchDragOutside]

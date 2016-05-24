@@ -91,7 +91,7 @@ public class KeyboardSimplifiedKeyView: KeyboardKeyView {
         self.updateIfNeeded()
     }
 
-    override public func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+    override public func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String: AnyObject]?, context: UnsafeMutablePointer<Void>) {
         if context == &kvoStateContext {
             if let highlighted = change?[NSKeyValueChangeNewKey] as? Bool {
                 self.keyMode.highlightMode = highlighted ? .Highlighted : .None

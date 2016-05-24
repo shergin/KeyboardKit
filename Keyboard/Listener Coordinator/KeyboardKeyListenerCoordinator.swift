@@ -1,5 +1,5 @@
 //
-//  KeyboardListenerCoordinator.swift
+//  KeyboardKeyListenerCoordinator.swift
 //  KeyboardKit
 //
 //  Created by Valentin Shergin on 1/14/16.
@@ -9,9 +9,10 @@
 import Foundation
 
 
-public final class KeyboardListenerCoordinator {
+public final class KeyboardKeyListenerCoordinator {
     // # Private
-    private var listeners: [KeyboardListenerProtocol] = []
+    private var listeners = KeyboardKeyListenerSet()
+
     private var registeredKeyViews = Set<KeyboardKeyView>()
     private var keyEventTarget: KeyboardKeyEventTarget!
     private weak var keyboardViewController: KeyboardViewController?
@@ -23,17 +24,12 @@ public final class KeyboardListenerCoordinator {
 
     // # Public
 
-    public func addListener(listener: KeyboardListenerProtocol) {
-        self.listeners.append(listener)
+    public func addListener(listener: KeyboardKeyListenerProtocol) {
+        self.listeners.addListener(listener)
     }
 
-    public func removeListener(listener: KeyboardListenerProtocol) {
-        // TODO: Implement me!
-        guard let index = self.listeners.indexOf({ $0 == listener }) else {
-            fatalError("The listener not found.")
-        }
-
-        self.listeners.removeAtIndex(index)
+    public func removeListener(listener: KeyboardKeyListenerProtocol) {
+        self.listeners.addListener(listener)
     }
 
     // # Internal
@@ -52,9 +48,7 @@ public final class KeyboardListenerCoordinator {
             keyboardViewController: keyboardViewController
         )
 
-        for listener in self.listeners {
-            listener.keyViewDidSendEvent(keyEvent)
-        }
+        self.listeners.keyViewDidSendEvent(keyEvent)
     }
 
     internal func registerKeyViews() {
@@ -77,9 +71,5 @@ public final class KeyboardListenerCoordinator {
 
         self.registeredKeyViews.removeAll()
     }
-
-    // Private
-
-
 
 }

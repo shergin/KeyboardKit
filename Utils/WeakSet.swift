@@ -36,6 +36,8 @@ func ==<T>(lhs: WeakBox<T>, rhs: WeakBox<T>) -> Bool {
 public struct WeakSet<Element>: SequenceType {
     private var boxes = Set<WeakBox<AnyObject>>()
 
+    public init() {}
+
     private mutating func sanitaze() {
         for box in self.boxes {
             if box.value == nil {

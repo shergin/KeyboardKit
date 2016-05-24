@@ -20,6 +20,7 @@
 		A728ADCC1CBC2936002093F1 /* KeyboardEmojiSuggestionSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C24FB91CB88AA1004E417B /* KeyboardEmojiSuggestionSource.swift */; };
 		A728ADCD1CBC2936002093F1 /* KeyboardSpellingSuggestionSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C24FBB1CB88FFC004E417B /* KeyboardSpellingSuggestionSource.swift */; };
 		A728ADCE1CBC2936002093F1 /* KeyboardSuggestionGuessesSortingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C24FBD1CB8932D004E417B /* KeyboardSuggestionGuessesSortingModel.swift */; };
+		A73F256A1CF50718001AA92F /* KeyboardKeyListenerSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A73F25691CF50718001AA92F /* KeyboardKeyListenerSet.swift */; };
 		A7512D4C1C8A1B47008A25C7 /* russianKeyboardLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7512D4B1C8A1B47008A25C7 /* russianKeyboardLayout.swift */; };
 		A7512D4E1C8A2262008A25C7 /* commonStandardKeyboardPages.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7512D4D1C8A2262008A25C7 /* commonStandardKeyboardPages.swift */; };
 		A7512D501C8A30D8008A25C7 /* commonStandardKeyboardKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7512D4F1C8A30D8008A25C7 /* commonStandardKeyboardKeys.swift */; };
@@ -81,7 +82,7 @@
 		A78320EC1C7FD6C20099C307 /* KeyboardKeySelectionMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78319DE1C7FD6BE0099C307 /* KeyboardKeySelectionMode.swift */; };
 		A78320ED1C7FD6C20099C307 /* KeyboardKeyViewPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78319DF1C7FD6BE0099C307 /* KeyboardKeyViewPool.swift */; };
 		A78320EE1C7FD6C20099C307 /* KeyboardKeyViewSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78319E01C7FD6BE0099C307 /* KeyboardKeyViewSet.swift */; };
-		A78320EF1C7FD6C20099C307 /* KeyboardListenerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78319E11C7FD6BE0099C307 /* KeyboardListenerCoordinator.swift */; };
+		A78320EF1C7FD6C20099C307 /* KeyboardKeyListenerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78319E11C7FD6BE0099C307 /* KeyboardKeyListenerCoordinator.swift */; };
 		A78320F01C7FD6C20099C307 /* KeyboardPageLayoutController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78319E21C7FD6BE0099C307 /* KeyboardPageLayoutController.swift */; };
 		A78320F11C7FD6C20099C307 /* KeyboardPagesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78319E31C7FD6BE0099C307 /* KeyboardPagesController.swift */; };
 		A78320F31C7FD6C20099C307 /* KeyboardShiftController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78319E51C7FD6BE0099C307 /* KeyboardShiftController.swift */; };
@@ -156,6 +157,7 @@
 		A722DB211C8E1BFF00804C5C /* KeyboardEmojiSuggestionModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardEmojiSuggestionModel.swift; sourceTree = "<group>"; };
 		A722DB231C8E44E700804C5C /* String+trim.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+trim.swift"; sourceTree = "<group>"; };
 		A722DB251C8E4AA900804C5C /* KeyboardSoundController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardSoundController.swift; sourceTree = "<group>"; };
+		A73F25691CF50718001AA92F /* KeyboardKeyListenerSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardKeyListenerSet.swift; sourceTree = "<group>"; };
 		A7512D4B1C8A1B47008A25C7 /* russianKeyboardLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = russianKeyboardLayout.swift; sourceTree = "<group>"; };
 		A7512D4D1C8A2262008A25C7 /* commonStandardKeyboardPages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = commonStandardKeyboardPages.swift; sourceTree = "<group>"; };
 		A7512D4F1C8A30D8008A25C7 /* commonStandardKeyboardKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = commonStandardKeyboardKeys.swift; sourceTree = "<group>"; };
@@ -220,7 +222,7 @@
 		A78319DE1C7FD6BE0099C307 /* KeyboardKeySelectionMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardKeySelectionMode.swift; sourceTree = "<group>"; };
 		A78319DF1C7FD6BE0099C307 /* KeyboardKeyViewPool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardKeyViewPool.swift; sourceTree = "<group>"; };
 		A78319E01C7FD6BE0099C307 /* KeyboardKeyViewSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardKeyViewSet.swift; sourceTree = "<group>"; };
-		A78319E11C7FD6BE0099C307 /* KeyboardListenerCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardListenerCoordinator.swift; sourceTree = "<group>"; };
+		A78319E11C7FD6BE0099C307 /* KeyboardKeyListenerCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardKeyListenerCoordinator.swift; sourceTree = "<group>"; };
 		A78319E21C7FD6BE0099C307 /* KeyboardPageLayoutController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardPageLayoutController.swift; sourceTree = "<group>"; };
 		A78319E31C7FD6BE0099C307 /* KeyboardPagesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardPagesController.swift; sourceTree = "<group>"; };
 		A78319E51C7FD6BE0099C307 /* KeyboardShiftController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardShiftController.swift; sourceTree = "<group>"; };
@@ -730,8 +732,9 @@
 			children = (
 				A7D30DB41C9B5F7B0010F36E /* KeyboardKeyEvent.swift */,
 				A78319D71C7FD6BE0099C307 /* KeyboardKeyEventTarget.swift */,
+				A78319E11C7FD6BE0099C307 /* KeyboardKeyListenerCoordinator.swift */,
 				A7D30DB21C9B5CEF0010F36E /* KeyboardKeyListenerProtocol.swift */,
-				A78319E11C7FD6BE0099C307 /* KeyboardListenerCoordinator.swift */,
+				A73F25691CF50718001AA92F /* KeyboardKeyListenerSet.swift */,
 			);
 			path = "Listener Coordinator";
 			sourceTree = "<group>";
@@ -912,6 +915,7 @@
 				A797F2091CADFD53005CB9CD /* turkishKeyboardLayout.swift in Sources */,
 				A797F1F11CADE0F3005CB9CD /* azertyKeyboardLayout.swift in Sources */,
 				A797F1EF1CADE0D9005CB9CD /* qwertzKeyboardLayout.swift in Sources */,
+				A73F256A1CF50718001AA92F /* KeyboardKeyListenerSet.swift in Sources */,
 				A78320D81C7FD6C20099C307 /* KeyboardKeyShiftSymbolView.swift in Sources */,
 				A78320FA1C7FD6C20099C307 /* KeyboardSuggestionItemView.swift in Sources */,
 				A7E4C56C1C8133B3006AF488 /* KeyboardTheme.swift in Sources */,
@@ -982,7 +986,7 @@
 				A7C4EF6C1CEA9FF500947B47 /* suitableKeyboardLayouts.swift in Sources */,
 				A722DB221C8E1BFF00804C5C /* KeyboardEmojiSuggestionModel.swift in Sources */,
 				A78320B91C7FD6C20099C307 /* KeyboardEmojiCategory.swift in Sources */,
-				A78320EF1C7FD6C20099C307 /* KeyboardListenerCoordinator.swift in Sources */,
+				A78320EF1C7FD6C20099C307 /* KeyboardKeyListenerCoordinator.swift in Sources */,
 				A797F21F1CB31579005CB9CD /* KeyboardSpaceKeyContentView.swift in Sources */,
 				A7512D4E1C8A2262008A25C7 /* commonStandardKeyboardPages.swift in Sources */,
 				A78320C31C7FD6C20099C307 /* RootInputViewController.swift in Sources */,

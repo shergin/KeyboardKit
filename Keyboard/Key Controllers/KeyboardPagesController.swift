@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal class KeyboardPagesController: KeyboardListenerProtocol {
+internal class KeyboardPagesController: KeyboardKeyListenerProtocol {
     
     internal func keyViewDidSendEvent(keyEvent: KeyboardKeyEvent) {
         guard keyEvent.controlEvents.contains(.TouchUpInside) else {

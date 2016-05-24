@@ -13,7 +13,7 @@ private let backspaceDelay: NSTimeInterval = 0.5
 private let backspaceRepeat: NSTimeInterval = 0.07
 
 
-public final class KeyboardBackspaceKeyController: KeyboardListenerProtocol {
+public final class KeyboardBackspaceKeyController: KeyboardKeyListenerProtocol {
 
     private var delayTimer: NSTimer?
     private var repeatTimer: NSTimer?

@@ -9,7 +9,7 @@
 import Foundation
 
 
-internal final class KeyboardShiftController: KeyboardListenerProtocol {
+internal final class KeyboardShiftController: KeyboardKeyListenerProtocol {
 
     internal func keyViewDidSendEvent(keyEvent: KeyboardKeyEvent) {
         let controlEvents = keyEvent.controlEvents
