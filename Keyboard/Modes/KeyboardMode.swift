@@ -30,7 +30,7 @@ extension KeyboardMode {
 
 extension KeyboardMode {
     public init(inputViewController: UIInputViewController) {
-        self.colorMode = KeyboardColorMode(keyboardAppearance: inputViewController.textDocumentProxy.keyboardAppearance!)
+        self.colorMode = KeyboardColorMode(keyboardAppearance: inputViewController.textDocumentProxy.keyboardAppearance ?? .Default)
         self.sizeMode = KeyboardSizeMode.suitable()
     }
 
