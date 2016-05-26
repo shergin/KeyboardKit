@@ -235,7 +235,7 @@ public class KeyboardViewController: UIViewController {
     }
 
     private func updateKeyboardColorMode() {
-        self.keyboardMode.colorMode = KeyboardColorMode(keyboardAppearance: UIInputViewController.rootInputViewController.textDocumentProxy.keyboardAppearance!)
+        self.keyboardMode.colorMode = KeyboardColorMode.suitable()
     }
 
     private func updateKeyboardAppearance() {

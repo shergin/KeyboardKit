@@ -20,6 +20,6 @@ extension KeyboardColorMode {
     }
 
     public static func suitable() -> KeyboardColorMode {
-        return KeyboardColorMode(keyboardAppearance: UIInputViewController.rootInputViewController.textDocumentProxy.keyboardAppearance!)
+        return KeyboardColorMode(keyboardAppearance: UIInputViewController.rootInputViewController.textDocumentProxy.keyboardAppearance ?? .Default)
     }
 }
