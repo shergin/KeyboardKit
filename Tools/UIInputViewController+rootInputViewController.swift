@@ -71,6 +71,10 @@ extension UIInputViewController {
         return storedInputViewController!
     }
 
+    internal static var optionalRootInputViewController: UIInputViewController? {
+        return storedInputViewController
+    }
+
     internal static var isRootInputViewControllerAvailable: Bool {
         return storedInputViewController != nil
     }

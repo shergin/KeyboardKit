@@ -11,13 +11,10 @@ import UIKit
 
 public class RootInputViewController: UIInputViewController {
 
-    @available(*, deprecated, message="Use `UIInputViewController.rootInputViewController` instead.")
-    public static var sharedInstance: RootInputViewController!
-
-    public var contentView: KeyboardContentView!
+    public var contentView: UIView!
     public var backgroundView: UIView!
 
-    public var height: CGFloat? {
+    private var height: CGFloat? {
         didSet {
             guard oldValue != self.height else {
                 return
@@ -28,8 +25,6 @@ public class RootInputViewController: UIInputViewController {
 
                 self.heightConstraint.constant = value
                 self.heightConstraint.active = true
-                //self.view.setNeedsLayout()
-                //self.view.layoutIfNeeded()
             }
             else {
                 self.heightConstraint.active = false
@@ -39,9 +34,11 @@ public class RootInputViewController: UIInputViewController {
 
     public override init(nibName: String?, bundle: NSBundle?) {
         super.init(nibName: nibName, bundle: bundle)
+        log("`RootInputViewController` instance was created.")
+    }
 
-        log("RootInputViewController was created")
-        self.dynamicType.sharedInstance = self
+    deinit {
+        log("`RootInputViewController` instance was destroyed.")
     }
 
     public required init?(coder aDecoder: NSCoder) {
@@ -84,27 +81,8 @@ public class RootInputViewController: UIInputViewController {
         return widthConstraint
     }()
 
-//    private lazy var contentViewHeightConstraint: NSLayoutConstraint = {
-//        assert(self.isViewLoaded(), "View must be loaded before `contentViewWidthConstraint` property can be accessed.")
-//
-//        let heightConstraint = NSLayoutConstraint(
-//            item: self.contentView,
-//            attribute: NSLayoutAttribute.Height,
-//            relatedBy: NSLayoutRelation.GreaterThanOrEqual,
-//            toItem: nil,
-//            attribute: NSLayoutAttribute.NotAnAttribute,
-//            multiplier: 1.0,
-//            constant: 0.0
-//        )
-//
-//        heightConstraint.active = true
-//
-//        return heightConstraint
-//    }()
-
-
-    var kludge: UIView?
-    func setupKludge() {
+    private var kludge: UIView?
+    private func setupKludge() {
         guard self.kludge == nil else {
             return
         }
@@ -124,26 +102,17 @@ public class RootInputViewController: UIInputViewController {
         self.kludge = kludge
     }
 
-
     public func updateKeyboardWindowHeight() {
         self.setupKludge()
 
-//        self.contentView.subviews.first!.frame = CGRect(origin: CGPointZero, size: UILayoutFittingExpandedSize)
-//        self.contentView.subviews.first!.setNeedsLayout()
+        self.view.setNeedsUpdateConstraints()
+        self.view.updateConstraintsIfNeeded()
 
-        self.contentView.setNeedsUpdateConstraints()
         let height = self.contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
-        /*
-        //self.contentView.constraints.map { print($0) }
-        let oldSize = self.contentView.frame.size
-        self.contentView.frame.size = UILayoutFittingExpandedSize
-        //let height = self.contentView.systemLayoutSizeFittingSize(UILayoutFittingExpandedSize, withHorizontalFittingPriority: UILayoutPriorityRequired, verticalFittingPriority: UILayoutPriorityRequired).height
-        let height = self.contentView.systemLayoutSizeFittingSize(UILayoutFittingExpandedSize).height
-        self.contentView.frame.size = oldSize
-*/
-
         self.height = max(height, 100)
     }
+
+    // # View Lifecycle
 
     public override func loadView() {
         super.loadView()
@@ -156,7 +125,7 @@ public class RootInputViewController: UIInputViewController {
         self.view.addSubview(self.backgroundView)
 
         // # `contentView`
-        self.contentView = KeyboardContentView()
+        self.contentView = UIView()
         self.contentView.translatesAutoresizingMaskIntoConstraints = false
         self.inputView!.addSubview(self.contentView)
     }
@@ -168,127 +137,18 @@ public class RootInputViewController: UIInputViewController {
 
     public override func viewWillLayoutSubviews() {
         self.contentViewWidthConstraint.constant = self.view.bounds.size.width
-//
-//        print("width = \(self.view.bounds.size.width)")
-//
         super.viewWillLayoutSubviews()
     }
 
     public override func viewDidLayoutSubviews() {
+        // That's important. We manage `size` throught auto-layout, but we manage `origin` manually.
         self.contentView.frame.origin = CGPointZero
-//        let bounds = self.view.bounds
-//
-//        guard bounds.width != 0 && bounds.height != 0 else {
-//            return
-//        }
-
-        //self.setupKludge()
-
         super.viewDidLayoutSubviews()
     }
 
-
     public override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        print("*** viewWillTransitionToSize:\(size)");
         super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
-
-//        let width = UIScreen.mainScreen().bounds.size.width
-//        let height = UIScreen.mainScreen().bounds.size.height
-//        self.view.window!.frame = CGRect(x: 0, y: 0, width: width, height: height)
-
-
-
-
-
-
-
-
-
-//        self.contentView.setNeedsUpdateConstraints()
-//        self.contentView.updateConstraintsIfNeeded()
-//
-//        self.contentView.setNeedsLayout()
-//        self.contentView.layoutIfNeeded()
-
         self.updateKeyboardWindowHeight()
     }
 
-
-//    public override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-//        print("*** viewWillTransitionToSize:\(size)");
-//        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
-//
-//        let width = UIScreen.mainScreen().bounds.size.width
-//        let height = UIScreen.mainScreen().bounds.size.height
-//        self.view.window!.frame = CGRect(x: 0, y: 0, width: width, height: height)
-//    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    public override func viewWillLayoutSubviews() {
-//        print("*** viewWillLayoutSubviews():\(self.view.bounds)");
-//        print("***  self.contentView.frame:\(self.contentView.frame)");
-//
-//        super.viewWillLayoutSubviews()
-//        let bounds = self.view.bounds
-//
-//        guard bounds.width != 0 && bounds.height != 0 else {
-//            return
-//        }
-//
-//        self.contentView.frame = bounds
-//
-///*
-//        //assert(self.inputView!.subviews.count == 1 && self.inputView!.subviews.first == self.contentView, "A `inputView` must contain only a `containerView`.")
-//
-//        //let frame = self.view.bounds
-//
-//            //self.contentView.frame
-//        var bounds = self.view.bounds
-//        let height = self.contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
-//        print("height: \(height)")
-//        print("bounds: \(bounds)")
-//
-////        bounds.size.height = height
-////        self.contentView.frame = bounds
-//
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) { () -> Void in
-//            print("applied height: \(height)")
-//            self.height = height
-//        }
-//*/
-//        /*
-//        guard self.mainViewController is KeyboardWithoutFullAccessViewController else {
-//            return
-//        }
-//
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) { () -> Void in
-//            let height = self.mainViewController.view.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
-//            self.height = height
-//        }
-//        */
-//    }
-///*
-//    public override func viewDidLayoutSubviews() {
-//        super.viewDidLayoutSubviews()
-//
-////        self.contentView.frame = self.view.bounds
-////        self.contentView.setNeedsLayout()
-////        self.contentView.layoutIfNeeded()
-//    }
-//*/
 }

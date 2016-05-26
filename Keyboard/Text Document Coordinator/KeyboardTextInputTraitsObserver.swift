@@ -36,7 +36,9 @@ internal final class KeyboardTextInputTraitsObserver: NSObject {
     }
 
     dynamic public func poll() {
-        let inputViewController = UIInputViewController.rootInputViewController
+        guard let inputViewController = UIInputViewController.optionalRootInputViewController else {
+            return
+        }
 
         let strange = String(inputViewController.dynamicType) == "UICompatibilityInputViewController"
         if strange {
@@ -46,7 +48,6 @@ internal final class KeyboardTextInputTraitsObserver: NSObject {
                 return
             #endif
         }
-
 
         let textInputTraits = inputViewController.textDocumentProxy as UITextInputTraits
 

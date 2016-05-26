@@ -9,7 +9,11 @@
 import UIKit
 
 internal final class KeyboardView: UIView {
-    
+
+    override static func requiresConstraintBasedLayout() -> Bool {
+        return true
+    }
+
     var touchToView: [UITouch:UIView]
     
     override init(frame: CGRect) {
@@ -22,25 +26,35 @@ internal final class KeyboardView: UIView {
         self.userInteractionEnabled = true
         self.opaque = false
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("NSCoding not supported")
     }
-    
+
+    override func intrinsicContentSize() -> CGSize {
+        let interfaceOrientation = UIApplication.🚀sharedApplication().statusBarOrientation
+        let isPad = UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad
+        let actualScreenWidth = (UIScreen.mainScreen().nativeBounds.size.width / UIScreen.mainScreen().nativeScale)
+        let canonicalPortraitHeight = (isPad ? CGFloat(264) : CGFloat(interfaceOrientation.isPortrait && actualScreenWidth >= 400 ? 226 : 216))
+        let canonicalLandscapeHeight = (isPad ? CGFloat(352) : CGFloat(162))
+        let canonicalHeight = interfaceOrientation.isPortrait ? canonicalPortraitHeight : canonicalLandscapeHeight
+        return CGSize(width: actualScreenWidth, height: canonicalHeight)
+    }
+
     // Why have this useless drawRect? Well, if we just set the backgroundColor to clearColor,
     // then some weird optimization happens on UIKit's side where tapping down on a transparent pixel will
     // not actually recognize the touch. Having a manual drawRect fixes this behavior, even though it doesn't
     // actually do anything.
     override func drawRect(rect: CGRect) {}
-    
+
     override func hitTest(point: CGPoint, withEvent event: UIEvent!) -> UIView? {
         guard !self.hidden && self.alpha > 0 && self.userInteractionEnabled else {
             return nil
         }
 
-        return CGRectContainsPoint(self.bounds, point) ? self : nil
+        return self.bounds.contains(point) ? self : nil
     }
-    
+
     func handleControl(view: UIView?, controlEvent: UIControlEvents, event: UIEvent?) {
         guard let controlView = view as? UIControl else {
             return
@@ -56,8 +70,7 @@ internal final class KeyboardView: UIView {
             }
         }
     }
-    
-    // TODO: there's a bit of "stickiness" to Apple's implementation
+
     func findNearestView(position: CGPoint) -> UIView? {
         guard self.bounds.contains(position) else {
             return nil
@@ -84,7 +97,6 @@ internal final class KeyboardView: UIView {
         return closest.view
     }
 
-    // reset tracked views without cancelling current touch
     func resetTrackedViews() {
         for view in self.touchToView.values {
             self.handleControl(view, controlEvent: .TouchCancel, event: nil)
@@ -92,10 +104,10 @@ internal final class KeyboardView: UIView {
 
         self.touchToView.removeAll(keepCapacity: true)
     }
-    
+
     func ownView(newTouch: UITouch, viewToOwn: UIView?) -> Bool {
         var foundView = false
-        
+
         if viewToOwn != nil {
             for (touch, view) in self.touchToView {
                 if viewToOwn == view {
@@ -110,11 +122,11 @@ internal final class KeyboardView: UIView {
                 }
             }
         }
-        
+
         self.touchToView[newTouch] = viewToOwn
         return foundView
     }
-    
+
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         for touch in touches {
             let position = touch.locationInView(self)
@@ -132,7 +144,7 @@ internal final class KeyboardView: UIView {
             }
         }
     }
-    
+
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
         for touch in touches {
             let position = touch.locationInView(self)
@@ -150,9 +162,6 @@ internal final class KeyboardView: UIView {
             }
 
             newView = newView ?? findNearestView(position)
-
-
-
 
             if oldView != newView {
                 self.handleControl(oldView, controlEvent: .TouchDragExit, event: event)
@@ -184,7 +193,7 @@ internal final class KeyboardView: UIView {
             else {
                 self.handleControl(view, controlEvent: .TouchCancel, event: event)
             }
-            
+
             self.touchToView[touch] = nil
         }
     }
@@ -193,11 +202,10 @@ internal final class KeyboardView: UIView {
         if let touches = touches {
             for touch in touches {
                 let view = self.touchToView[touch]
-                
                 self.handleControl(view, controlEvent: .TouchCancel, event: event)
-                
                 self.touchToView[touch] = nil
             }
         }
     }
+
 }

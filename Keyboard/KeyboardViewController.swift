@@ -85,6 +85,7 @@ public class KeyboardViewController: UIViewController {
     public override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
 
+        self.view.invalidateIntrinsicContentSize()
         self.establishKeyViews(pageNumber: self.pageNumber)
     }
 
@@ -109,6 +110,13 @@ public class KeyboardViewController: UIViewController {
         }
 
         //for view in self.keyViewSet.views { view.shouldRasterize = false }
+    }
+
+    public override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+        self.view.invalidateIntrinsicContentSize()
+        self.view.setNeedsUpdateConstraints()
+        self.view.setNeedsLayout()
     }
 
     // # Private
