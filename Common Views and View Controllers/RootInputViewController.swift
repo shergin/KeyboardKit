@@ -8,6 +8,7 @@
 
 import UIKit
 
+private var inputViewControllerCounter = 0
 
 public class RootInputViewController: UIInputViewController {
 
@@ -34,11 +35,24 @@ public class RootInputViewController: UIInputViewController {
 
     public override init(nibName: String?, bundle: NSBundle?) {
         super.init(nibName: nibName, bundle: bundle)
+
+        if inputViewControllerCounter > 0 {
+            let message = "💣🔥🙀💥 Attempt to create \(inputViewControllerCounter + 1)-nd instance of `RootInputViewController` (and that should not be)." +
+                "That's usually means that there is memory leak of something like this. KeyboardKit cannot work properly in this situation."
+            #if DEBUG
+                fatalError(message)
+            #else
+                log(message)
+            #endif
+        }
+
         log("`RootInputViewController` instance was created.")
+        inputViewControllerCounter += 1
     }
 
     deinit {
         log("`RootInputViewController` instance was destroyed.")
+        inputViewControllerCounter -= 1
     }
 
     public required init?(coder aDecoder: NSCoder) {

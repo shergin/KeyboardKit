@@ -9,66 +9,87 @@
 import UIKit
 
 
-private var storedInputViewConrollers = WeakSet<UIInputViewController>()
-
+private var storedInputViewControllers = WeakSet<UIInputViewController>()
 private weak var storedInputViewController: UIInputViewController?
 private var dispatchOnceToken: dispatch_once_t = 0
 
-private var inputWindowObserver = InputWindowObserver()
+
+func swizzleInit() {
+    let type = UIViewController.self // Yes, `UIViewController`, not `UIInputViewController`.
+    let originalMethod = class_getInstanceMethod(type, Selector("initWithNibName:bundle:"))
+
+    let swizzledImplementation: @convention(c) (NSObject, Selector, AnyObject, AnyObject) -> Unmanaged<AnyObject>! = { (_self, _cmd, nibName, bundle) in
+        if let inputViewController = _self as? UIInputViewController {
+            storedInputViewController = inputViewController
+            storedInputViewControllers.insert(inputViewController)
+        }
+
+        return _self.performSelector("originalInitWithNibName:bundle:", withObject: nibName, withObject: bundle)
+    }
+
+    let originalImplementation =
+        method_setImplementation(
+            originalMethod,
+            unsafeBitCast(swizzledImplementation, IMP.self)
+    )
+
+    class_addMethod(
+        type,
+        "originalInitWithNibName:bundle:",
+        originalImplementation,
+        method_getTypeEncoding(originalMethod)
+    )
+}
+
+
+func swizzleSendEvent() {
+    let type = UIApplication.self
+    let originalMethod = class_getInstanceMethod(type, Selector("sendEvent:"))
+
+    let swizzledImplementation: @convention(c) (UIApplication, Selector, UIEvent) -> Unmanaged<AnyObject>! = { (_self, _cmd, event) in
+        if let view = event.allTouches()?.first?.view {
+            if let rootViewController = view.window?.rootViewController?.childViewControllers.first as? UIInputViewController {
+                if storedInputViewController != rootViewController {
+                    storedInputViewController = rootViewController
+                    log("🙀🔥 `UIInputViewController.rootInputViewController` was recovered.")
+                }
+            }
+        }
+
+        return _self.performSelector("originalSendEvent:", withObject: event)
+    }
+
+    let originalImplementation =
+        method_setImplementation(
+            originalMethod,
+            unsafeBitCast(swizzledImplementation, IMP.self)
+    )
+
+    class_addMethod(
+        type,
+        "originalSendEvent:",
+        originalImplementation,
+        method_getTypeEncoding(originalMethod)
+    )
+}
+
 
 extension UIInputViewController {
 
     public override class func initialize() {
         dispatch_once(&dispatchOnceToken) {
-            let type = UIViewController.self // Yes, `UIViewController`, not `UIInputViewController`.
-            let originalMethod = class_getInstanceMethod(type, Selector("initWithNibName:bundle:"))
-
-            let swizzledImplementation: @convention(c) (NSObject, Selector, AnyObject, AnyObject) -> Unmanaged<AnyObject>! = { (_self, _cmd, nibName, bundle) in
-                if let inputViewController = _self as? UIInputViewController {
-                    storedInputViewController = inputViewController
-                    storedInputViewConrollers.insert(inputViewController)
-                }
-
-                return _self.performSelector("originalInitWithNibName:bundle:", withObject: nibName, withObject: bundle)
-            }
-
-            let originalImplementation =
-                method_setImplementation(
-                    originalMethod,
-                    unsafeBitCast(swizzledImplementation, IMP.self)
-                )
-
-            class_addMethod(
-                type,
-                "originalInitWithNibName:bundle:",
-                originalImplementation,
-                method_getTypeEncoding(originalMethod)
-            )
-
-            let _ = inputWindowObserver
-        }
-    }
-
-    private static func selectVisibleRootViewController(visibleWindow: UIWindow) {
-        var visibleInputViewConroller: UIInputViewController?
-        for inputViewConroller in storedInputViewConrollers {
-            guard let window = inputViewConroller.view.window else {
-                continue
-            }
-
-            if window == visibleWindow {
-                visibleInputViewConroller = inputViewConroller
-                break
-            }
-        }
-
-        if let viewController = visibleInputViewConroller where viewController != storedInputViewController {
-            storedInputViewController = viewController
+            swizzleInit()
+            swizzleSendEvent()
         }
     }
 
     public static var rootInputViewController: UIInputViewController {
-        return storedInputViewController!
+        if let inputViewController = storedInputViewController {
+            return inputViewController
+        }
+
+        // FIXME: Ugly.
+        return Array(storedInputViewControllers).first!
     }
 
     internal static var optionalRootInputViewController: UIInputViewController? {
@@ -78,23 +99,5 @@ extension UIInputViewController {
     internal static var isRootInputViewControllerAvailable: Bool {
         return storedInputViewController != nil
     }
-}
 
-class InputWindowObserver: NSObject {
-    override init() {
-        super.init()
-
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(handleWindowDidBecomeVisible), name: UIWindowDidBecomeVisibleNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(handleWindowDidBecomeHidden), name: UIWindowDidBecomeHiddenNotification, object: nil)
-    }
-
-    func handleWindowDidBecomeVisible(notification: NSNotification) {
-        print("handleWindowDidBecomeVisible: \(notification.object)")
-
-        UIInputViewController.selectVisibleRootViewController(notification.object as! UIWindow)
-    }
-
-    func handleWindowDidBecomeHidden(notification: NSNotification) {
-        print("handleWindowDidBecomeHidden: \(notification.object)")
-    }
 }
