@@ -247,7 +247,7 @@
 		A78320B01C7FD6C20099C307 /* CGPoint+Math.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGPoint+Math.swift"; sourceTree = "<group>"; };
 		A78320B11C7FD6C20099C307 /* CGRect+Hashable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGRect+Hashable.swift"; sourceTree = "<group>"; };
 		A78320B21C7FD6C20099C307 /* CGSize+Hashable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGSize+Hashable.swift"; sourceTree = "<group>"; };
-		A78320B31C7FD6C20099C307 /* WeakSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WeakSet.swift; path = ../Utils/WeakSet.swift; sourceTree = "<group>"; };
+		A78320B31C7FD6C20099C307 /* WeakSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeakSet.swift; sourceTree = "<group>"; };
 		A783272B1C7FD9BD0099C307 /* KeyboardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardView.swift; sourceTree = "<group>"; };
 		A787A8A51C84D9D400588D01 /* KeyboardStructuredTheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardStructuredTheme.swift; sourceTree = "<group>"; };
 		A797EBDC1CEA6E3F0024E023 /* isKeyboardExtensionEnabled.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = isKeyboardExtensionEnabled.swift; sourceTree = "<group>"; };
@@ -314,11 +314,11 @@
 		A728ADCF1CBC3521002093F1 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				A7C24FB51CB888AC004E417B /* KeyboardSuggestionSource.swift */,
 				A7C24FB91CB88AA1004E417B /* KeyboardEmojiSuggestionSource.swift */,
 				A7C24FBB1CB88FFC004E417B /* KeyboardSpellingSuggestionSource.swift */,
+				A7C24FB51CB888AC004E417B /* KeyboardSuggestionSource.swift */,
 			);
-			name = Sources;
+			path = Sources;
 			sourceTree = "<group>";
 		};
 		A752657B1C459B83002355AF = {
@@ -350,12 +350,12 @@
 		A76D12EF1CBC1EE700AA22EC /* Query & Guess */ = {
 			isa = PBXGroup;
 			children = (
-				A7C24FB31CB887C8004E417B /* KeyboardSuggestionQuery.swift */,
 				A7C24FB71CB8896C004E417B /* KeyboardSuggestionGuess.swift */,
 				A76D12EE1CBC1ED900AA22EC /* KeyboardSuggestionGuessAppearance.swift */,
 				A76D12F01CBC1EFC00AA22EC /* KeyboardSuggestionGuessType.swift */,
+				A7C24FB31CB887C8004E417B /* KeyboardSuggestionQuery.swift */,
 			);
-			name = "Query & Guess";
+			path = "Query & Guess";
 			sourceTree = "<group>";
 		};
 		A78319991C7FD6BE0099C307 /* Standard Keyboards */ = {
@@ -467,11 +467,11 @@
 		A78319C71C7FD6BE0099C307 /* Keyboard */ = {
 			isa = PBXGroup;
 			children = (
-				A7CF9BA91CC6F9470085A700 /* Managers */,
 				A78319B41C7FD6BE0099C307 /* Key */,
 				A7EBA4551C7FE11A00CCF2F2 /* Key Controllers */,
 				A78319C91C7FD6BE0099C307 /* Layout */,
 				A7EBA4561C7FE16700CCF2F2 /* Listener Coordinator */,
+				A7CF9BA91CC6F9470085A700 /* Managers */,
 				A783199B1C7FD6BE0099C307 /* Model */,
 				A78319CB1C7FD6BE0099C307 /* Modes */,
 				A7EBA4571C7FE1CF00CCF2F2 /* Text Document Coordinator */,
@@ -520,17 +520,17 @@
 			isa = PBXGroup;
 			children = (
 				A7EBA4531C7FDEB600CCF2F2 /* Core Graphics */,
-				A7D196591CEBAEB300C8E056 /* isKeyboardExtensionContext.swift */,
-				A797EBDC1CEA6E3F0024E023 /* isKeyboardExtensionEnabled.swift */,
-				A70B41291CE3CB2F00C80054 /* log.swift */,
 				A7CF9BAC1CC6FFFA0085A700 /* NSCharacterSet+AdditionalSets.swift */,
-				A797EBDE1CEA75B60024E023 /* openSettingsAppWithKeyboards.swift */,
 				A722DB231C8E44E700804C5C /* String+trim.swift */,
 				A78319F21C7FD6BE0099C307 /* UIApplication+sharedKeyboardApplication.swift */,
 				A78319F31C7FD6BE0099C307 /* UIInputViewController+rootInputViewController.swift */,
 				A78319F41C7FD6BE0099C307 /* UIResponder+firstResponder.swift */,
 				A7FCC15D1CD41E8900008EC7 /* WeakBox.swift */,
 				A78320B31C7FD6C20099C307 /* WeakSet.swift */,
+				A7D196591CEBAEB300C8E056 /* isKeyboardExtensionContext.swift */,
+				A797EBDC1CEA6E3F0024E023 /* isKeyboardExtensionEnabled.swift */,
+				A70B41291CE3CB2F00C80054 /* log.swift */,
+				A797EBDE1CEA75B60024E023 /* openSettingsAppWithKeyboards.swift */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -671,11 +671,11 @@
 		A7C24FB21CB88728004E417B /* New */ = {
 			isa = PBXGroup;
 			children = (
-				A728ADCF1CBC3521002093F1 /* Sources */,
 				A76D12EF1CBC1EE700AA22EC /* Query & Guess */,
+				A728ADCF1CBC3521002093F1 /* Sources */,
 				A7C24FBD1CB8932D004E417B /* KeyboardSuggestionGuessesSortingModel.swift */,
 			);
-			name = New;
+			path = New;
 			sourceTree = "<group>";
 		};
 		A7CF9BA91CC6F9470085A700 /* Managers */ = {
@@ -683,7 +683,7 @@
 			children = (
 				A7CF9BAA1CC6F95F0085A700 /* KeyboardShiftStatusController.swift */,
 			);
-			name = Managers;
+			path = Managers;
 			sourceTree = "<group>";
 		};
 		A7EBA4531C7FDEB600CCF2F2 /* Core Graphics */ = {
@@ -694,8 +694,7 @@
 				A78320B11C7FD6C20099C307 /* CGRect+Hashable.swift */,
 				A78320B21C7FD6C20099C307 /* CGSize+Hashable.swift */,
 			);
-			name = "Core Graphics";
-			path = "../Utils/Core Graphics";
+			path = "Core Graphics";
 			sourceTree = "<group>";
 		};
 		A7EBA4541C7FE04600CCF2F2 /* Modes */ = {
