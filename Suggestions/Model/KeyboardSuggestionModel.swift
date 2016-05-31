@@ -154,16 +154,13 @@ public final class KeyboardSuggestionModel {
                 correctionsLimit -= 1
                 totalSpellingLimit -= 1
                 return correctionsLimit >= 0 && totalSpellingLimit >= 0
-                break
             case .Completion:
                 completionsLimit -= 1
                 totalSpellingLimit -= 1
                 return completionsLimit >= 0 && totalSpellingLimit >= 0
-                break
             case .Emoji:
                 emojisLimit -= 1
                 return emojisLimit >= 0
-                break
             }
 
             return false

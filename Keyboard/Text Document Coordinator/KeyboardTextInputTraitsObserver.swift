@@ -31,11 +31,11 @@ internal final class KeyboardTextInputTraitsObserver: NSObject {
 
     internal func enable() {
         self.disable()
-        self.pollingTimer = UIScreen.mainScreen().displayLinkWithTarget(self, selector: "poll")
+        self.pollingTimer = UIScreen.mainScreen().displayLinkWithTarget(self, selector: #selector(self.poll))
         self.pollingTimer?.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSDefaultRunLoopMode)
     }
 
-    dynamic public func poll() {
+    internal dynamic func poll() {
         guard let inputViewController = UIInputViewController.optionalRootInputViewController else {
             return
         }

@@ -106,8 +106,8 @@ internal final class KeyboardKeyAlternateKeysPopupView: KeyboardKeyPopupView {
     }
 
     func addTargets() {
-        self.keyView!.addTarget(self, action: Selector("keyViewDidTouchDragInside:event:"), forControlEvents: .TouchDragInside)
-        self.keyView!.addTarget(self, action: Selector("keyViewDidTouchUpInside:event:"), forControlEvents: .TouchUpInside)
+        self.keyView!.addTarget(self, action: #selector(self.keyViewDidTouchDragInside(_:event:)), forControlEvents: .TouchDragInside)
+        self.keyView!.addTarget(self, action: #selector(self.keyViewDidTouchUpInside(_:event:)), forControlEvents: .TouchUpInside)
     }
 
     func removeTargets() {
