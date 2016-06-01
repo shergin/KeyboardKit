@@ -75,9 +75,9 @@ public class KeyboardKeyView: UIControl {
 
     public var shouldRasterize: Bool = false {
         didSet {
-            for view in [self.displayView, self.borderView, self.underView, self.labelView as? UIView] where view != nil {
-                view!.layer.shouldRasterize = shouldRasterize
-                view!.layer.rasterizationScale = UIScreen.mainScreen().scale
+            for view in [self.displayView, self.borderView, self.underView, self.labelView] as [UIView?] {
+                view?.layer.shouldRasterize = shouldRasterize
+                view?.layer.rasterizationScale = UIScreen.mainScreen().scale
             }
 
             self.labelView.layer.shouldRasterize = shouldRasterize
@@ -381,7 +381,7 @@ public class KeyboardKeyView: UIControl {
         if let image = self.key.image {
             self.contentView = image.imageView
         } else if let contentView = self.key.contentView {
-            self.contentView = contentView.copy() as! UIView
+            self.contentView = (contentView.copy() as? UIView)!
         } else {
             self.contentView = nil
         }

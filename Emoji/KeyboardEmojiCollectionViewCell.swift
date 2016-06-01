@@ -30,7 +30,7 @@ internal final class KeyboardEmojiCollectionViewCell: UICollectionViewCell {
         self.labelView.frame = self.contentView.bounds
         self.labelView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         self.labelView.textAlignment = .Center
-        self.labelView.font = UIFont.systemFontOfSize(22.0)
+        self.labelView.font = UIFont.systemFontOfSize(28.0)
         self.contentView.addSubview(labelView)
     }
 
@@ -40,6 +40,12 @@ internal final class KeyboardEmojiCollectionViewCell: UICollectionViewCell {
 
     private func updateEmoji() {
         self.labelView.text = self.emoji.character
+    }
+
+    override var highlighted: Bool {
+        didSet {
+            self.labelView.alpha = self.highlighted ? 0.6 : 1.0
+        }
     }
 
 }

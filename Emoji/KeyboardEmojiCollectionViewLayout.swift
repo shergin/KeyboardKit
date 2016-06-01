@@ -14,18 +14,22 @@ internal final class KeyboardEmojiCollectionViewLayout: UICollectionViewFlowLayo
     override init() {
         super.init()
 
-        self.itemSize = CGSize(width: 32.0, height: 32.0)
-        self.scrollDirection = .Vertical
+        self.itemSize = CGSize(width: 40.0, height: 40.0)
+        self.minimumLineSpacing = 4.0
+        self.minimumInteritemSpacing = 4.0
+        self.scrollDirection = .Horizontal
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    /*
     override func prepareLayout() {
         super.prepareLayout()
         self.headerReferenceSize = CGSize(width: self.collectionView!.bounds.size.height, height: 32.0)
     }
+    */
 
     /*
     override func shouldInvalidateLayoutForBoundsChange(newBounds: CGRect) -> Bool {

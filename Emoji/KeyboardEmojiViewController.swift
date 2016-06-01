@@ -33,6 +33,11 @@ public class KeyboardEmojiViewController: UICollectionViewController {
         self.collectionView!.backgroundColor = UIColor.clearColor()
         self.collectionView!.backgroundView?.backgroundColor = UIColor.clearColor()
     }
+
+    public func scrollToEmojiCategory(emojiCategory: KeyboardEmojiCategory) {
+        let section = self.emojis.categories.indexOf(emojiCategory)!
+        self.collectionView?.scrollToItemAtIndexPath(NSIndexPath(forItem: 0, inSection: section), atScrollPosition: [.Left, .Top], animated: true)
+    }
 }
 
 
@@ -57,14 +62,14 @@ extension KeyboardEmojiViewController /*: UICollectionViewDataSource */ {
         return self.emojis.categories.count
     }
 
-    public override func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
-        let category = self.emojis.categories[indexPath.section]
-        let index = indexPath.row
-
-        let headerView = self.collectionView?.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: KeyboardEmojiCollectionSectionHeaderView.reuseIdentifier, forIndexPath: indexPath) as! KeyboardEmojiCollectionSectionHeaderView
-        headerView.emojiCategory = category
-        return headerView
-    }
+//    public override func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
+//        let category = self.emojis.categories[indexPath.section]
+//        let index = indexPath.row
+//
+//        let headerView = self.collectionView?.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: KeyboardEmojiCollectionSectionHeaderView.reuseIdentifier, forIndexPath: indexPath) as! KeyboardEmojiCollectionSectionHeaderView
+//        headerView.emojiCategory = category
+//        return headerView
+//    }
 
 }
 

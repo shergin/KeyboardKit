@@ -23,7 +23,7 @@ public enum KeyboardEmojiCategory {
 }
 
 extension KeyboardEmojiCategory {
-    static var all: [KeyboardEmojiCategory] {
+    public static var all: [KeyboardEmojiCategory] {
         return [
             .People,
             .Nature,
