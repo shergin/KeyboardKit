@@ -9,13 +9,15 @@
 import UIKit
 
 
-public final class KeyboardFoodEmojiCategoryView: KeyboardEmojiCategoryView {
+public final class KeyboardFoodsEmojiCategoryView: KeyboardEmojiCategoryView {
 
     public override var emojiCategory: KeyboardEmojiCategory {
         return .Foods
     }
 
-    override func draw() {
+    internal override func draw() {
+        super.draw()
+
         let color = self.tintColor
 
         let foodPath = UIBezierPath()

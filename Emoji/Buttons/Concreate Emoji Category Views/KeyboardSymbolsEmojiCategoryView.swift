@@ -15,7 +15,9 @@ public final class KeyboardSymbolsEmojiCategoryView: KeyboardEmojiCategoryView {
         return .Symbols
     }
 
-    override func draw() {
+    internal override func draw() {
+        super.draw()
+
         let color = self.tintColor
 
         let ampersandSymbolPath = UIBezierPath()

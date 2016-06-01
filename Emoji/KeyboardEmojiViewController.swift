@@ -13,6 +13,8 @@ public class KeyboardEmojiViewController: UICollectionViewController {
 
     var emojis = KeyboardEmojis.sharedInstance
 
+    public weak var delegate: KeyboardEmojiViewControllerDelegate?
+
     public init() {
         let layout = KeyboardEmojiCollectionViewLayout()
         super.init(collectionViewLayout: layout)
@@ -34,9 +36,41 @@ public class KeyboardEmojiViewController: UICollectionViewController {
         self.collectionView!.backgroundView?.backgroundColor = UIColor.clearColor()
     }
 
-    public func scrollToEmojiCategory(emojiCategory: KeyboardEmojiCategory) {
+    public func scrollToEmojiCategory(emojiCategory: KeyboardEmojiCategory, animated: Bool) {
         let section = self.emojis.categories.indexOf(emojiCategory)!
-        self.collectionView?.scrollToItemAtIndexPath(NSIndexPath(forItem: 0, inSection: section), atScrollPosition: [.Left, .Top], animated: true)
+        self.collectionView?.scrollToItemAtIndexPath(NSIndexPath(forItem: 0, inSection: section), atScrollPosition: [.Left, .Top], animated: animated)
+    }
+
+    private var cachedEmojiCategory: KeyboardEmojiCategory = .None
+    public var emojiCategory: KeyboardEmojiCategory {
+        get {
+            guard let indexPaths = self.collectionView?.indexPathsForVisibleItems() where indexPaths.count > 0 else {
+                return .None
+            }
+
+            // # Short version of Finding Majority Item algorithm
+            var majoritySection = 0
+            var count = 0
+
+            for indexPath in indexPaths {
+                if count == 0 {
+                    majoritySection = indexPath.section
+                }
+
+                count += majoritySection == indexPath.section ? 1 : -1
+            }
+
+            return self.emojis.categories[majoritySection]
+        }
+
+        set {
+            self.scrollToEmojiCategory(newValue, animated: UIView.areAnimationsEnabled())
+        }
+    }
+
+    public override func viewDidAppear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        self.notifyAboutEmojiCategoryIfNeeded()
     }
 }
 
@@ -71,6 +105,14 @@ extension KeyboardEmojiViewController /*: UICollectionViewDataSource */ {
 //        return headerView
 //    }
 
+    private func notifyAboutEmojiCategoryIfNeeded() {
+        let actiallyEmojiCategories = self.emojiCategory
+        if self.cachedEmojiCategory != actiallyEmojiCategories {
+            self.cachedEmojiCategory = actiallyEmojiCategories
+            self.delegate?.emojiViewController(self, emojiCategoryWasChanged: actiallyEmojiCategories)
+        }
+
+    }
 }
 
 
@@ -82,6 +124,15 @@ extension KeyboardEmojiViewController /*: UICollectionViewDelegate */ {
         let emoji = self.emojis.emojisByCategory[category]![index]
 
         UIInputViewController.rootInputViewController.textDocumentProxy.insertText(emoji.character)
+    }
+
+}
+
+
+extension KeyboardEmojiViewController /*: UIScrollViewDelegate */ {
+
+    public override func scrollViewDidScroll(scrollView: UIScrollView) {
+        self.notifyAboutEmojiCategoryIfNeeded()
     }
 
 }

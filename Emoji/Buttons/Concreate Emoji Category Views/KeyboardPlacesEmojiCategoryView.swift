@@ -15,7 +15,9 @@ public final class KeyboardPlacesEmojiCategoryView: KeyboardEmojiCategoryView {
         return .Places
     }
 
-    override func draw() {
+    internal override func draw() {
+        super.draw()
+
         let color = self.tintColor
 
         let placesBuildingPath = UIBezierPath()

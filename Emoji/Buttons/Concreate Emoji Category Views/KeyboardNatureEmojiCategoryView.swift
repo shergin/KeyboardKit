@@ -15,7 +15,9 @@ public final class KeyboardNatureEmojiCategoryView: KeyboardEmojiCategoryView {
         return .Nature
     }
 
-    override func draw() {
+    internal override func draw() {
+        super.draw()
+
         let color = self.tintColor
 
         let animalLeftEyePath = UIBezierPath(ovalInRect: CGRectMake(-3.95, -0.45, 1.4, 1.9))

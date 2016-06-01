@@ -15,7 +15,9 @@ public final class KeyboardPeopleEmojiCategoryView: KeyboardEmojiCategoryView {
         return .People
     }
 
-    override func draw() {
+    internal override func draw() {
+        super.draw()
+
         let color = self.tintColor
 
         let smileLeftEyePath = UIBezierPath(ovalInRect: CGRectMake(-3.25, -3, 1.5, 2))

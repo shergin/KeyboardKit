@@ -15,7 +15,9 @@ public final class KeyboardFlagsEmojiCategoryView: KeyboardEmojiCategoryView {
         return .Flags
     }
 
-    override func draw() {
+    internal override func draw() {
+        super.draw()
+
         let color = self.tintColor
 
         let flagPath = UIBezierPath()

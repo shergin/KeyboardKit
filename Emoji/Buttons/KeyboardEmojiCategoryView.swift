@@ -6,10 +6,10 @@
 //  Copyright © 2016 AnchorFree. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 
-public class KeyboardEmojiCategoryView: UIControl {
+public class KeyboardEmojiCategoryView: KeyboardDrawableView {
 
     public static func classForEmojiCategory(emojiCategory: KeyboardEmojiCategory) -> KeyboardEmojiCategoryView.Type {
         switch emojiCategory {
@@ -18,7 +18,7 @@ public class KeyboardEmojiCategoryView: UIControl {
         case .Nature:
             return KeyboardNatureEmojiCategoryView.self
         case .Foods:
-            return KeyboardFoodEmojiCategoryView.self
+            return KeyboardFoodsEmojiCategoryView.self
         case .Activity:
             return KeyboardActivityEmojiCategoryView.self
         case .Places:
@@ -34,10 +34,6 @@ public class KeyboardEmojiCategoryView: UIControl {
         }
     }
 
-    class var size: CGSize {
-        return CGSize(width: 32.0, height: 32.0)
-    }
-
     public var emojiCategory: KeyboardEmojiCategory {
         fatalError("`emojiCategory` has to be implemented in subclasses.")
     }
@@ -51,42 +47,42 @@ public class KeyboardEmojiCategoryView: UIControl {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public override func intrinsicContentSize() -> CGSize {
-        return self.dynamicType.size
-    }
-
-    public override func sizeThatFits(size: CGSize) -> CGSize {
-        return self.dynamicType.size
-    }
-
-    public override var tintColor: UIColor! {
-        didSet {
-            self.setNeedsDisplay()
-        }
-    }
-
-    public override func drawRect(rect: CGRect) {
-        let context = UIGraphicsGetCurrentContext()
-
-        CGContextSaveGState(context)
-
-        let xOffset = self.bounds.width / CGFloat(2)
-        let yOffset = self.bounds.height / CGFloat(2)
-
-        CGContextTranslateCTM(context, xOffset, yOffset)
-
-        self.draw()
-
-        CGContextRestoreGState(context)
-    }
-
-    func draw() {
-        fatalError("draw() has to be implemented in subclasses.")
+    func drawSelection() {
+        let ovalPath = UIBezierPath(ovalInRect: CGRectMake(-12, -12, 24, 24))
+        UIColor.grayColor().setFill()
+        ovalPath.fill()
     }
 
     public override var highlighted: Bool {
         didSet {
             self.alpha = self.highlighted ? 0.5 : 1.0
+        }
+    }
+
+    public override var selected: Bool {
+        didSet {
+            self.setNeedsDisplay()
+        }
+    }
+
+    public var selectedTintColor: UIColor = UIColor.clearColor()
+    public var selectedCircleTintColor: UIColor = UIColor.clearColor()
+
+    public override var tintColor: UIColor! {
+        get {
+            return self.selected ? self.selectedTintColor : super.tintColor
+        }
+
+        set {
+            super.tintColor = newValue
+        }
+    }
+
+    internal override func draw() {
+        if self.selected {
+            let circlePath = UIBezierPath(ovalInRect: CGRectMake(-13, -13, 26, 26))
+            self.selectedCircleTintColor.setFill()
+            circlePath.fill()
         }
     }
 

@@ -20,6 +20,8 @@
 		A728ADCC1CBC2936002093F1 /* KeyboardEmojiSuggestionSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C24FB91CB88AA1004E417B /* KeyboardEmojiSuggestionSource.swift */; };
 		A728ADCD1CBC2936002093F1 /* KeyboardSpellingSuggestionSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C24FBB1CB88FFC004E417B /* KeyboardSpellingSuggestionSource.swift */; };
 		A728ADCE1CBC2936002093F1 /* KeyboardSuggestionGuessesSortingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C24FBD1CB8932D004E417B /* KeyboardSuggestionGuessesSortingModel.swift */; };
+		A73A91BE1CFF5952009A09AD /* KeyboardEmojiViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A73A91BD1CFF5952009A09AD /* KeyboardEmojiViewControllerDelegate.swift */; };
+		A73A91C01CFF7E82009A09AD /* KeyboardDrawableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A73A91BF1CFF7E82009A09AD /* KeyboardDrawableView.swift */; };
 		A73F256A1CF50718001AA92F /* KeyboardKeyListenerSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A73F25691CF50718001AA92F /* KeyboardKeyListenerSet.swift */; };
 		A7512D4C1C8A1B47008A25C7 /* russianKeyboardLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7512D4B1C8A1B47008A25C7 /* russianKeyboardLayout.swift */; };
 		A7512D4E1C8A2262008A25C7 /* commonStandardKeyboardPages.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7512D4D1C8A2262008A25C7 /* commonStandardKeyboardPages.swift */; };
@@ -166,6 +168,8 @@
 		A722DB211C8E1BFF00804C5C /* KeyboardEmojiSuggestionModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardEmojiSuggestionModel.swift; sourceTree = "<group>"; };
 		A722DB231C8E44E700804C5C /* String+trim.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+trim.swift"; sourceTree = "<group>"; };
 		A722DB251C8E4AA900804C5C /* KeyboardSoundController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardSoundController.swift; sourceTree = "<group>"; };
+		A73A91BD1CFF5952009A09AD /* KeyboardEmojiViewControllerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardEmojiViewControllerDelegate.swift; sourceTree = "<group>"; };
+		A73A91BF1CFF7E82009A09AD /* KeyboardDrawableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardDrawableView.swift; sourceTree = "<group>"; };
 		A73F25691CF50718001AA92F /* KeyboardKeyListenerSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardKeyListenerSet.swift; sourceTree = "<group>"; };
 		A7512D4B1C8A1B47008A25C7 /* russianKeyboardLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = russianKeyboardLayout.swift; sourceTree = "<group>"; };
 		A7512D4D1C8A2262008A25C7 /* commonStandardKeyboardPages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = commonStandardKeyboardPages.swift; sourceTree = "<group>"; };
@@ -448,8 +452,9 @@
 				A78319AF1C7FD6BE0099C307 /* KeyboardEmojiCollectionSectionHeaderView.swift */,
 				A78319B01C7FD6BE0099C307 /* KeyboardEmojiCollectionViewCell.swift */,
 				A78319B11C7FD6BE0099C307 /* KeyboardEmojiCollectionViewLayout.swift */,
-				A78319B31C7FD6BE0099C307 /* KeyboardEmojiViewController.swift */,
 				A78319B21C7FD6BE0099C307 /* KeyboardEmojis.swift */,
+				A78319B31C7FD6BE0099C307 /* KeyboardEmojiViewController.swift */,
+				A73A91BD1CFF5952009A09AD /* KeyboardEmojiViewControllerDelegate.swift */,
 			);
 			path = Emoji;
 			sourceTree = "<group>";
@@ -565,6 +570,7 @@
 				A797EBDC1CEA6E3F0024E023 /* isKeyboardExtensionEnabled.swift */,
 				A70B41291CE3CB2F00C80054 /* log.swift */,
 				A797EBDE1CEA75B60024E023 /* openSettingsAppWithKeyboards.swift */,
+				A73A91BF1CFF7E82009A09AD /* KeyboardDrawableView.swift */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -977,6 +983,7 @@
 				A78320D51C7FD6C20099C307 /* KeyboardKeyBackspaceSymbolView.swift in Sources */,
 				A7CF9BAD1CC6FFFA0085A700 /* NSCharacterSet+AdditionalSets.swift in Sources */,
 				A78327261C7FD6C30099C307 /* WeakSet.swift in Sources */,
+				A73A91BE1CFF5952009A09AD /* KeyboardEmojiViewControllerDelegate.swift in Sources */,
 				A78320E41C7FD6C20099C307 /* KeyboardKeyCompoundModificationMode.swift in Sources */,
 				A7A24FD91C8F6DA100E2ED18 /* KeyboardKeyPreviewPopupView.swift in Sources */,
 				A7818DF31CFE51FB00631476 /* KeyboardFoodsEmojiCategoryView.swift in Sources */,
@@ -1028,6 +1035,7 @@
 				A7818DF91CFE523400631476 /* KeyboardFlagsEmojiCategoryView.swift in Sources */,
 				A7D30DB31C9B5CF00010F36E /* KeyboardKeyListenerProtocol.swift in Sources */,
 				A78327221C7FD6C30099C307 /* CGFloat+Roundable.swift in Sources */,
+				A73A91C01CFF7E82009A09AD /* KeyboardDrawableView.swift in Sources */,
 				A78327241C7FD6C30099C307 /* CGRect+Hashable.swift in Sources */,
 				A78320DB1C7FD6C20099C307 /* KeyboardColorMode.swift in Sources */,
 				A797EBDF1CEA75B60024E023 /* openSettingsAppWithKeyboards.swift in Sources */,
