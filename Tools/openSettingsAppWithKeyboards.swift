@@ -11,13 +11,14 @@ import Foundation
 
 public func openSettingsAppWithKeyboards() {
     // Original URL: "prefs:root=General&path=Keyboard/KEYBOARDS"
-
     let parts = ["prefs", ":", "root", "=", "General", "&", "path", "=", "Keyboard", "/", "KEYBOARDS"]
 
     if let settingsURL = NSURL(string: parts.joinWithSeparator("")) {
-        UIApplication.sharedApplication().openURL(settingsURL)
+        if (UIApplication.sharedApplication().openURL(settingsURL)) {
+            // Successfully open internal Keyboard Settings screen.
+            return
+        }
     }
-    else {
-        UIApplication.sharedApplication().openURL(NSURL(string: UIApplicationOpenSettingsURLString)!)
-    }
+
+    UIApplication.sharedApplication().openURL(NSURL(string: UIApplicationOpenSettingsURLString)!)
 }
