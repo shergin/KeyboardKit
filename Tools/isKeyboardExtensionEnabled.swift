@@ -15,7 +15,8 @@ public func isKeyboardExtensionEnabled() -> Bool {
     }
 
     guard let keyboards = NSUserDefaults.standardUserDefaults().dictionaryRepresentation()["AppleKeyboards"] as? [String] else {
-        fatalError("isKeyboardExtensionEnabled(): Cannot access to keyboard list.")
+        // There is no key `AppleKeyboards` in NSUserDefaults. That happens sometimes.
+        return false
     }
 
     let keyboardExtensionBundleIdentifierPrefix = appBundleIdentifier + "."
