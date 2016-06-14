@@ -56,10 +56,6 @@ public class KeyboardSuggestionsViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
-         KeyboardRegistry.sharedInstance.unregisterSuggestionsViewController(self)
-    }
-
     public override func loadView() {
         super.loadView()
 
