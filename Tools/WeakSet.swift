@@ -91,6 +91,10 @@ public struct WeakSet<Element>: SequenceType {
             }
         }
     }
+
+    public var first: Element? {
+        return self.generate().next()
+    }
 }
 
 /*

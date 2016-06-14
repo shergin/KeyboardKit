@@ -89,6 +89,16 @@ public class KeyboardViewController: UIViewController {
         self.establishKeyViews(pageNumber: self.pageNumber)
     }
 
+    public override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        KeyboardRegistry.sharedInstance.registerKeyboardViewController(self)
+    }
+
+    public override func viewWillDisappear(animated: Bool) {
+        KeyboardRegistry.sharedInstance.unregisterKeyboardViewController(self)
+        super.viewWillDisappear(animated)
+    }
+
     public override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
 

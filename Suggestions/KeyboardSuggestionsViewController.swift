@@ -30,25 +30,34 @@ public class KeyboardSuggestionsViewController: UIViewController {
     private var lastQuery: KeyboardSuggestionQuery?
     private var characterBeforeDeleteBackward: String?
 
-    // # Public
-    public weak var delegate: KeyboardSuggestionsViewControllerDelegate?
-    public var suggestionModel: KeyboardSuggestionModel! = KeyboardSuggestionModel()
-
-    public weak var keyboardViewController: KeyboardViewController? {
+    internal weak var keyboardViewController: KeyboardViewController? {
         didSet {
+            guard self.suggestionModel.keyboardViewController != self.keyboardViewController else {
+                return
+            }
+
             self.suggestionModel.keyboardViewController = self.keyboardViewController
             self.updateApperanceManager()
         }
     }
 
+    // # Public
+    public weak var delegate: KeyboardSuggestionsViewControllerDelegate?
+    public var suggestionModel: KeyboardSuggestionModel! = KeyboardSuggestionModel()
+
     public init() {
         super.init(nibName: nil, bundle: nil)
+        KeyboardRegistry.sharedInstance.registerSuggestionsViewController(self)
 
         KeyboardTextDocumentCoordinator.sharedInstance.addObserver(self)
     }
 
     public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+         KeyboardRegistry.sharedInstance.unregisterSuggestionsViewController(self)
     }
 
     public override func loadView() {
@@ -71,24 +80,14 @@ public class KeyboardSuggestionsViewController: UIViewController {
         itemsView.appearanceManager = self.keyboardViewController?.appearanceManager
     }
 
-//    public override func viewWillAppear(animated: Bool) {
-//        super.viewWillAppear(animated)
+//    public override func viewDidAppear(animated: Bool) {
+//        super.viewDidAppear(animated)
+//        KeyboardRegistry.sharedInstance.registerSuggestionsViewController(self)
 //    }
 //
-//    public override func viewDidDisappear(animated: Bool) {
-//        super.viewDidDisappear(animated)
-//    }
-
-//    public override func didMoveToParentViewController(parentViewController: UIViewController?) {
-//        super.didMoveToParentViewController(parentViewController)
-//
-//        if parentViewController != nil {
-//            KeyboardTextDocumentCoordinator.sharedInstance.addObserver(self)
-//        }
-//        else {
-//            KeyboardTextDocumentCoordinator.sharedInstance.removeObserver(self)
-//            self.items = []
-//        }
+//    public override func viewWillDisappear(animated: Bool) {
+//        KeyboardRegistry.sharedInstance.unregisterSuggestionsViewController(self)
+//        super.viewWillDisappear(animated)
 //    }
 
     private func updateGuesses() {

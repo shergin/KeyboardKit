@@ -9,7 +9,6 @@
 import Foundation
 
 
-
 public final class KeyboardAppearanceManager {
 
     private var cache: [KeyboardKeyAppearanceVariant: KeyboardKeyAppearance] = [:]
