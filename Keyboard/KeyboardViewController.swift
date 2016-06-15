@@ -66,6 +66,8 @@ public class KeyboardViewController: UIViewController {
         self.listenerCoordinator.addListener(KeyboardPagesController())
         self.listenerCoordinator.addListener(KeyboardShiftController())
         self.listenerCoordinator.addListener(KeyboardPeriodShortcutController())
+
+        precondition(!self.isViewLoaded(), "Keyboard's view must not be loaded after `init()`.")
     }
 
     public required init?(coder aDecoder: NSCoder) {
