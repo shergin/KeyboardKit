@@ -17,7 +17,7 @@ internal class KeyboardPeriodShortcutController: KeyboardKeyListenerProtocol {
 
     static let sentenceEndingSet: NSCharacterSet = {
         let characterSet = NSMutableCharacterSet.letterCharacterSet()
-        characterSet.addCharactersInString("\"'`?!.")
+        characterSet.addCharactersInString("\"'`?!.%])}>")
         return characterSet
     } ()
 
