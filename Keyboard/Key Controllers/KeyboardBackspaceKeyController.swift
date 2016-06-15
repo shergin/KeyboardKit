@@ -9,8 +9,8 @@
 import Foundation
 
 
-private let backspaceDelay: NSTimeInterval = 0.5
-private let backspaceRepeat: NSTimeInterval = 0.07
+private let backspaceDelay = NSTimeInterval(0.5)
+private let backspaceRepeat = NSTimeInterval(0.07)
 
 
 public final class KeyboardBackspaceKeyController: KeyboardKeyListenerProtocol {
