@@ -180,7 +180,7 @@ public class KeyboardSuggestionsViewController: UIViewController {
             textDocumentProxy.insertText("\u{200B}") // ZERO WIDTH SPACE, fake symbol which will be removed by waiting backspace.
         }
 
-        self.suggestionModel.learnWord(guess.replacement.trim())
+        self.suggestionModel.learnWord(guess.query.placement.trim())
     }
 
     private func separatorWillBeInsertedInTextDocument() {
