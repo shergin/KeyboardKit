@@ -22,7 +22,6 @@ extension KeyboardSuggestionKey {
 }
 
 
-
 internal struct KeyboardSuggestionKeyStream {
     var source: String
     var keys: [KeyboardSuggestionKey?]

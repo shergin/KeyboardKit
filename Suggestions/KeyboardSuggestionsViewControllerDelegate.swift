@@ -16,5 +16,5 @@ public protocol KeyboardSuggestionsViewControllerDelegate: class {
 
 // # Optional methods
 extension KeyboardSuggestionsViewControllerDelegate {
-    func suggestionsViewControllerDidUpdateSuggestionItems() {}
+    public func suggestionsViewControllerDidUpdateSuggestionItems() {}
 }

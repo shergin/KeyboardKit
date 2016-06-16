@@ -75,6 +75,59 @@ public final class KeyboardTextDocumentCoordinator {
         enablesNotifications = true
     }
 
+    // # Dispatch
+
+    // keyboardTextDocument(Will/Did)InsertText()
+    internal func dispatchKeyboardTextDocumentWillInsertText(text: String) {
+        log("keyboardTextDocumentWillInsertText(\"\(text)\")")
+        for observer in self.observers {
+            guard observer.observesTextDocumentEvents else { continue }
+            observer.keyboardTextDocumentWillInsertText(text)
+        }
+    }
+    
+    internal func dispatchKeyboardTextDocumentDidInsertText(text: String) {
+        log("keyboardTextDocumentDidInsertText(\"\(text)\")")
+        for observer in self.observers {
+            guard observer.observesTextDocumentEvents else { continue }
+            observer.keyboardTextDocumentDidInsertText(text)
+        }
+    }
+    
+    // keyboardTextDocument(Will/Did)DeleteBackward()
+    internal func dispatchTextDocumentWillDeleteBackward() {
+        log("dispatchTextDocumentWillDeleteBackward()")
+        for observer in self.observers {
+            guard observer.observesTextDocumentEvents else { continue }
+            observer.keyboardTextDocumentWillDeleteBackward()
+        }
+    }
+
+    internal func dispatchTextDocumentDidDeleteBackward() {
+        log("dispatchTextDocumentDidDeleteBackward()")
+        for observer in self.observers {
+            guard observer.observesTextDocumentEvents else { continue }
+            observer.keyboardTextDocumentDidDeleteBackward()
+        }
+    }
+
+    // keyboardText(Will/Did)Change()
+    internal func dispatchTextWillChange() {
+        log("dispatchTextWillChange()")
+        for observer in self.observers {
+            guard observer.observesTextDocumentEvents else { continue }
+            observer.keyboardTextDocumentWillChange()
+        }
+    }
+
+    internal func dispatchTextDidChange() {
+        log("dispatchTextDidChange()")
+        for observer in self.observers {
+            guard observer.observesTextDocumentEvents else { continue }
+            observer.keyboardTextDocumentDidChange()
+        }
+    }
+
     // # Private
 
     private func swizzleAll() {
@@ -98,20 +151,12 @@ public final class KeyboardTextDocumentCoordinator {
 
         textDocumentWillInsertText = { [unowned self] text in
             guard enablesNotifications else { return }
-            //print("textDocumentWillInsertText(\(text))")
-            for observer in self.observers {
-                guard observer.observesTextDocumentEvents else { continue }
-                observer.keyboardTextDocumentWillInsertText(text)
-            }
+            self.dispatchKeyboardTextDocumentWillInsertText(text)
         }
 
         textDocumentDidInsertText = { [unowned self] text in
             guard enablesNotifications else { return }
-            //print("textDocumentDidInsertText(\(text))")
-            for observer in self.observers {
-                guard observer.observesTextDocumentEvents else { continue }
-                observer.keyboardTextDocumentDidInsertText(text)
-            }
+            self.dispatchKeyboardTextDocumentDidInsertText(text)
         }
 
         let type = textDocumentProxy.dynamicType
@@ -141,20 +186,12 @@ public final class KeyboardTextDocumentCoordinator {
 
         textDocumentWillDeleteBackward = { [unowned self] in
             guard enablesNotifications else { return }
-            //print("textDocumentWillDeleteBackward()")
-            for observer in self.observers {
-                guard observer.observesTextDocumentEvents else { continue }
-                observer.keyboardTextDocumentWillDeleteBackward()
-            }
+            self.dispatchTextDocumentWillDeleteBackward()
         }
 
         textDocumentDidDeleteBackward = { [unowned self] in
             guard enablesNotifications else { return }
-            //print("textDocumentDidDeleteBackward()")
-            for observer in self.observers {
-                guard observer.observesTextDocumentEvents else { continue }
-                observer.keyboardTextDocumentDidDeleteBackward()
-            }
+            self.dispatchTextDocumentDidDeleteBackward()
         }
 
         let type = textDocumentProxy.dynamicType
@@ -184,11 +221,7 @@ public final class KeyboardTextDocumentCoordinator {
 
         textWillChange = { [unowned self] in
             guard enablesNotifications else { return }
-            log("textWillChange()")
-            for observer in self.observers {
-                guard observer.observesTextDocumentEvents else { continue }
-                observer.keyboardTextDocumentWillChange()
-            }
+            self.dispatchTextWillChange()
         }
 
         let type = inputViewController.dynamicType
@@ -217,11 +250,7 @@ public final class KeyboardTextDocumentCoordinator {
 
         textDidChange = { [unowned self] in
             guard enablesNotifications else { return }
-            log("textDidChange()")
-            for observer in self.observers {
-                guard observer.observesTextDocumentEvents else { continue }
-                observer.keyboardTextDocumentDidChange()
-            }
+            self.dispatchTextDidChange()
         }
 
         let type = inputViewController.dynamicType

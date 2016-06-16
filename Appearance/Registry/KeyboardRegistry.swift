@@ -14,7 +14,7 @@ internal class KeyboardRegistry {
     internal static var sharedInstance = KeyboardRegistry()
 
     private var keyboardViewControllers = WeakSet<KeyboardViewController>()
-    private var suggestionsViewController = WeakSet<KeyboardSuggestionsViewController>()
+    private var suggestionModels = WeakSet<KeyboardSuggestionModel>()
 
     // # KeyboardViewController
     internal func registerKeyboardViewController(keyboardViewController: KeyboardViewController) {
@@ -27,14 +27,14 @@ internal class KeyboardRegistry {
         self.synchronize()
     }
 
-    // # KeyboardSuggestionsViewController
-    internal func registerSuggestionsViewController(suggestionsViewController: KeyboardSuggestionsViewController) {
-        self.suggestionsViewController.insert(suggestionsViewController)
+    // # KeyboardSuggestionModel
+    internal func registerSuggestionModel(suggestionModel: KeyboardSuggestionModel) {
+        self.suggestionModels.insert(suggestionModel)
         self.synchronize()
     }
 
-    internal func unregisterSuggestionsViewController(suggestionsViewController: KeyboardSuggestionsViewController) {
-        self.suggestionsViewController.remove(suggestionsViewController)
+    internal func unregisterSuggestionModel(suggestionModel: KeyboardSuggestionModel) {
+        self.suggestionModels.remove(suggestionModel)
         self.synchronize()
     }
 
@@ -42,8 +42,8 @@ internal class KeyboardRegistry {
     private func synchronize() {
         let keyboardViewController = self.keyboardViewControllers.first
 
-        for suggestionViewController in self.suggestionsViewController {
-            suggestionViewController.keyboardViewController = keyboardViewController
+        for suggestionModel in self.suggestionModels {
+            suggestionModel.keyboardViewController = keyboardViewController
         }
     }
 }

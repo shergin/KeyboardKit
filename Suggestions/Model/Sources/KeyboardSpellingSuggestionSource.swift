@@ -11,7 +11,7 @@ import Foundation
 
 internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource {
 
-    private let queue = dispatch_queue_create("com.keyboard-kit.word-suggestion-source", DISPATCH_QUEUE_SERIAL)
+    private let queue = dispatch_queue_create("com.keyboard-kit.spelling-suggestion-source", DISPATCH_QUEUE_SERIAL)
 
     private let sortingModel = KeyboardSuggestionGuessesSortingModel()
     private var lastQuery: KeyboardSuggestionQuery?

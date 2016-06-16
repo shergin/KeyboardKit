@@ -11,14 +11,13 @@ import Foundation
 
 public final class KeyboardSuggestionModel {
 
-    private var keyViewSetHashValue: Int = 0
-    private var keyTable: [String: KeyboardSuggestionKey] = [:]
+    private var ignoreTextDocumentEvents = false
+    private var lastAppliedGuess: KeyboardSuggestionGuess?
+    private var lastQuery: KeyboardSuggestionQuery?
+    private var characterBeforeDeleteBackward: String?
 
-    internal weak var keyboardViewController: KeyboardViewController? {
-        didSet {
-            self.spellingSuggestionSource.keyboardViewController = self.keyboardViewController
-        }
-    }
+    internal var spellingSuggestionSource = KeyboardSpellingSuggestionSource()
+    internal var emojiSuggestionSource = KeyboardEmojiSuggestionSource()
 
     public var isSpellingSuggestionsEnabled = true
     public var isSpellingAutocorrectionEnabled = true
@@ -26,10 +25,18 @@ public final class KeyboardSuggestionModel {
     public var isEmojiSuggestionsEnabled = true
     public var isBackspaceRevertCorrection = true
 
-    private var spellingSuggestionSource = KeyboardSpellingSuggestionSource()
-    private var emojiSuggestionSource = KeyboardEmojiSuggestionSource()
+    public private(set) var guesses: [KeyboardSuggestionGuess] = []
+    public weak var delegate: KeyboardSuggestionModelDelegate?
+
+    internal weak var keyboardViewController: KeyboardViewController? {
+        didSet {
+            self.spellingSuggestionSource.keyboardViewController = self.keyboardViewController
+        }
+    }
 
     internal init() {
+        KeyboardRegistry.sharedInstance.registerSuggestionModel(self)
+        KeyboardTextDocumentCoordinator.sharedInstance.addObserver(self)
     }
 
     private var textDocumentProxy: UITextDocumentProxy {
@@ -98,125 +105,144 @@ public final class KeyboardSuggestionModel {
         return query
     }
 
-    public func guesses(query: KeyboardSuggestionQuery, callback: ([KeyboardSuggestionGuess]) -> ()) {
-        var results: (spellingGuesses: [KeyboardSuggestionGuess]?, emojiGuesses: [KeyboardSuggestionGuess]?) = (spellingGuesses: nil, emojiGuesses: nil)
-
-        let processResults = {
-            guard
-                let spellingGuesses = results.spellingGuesses,
-                let emojiGuesses = results.emojiGuesses
-            else {
-                return
-            }
-
-            var gueses: [KeyboardSuggestionGuess] = []
-            gueses.appendContentsOf(spellingGuesses)
-            gueses.appendContentsOf(emojiGuesses)
-
-            callback(self.reduceGuesses(gueses))
-        }
-
-        if self.shouldSuggestSpelling() {
-            self.spellingSuggestionSource.suggest(query) { guesses in
-                results.spellingGuesses = guesses
-                processResults()
-            }
-        }
-        else {
-            results.spellingGuesses = []
-        }
-
-        if self.shouldSuggestEmoji() {
-            self.emojiSuggestionSource.suggest(query) { guesses in
-                results.emojiGuesses = guesses
-                processResults()
-            }
-        }
-        else {
-            results.emojiGuesses = []
-        }
-
-        processResults()
-    }
-
-    private func reduceGuesses(guesses: [KeyboardSuggestionGuess]) -> [KeyboardSuggestionGuess] {
-        var correctionsLimit = 2
-        var completionsLimit = 2
-        var totalSpellingLimit = 3
-
-        var emojisLimit = 3
-
-        var reduceGuesses = guesses.filter { (guess: KeyboardSuggestionGuess) -> Bool in
-            switch guess.type {
-            case .Learning, .Autoreplacement, .Capitalization, .Prediction, .Other:
-                return true
-            case .Correction:
-                correctionsLimit -= 1
-                totalSpellingLimit -= 1
-                return correctionsLimit >= 0 && totalSpellingLimit >= 0
-            case .Completion:
-                completionsLimit -= 1
-                totalSpellingLimit -= 1
-                return completionsLimit >= 0 && totalSpellingLimit >= 0
-            case .Emoji:
-                emojisLimit -= 1
-                return emojisLimit >= 0
-            }
-
-            return false
-        }
-
-        //
-        let capitalizeSpelling = self.shouldCapitalizeSpelling()
-        let correctSpelling = self.shouldСorrectSpelling()
-
-        var automated = !correctSpelling && !capitalizeSpelling
-
-        reduceGuesses = reduceGuesses.map { guess in
-            guard guess.automatic else {
-                return guess
-            }
-
-            if
-                automated ||
-                (guess.type == .Correction && !correctSpelling) ||
-                (guess.type == .Capitalization && !capitalizeSpelling)
-            {
-                return guess.deautomated()
-            }
-
-            automated = true
-            return guess
-        }
-
-        /*
-        if self.shouldСorrectSpelling() {
-            var automated = false
-            var hasLearningGuess = false
-
-            reduceGuesses = reduceGuesses.map { guess in
-                if guess.type == .Learning {
-                    hasLearningGuess = true
-                }
-
-                if !automated && hasLearningGuess && guess.type.isKindOfCorrection {
-                    var automatedGuess = guess
-                    automated = true
-                    automatedGuess.automatic = true
-                    automatedGuess.appearance.highlighted = true
-                    return automatedGuess
-                }
-
-                return guess
-            }
-        }
-        */
-
-        return reduceGuesses
-    }
 
     internal func learnWord(word: String) {
         self.spellingSuggestionSource.learnWord(word)
     }
 
+    private func updateGuesses() {
+        self.guesses = []
+        let query = self.query()
+        self.lastQuery = query
+
+        self.generateGuesses(query) { guesses in
+            guard self.lastQuery == query else {
+                return
+            }
+
+            self.lastQuery = nil
+            self.guesses = guesses
+            self.delegate?.suggestionModelDidUpdateGuesses(guesses)
+        }
+    }
+
+    private func textDidChange() {
+        self.updateGuesses()
+    }
+
+    internal func applyGuest(guess: KeyboardSuggestionGuess, addSpace: Bool = false) {
+        guard self.guesses.contains(guess) else {
+            return
+        }
+
+        KeyboardTextDocumentCoordinator.sharedInstance.dispatchTextWillChange()
+        defer {
+            KeyboardTextDocumentCoordinator.sharedInstance.dispatchTextDidChange()
+        }
+
+        let textDocumentProxy = self.textDocumentProxy
+
+        textDocumentProxy.performWithoutNotifications {
+            for _ in 0..<guess.query.placement.characters.count {
+                textDocumentProxy.deleteBackward()
+            }
+
+            textDocumentProxy.insertText(guess.replacement + (addSpace ? " " : ""))
+        }
+
+        self.lastAppliedGuess = guess
+    }
+
+    private func revertAppliedSuggestionItemIfNeeded() {
+        guard let guess = self.lastAppliedGuess else {
+            return
+        }
+
+        guard self.isBackspaceRevertCorrection else {
+            return
+        }
+
+        let context = self.textDocumentProxy.documentContextBeforeInput ?? ""
+
+        var contextTailLength: Int = 0
+
+        // And now two cases for tailes:
+        if context.hasSuffix(". ") {
+            contextTailLength = 2
+        }
+        else if context.hasSuffix(" ") {
+            contextTailLength = 1
+        }
+
+        let contextTailIndex = context.endIndex.advancedBy(-contextTailLength)
+        let contextTail = context.substringFromIndex(contextTailIndex)
+        let contextHead = context.substringToIndex(contextTailIndex)
+
+        guard contextHead.hasSuffix(guess.replacement) else {
+            return
+        }
+
+        self.lastAppliedGuess = nil
+
+        let textDocumentProxy = self.textDocumentProxy
+
+        textDocumentProxy.performWithoutNotifications {
+            // TODO: Optimize replacement!
+            for _ in 0..<(guess.replacement.characters.count + contextTailLength) {
+                textDocumentProxy.deleteBackward()
+            }
+            textDocumentProxy.insertText(guess.query.placement)
+
+            textDocumentProxy.insertText(contextTail)
+            textDocumentProxy.insertText("\u{200B}") // ZERO WIDTH SPACE, fake symbol which will be removed by waiting backspace.
+        }
+
+        self.learnWord(guess.query.placement.trim())
+    }
+
+    private func separatorWillBeInsertedInTextDocument() {
+        guard let item = (self.guesses.filter { $0.automatic }.first) else {
+            return
+        }
+        
+        self.applyGuest(item)
+    }
+}
+
+
+extension KeyboardSuggestionModel: KeyboardTextDocumentObserver {
+
+    public var observesTextDocumentEvents: Bool {
+        return !self.ignoreTextDocumentEvents
+    }
+
+    public func keyboardTextDocumentWillInsertText(text: String) {
+        guard !text.isEmpty else {
+            return
+        }
+
+        if NSCharacterSet.separatorChracterSet().characterIsMember(text.utf16.first!) {
+            self.separatorWillBeInsertedInTextDocument()
+        }
+    }
+
+    public func keyboardTextDocumentDidInsertText(text: String) {
+        guard !text.isEmpty else {
+            return
+        }
+
+        if !NSCharacterSet.separatorChracterSet().characterIsMember(text.utf16.first!) {
+            self.lastAppliedGuess = nil
+        }
+
+        self.textDidChange()
+    }
+
+    public func keyboardTextDocumentWillDeleteBackward() {
+        self.revertAppliedSuggestionItemIfNeeded()
+    }
+
+    public func keyboardTextDocumentDidDeleteBackward() {
+        self.textDidChange()
+    }
 }
