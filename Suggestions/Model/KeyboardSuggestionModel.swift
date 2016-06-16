@@ -245,4 +245,8 @@ extension KeyboardSuggestionModel: KeyboardTextDocumentObserver {
     public func keyboardTextDocumentDidDeleteBackward() {
         self.textDidChange()
     }
+
+    public func keyboardTextDocumentDidChange() {
+        self.textDidChange()
+    }
 }

@@ -14,6 +14,7 @@ internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource 
     private let queue = dispatch_queue_create("com.keyboard-kit.spelling-suggestion-source", DISPATCH_QUEUE_SERIAL)
 
     private let sortingModel = KeyboardSuggestionGuessesSortingModel()
+    private let completionsSortingModel = KeyboardSuggestionComplitionsSortingModel()
     private var lastQuery: KeyboardSuggestionQuery?
     private let checker = UITextChecker()
     
@@ -87,6 +88,7 @@ internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource 
 
         let checker = self.checker
         let sortingModel = self.sortingModel
+        let completionsSortingModel = self.completionsSortingModel
 
         dispatch_async(self.queue) { [weak self] in
             var guesses: [KeyboardSuggestionGuess] = []
@@ -110,12 +112,16 @@ internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource 
                     language: query.language
                 ).location != NSNotFound
 
-            let completions =
+            var unsortedCompletions =
                 checker.completionsForPartialWordRange(
                     query.range,
                     inString: query.context,
                     language: query.language
                 ) as? [String] ?? []
+
+            unsortedCompletions.appendContentsOf(completionsSortingModel.completions(query))
+
+            unsortedCompletions = completionsSortingModel.removeObviousReplacements(unsortedCompletions, query: query)
 
             let unsortedCorrections =
                 checker.guessesForWordRange(
@@ -125,8 +131,8 @@ internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource 
                 ) as? [String] ?? []
 
 
-            let corrections =
-                sortingModel.sortReplacements(unsortedCorrections, placement: query.placement)
+            let corrections = sortingModel.sortReplacements(unsortedCorrections, placement: query.placement)
+            let completions = completionsSortingModel.sortReplacements(unsortedCompletions, query: query)
 
             var isPlacementLongEnough = query.placement.characters.count > 2
             var automatic = false

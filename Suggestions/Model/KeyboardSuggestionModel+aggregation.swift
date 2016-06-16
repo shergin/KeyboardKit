@@ -54,7 +54,7 @@ extension KeyboardSuggestionModel {
 
     private func reduceGuesses(guesses: [KeyboardSuggestionGuess]) -> [KeyboardSuggestionGuess] {
         var correctionsLimit = 2
-        var completionsLimit = 2
+        var completionsLimit = 3
         var totalSpellingLimit = 3
 
         var emojisLimit = 3
@@ -64,16 +64,22 @@ extension KeyboardSuggestionModel {
             case .Learning, .Autoreplacement, .Capitalization, .Prediction, .Other:
                 return true
             case .Correction:
-                correctionsLimit -= 1
-                totalSpellingLimit -= 1
-                return correctionsLimit >= 0 && totalSpellingLimit >= 0
+                if correctionsLimit > 0 && totalSpellingLimit > 0 {
+                    correctionsLimit -= 1
+                    totalSpellingLimit -= 1
+                    return true
+                }
             case .Completion:
-                completionsLimit -= 1
-                totalSpellingLimit -= 1
-                return completionsLimit >= 0 && totalSpellingLimit >= 0
+                if completionsLimit > 0 && totalSpellingLimit > 0 {
+                    completionsLimit -= 1
+                    totalSpellingLimit -= 1
+                    return true
+                }
             case .Emoji:
-                emojisLimit -= 1
-                return emojisLimit >= 0
+                if emojisLimit > 0 {
+                    emojisLimit -= 1
+                    return true
+                }
             }
 
             return false
