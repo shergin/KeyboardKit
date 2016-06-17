@@ -107,7 +107,7 @@ public final class KeyboardSuggestionModel {
 
 
     internal func learnWord(word: String) {
-        self.spellingSuggestionSource.learnWord(word)
+        self.spellingSuggestionSource.learnWord(word.trim())
     }
 
     private func updateGuesses() {
@@ -148,6 +148,10 @@ public final class KeyboardSuggestionModel {
             }
 
             textDocumentProxy.insertText(guess.replacement + (addSpace ? " " : ""))
+        }
+
+        if guess.type == .Learning {
+            self.learnWord(guess.replacement)
         }
 
         self.lastAppliedGuess = guess
@@ -197,7 +201,7 @@ public final class KeyboardSuggestionModel {
             textDocumentProxy.insertText("\u{200B}") // ZERO WIDTH SPACE, fake symbol which will be removed by waiting backspace.
         }
 
-        self.learnWord(guess.query.placement.trim())
+        self.learnWord(guess.query.placement)
     }
 
     private func separatorWillBeInsertedInTextDocument() {

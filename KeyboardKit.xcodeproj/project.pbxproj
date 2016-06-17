@@ -172,6 +172,7 @@
 		A71288F91D1221DD00346F99 /* KeyboardSuggestionModel+aggregation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "KeyboardSuggestionModel+aggregation.swift"; sourceTree = "<group>"; };
 		A71288FE1D131E3300346F99 /* topAmericanEnglishWords.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = topAmericanEnglishWords.swift; sourceTree = "<group>"; };
 		A71289001D131EAB00346F99 /* KeyboardSuggestionComplitionsSortingModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardSuggestionComplitionsSortingModel.swift; sourceTree = "<group>"; };
+		A71289081D147B7200346F99 /* topRussianWords.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = topRussianWords.swift; sourceTree = "<group>"; };
 		A722DB1F1C8E0BBD00804C5C /* KeyboardPeriodShortcutController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardPeriodShortcutController.swift; sourceTree = "<group>"; };
 		A722DB231C8E44E700804C5C /* String+trim.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+trim.swift"; sourceTree = "<group>"; };
 		A722DB251C8E4AA900804C5C /* KeyboardSoundController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardSoundController.swift; sourceTree = "<group>"; };
@@ -355,6 +356,7 @@
 			isa = PBXGroup;
 			children = (
 				A71288FE1D131E3300346F99 /* topAmericanEnglishWords.swift */,
+				A71289081D147B7200346F99 /* topRussianWords.swift */,
 			);
 			path = Linguistics;
 			sourceTree = "<group>";

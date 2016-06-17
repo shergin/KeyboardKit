@@ -139,9 +139,6 @@ internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource 
             var hasAutoreplacement = false
 
             log("placement: \(query.placement), misspelled: \(isMisspelled), corrections: \(corrections), completions: \(completions)")
-//            print("unsortedCorrections: \(unsortedCorrections)")
-//            print("query.placement: \(query.placement)")
-//            print("corrections: \(corrections)")
 
             var replacements = Set<String>()
 
