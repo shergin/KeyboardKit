@@ -144,7 +144,7 @@ public class KeyboardKeyView: UIControl {
 
         self.shadowLayer.shadowOpacity = Float(0.2)
         self.shadowLayer.shadowRadius = 4
-        self.shadowLayer.shadowOffset = CGSizeMake(0, 3)
+        self.shadowLayer.shadowOffset = CGSize(width: 0, height: 3)
 
         self.borderView?.lineWidth = CGFloat(0.5)
         self.borderView?.fillColor = UIColor.clearColor()
@@ -183,14 +183,14 @@ public class KeyboardKeyView: UIControl {
     }
 
     private func boundingBounds() -> CGRect {
-        return self.popupView != nil ? CGRectUnion(self.bounds, self.popupView!.frame) : self.bounds
+        return self.popupView != nil ? self.bounds.union(self.popupView!.frame) : self.bounds
     }
 
     var oldBounds: CGRect?
     override public func layoutSubviews() {
         self.layoutPopupIfNeeded()
 
-        let boundingBox = (self.popupView != nil ? CGRectUnion(self.bounds, self.popupView!.frame) : self.bounds)
+        let boundingBox = self.boundingBounds()
 
         if self.bounds.width == 0 || self.bounds.height == 0 {
             return
@@ -379,10 +379,12 @@ public class KeyboardKeyView: UIControl {
         }
 
         if let image = self.key.image {
-            self.contentView = image.imageView
-        } else if let contentView = self.key.contentView {
-            self.contentView = (contentView.copy() as? UIView)!
-        } else {
+            self.contentView = image.view(keyboardMode: self.keyboardMode, keyMode: self.keyMode)
+        }
+        else if let contentView = self.key.contentView?.copy() as? UIView {
+            self.contentView = contentView
+        }
+        else {
             self.contentView = nil
         }
     }

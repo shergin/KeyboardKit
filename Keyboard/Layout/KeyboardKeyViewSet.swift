@@ -80,7 +80,7 @@ extension KeyboardKeyViewSet: Hashable {
 extension KeyboardKeyViewSet: Equatable {
 }
 
-internal func ==(lhs: KeyboardKeyViewSet, rhs: KeyboardKeyViewSet) -> Bool {
+internal func == (lhs: KeyboardKeyViewSet, rhs: KeyboardKeyViewSet) -> Bool {
     return
         lhs.viewsByKey == rhs.viewsByKey &&
         lhs.keysByView == rhs.keysByView

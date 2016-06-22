@@ -53,6 +53,12 @@ extension KeyboardSuggestionModel {
     }
 
     private func reduceGuesses(guesses: [KeyboardSuggestionGuess]) -> [KeyboardSuggestionGuess] {
+        let autocapitalizeSpelling = self.shouldCapitalizeSpelling()
+        let autocorrectSpelling = self.shouldСorrectSpelling()
+        let autocompleteSpelling = autocorrectSpelling // Here it is different things but conseptualy their similar.
+
+        let autoSpelling = autocapitalizeSpelling || autocorrectSpelling || autocompleteSpelling
+
         var correctionsLimit = 2
         var completionsLimit = 3
         var totalSpellingLimit = 3
@@ -85,11 +91,9 @@ extension KeyboardSuggestionModel {
             return false
         }
 
-        //
-        let capitalizeSpelling = self.shouldCapitalizeSpelling()
-        let correctSpelling = self.shouldСorrectSpelling()
 
-        var automated = !correctSpelling && !capitalizeSpelling
+        var automated = !autoSpelling
+        var hasAutomatedGuess = false
 
         reduceGuesses = reduceGuesses.map { guess in
             guard guess.automatic else {
@@ -98,17 +102,23 @@ extension KeyboardSuggestionModel {
 
             if
                 automated ||
-                    (guess.type == .Correction && !correctSpelling) ||
-                    (guess.type == .Capitalization && !capitalizeSpelling)
+                (guess.type == .Correction && !autocorrectSpelling) ||
+                (guess.type == .Completion && !autocompleteSpelling) ||
+                (guess.type == .Capitalization && !autocapitalizeSpelling)
             {
                 return guess.deautomated()
             }
-            
+
+            hasAutomatedGuess = true
             automated = true
             return guess
         }
-        
+
+        if !hasAutomatedGuess {
+            reduceGuesses = reduceGuesses.filter { $0.type != .Learning }
+        }
+
         return reduceGuesses
     }
-    
+
 }

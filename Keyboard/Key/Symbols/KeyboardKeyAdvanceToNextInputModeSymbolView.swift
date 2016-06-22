@@ -9,95 +9,48 @@
 import Foundation
 
 
-public final class KeyboardKeyAdvanceToNextInputModeSymbolView: KeyboardKeySymbolView {
-    override func drawCall(color: UIColor) {
-        drawGlobe(self.bounds, color: color)
+public final class KeyboardKeyAdvanceToNextInputModeSymbolView: KeyboardKeyDrawableSymbolView {
+    override func draw() {
+        let color = self.tintColor
+
+        let globeVerticalLinePath = UIBezierPath()
+        globeVerticalLinePath.moveToPoint(CGPoint(x: 0, y: -9.5))
+        globeVerticalLinePath.addLineToPoint(CGPoint(x: 0, y: 9.5))
+        color.setStroke()
+        globeVerticalLinePath.lineWidth = 1
+        globeVerticalLinePath.stroke()
+
+        let globeHorizontalLinePath = UIBezierPath()
+        globeHorizontalLinePath.moveToPoint(CGPoint(x: -9.5, y: 0))
+        globeHorizontalLinePath.addLineToPoint(CGPoint(x: 9.5, y: 0))
+        color.setStroke()
+        globeHorizontalLinePath.lineWidth = 1
+        globeHorizontalLinePath.stroke()
+
+        let globeCirclePath = UIBezierPath(ovalInRect: CGRect(x: -9.5, y: -9.5, width: 19, height: 19))
+        color.setStroke()
+        globeCirclePath.lineWidth = 1
+        globeCirclePath.stroke()
+
+        let globeArcsPath = UIBezierPath()
+        globeArcsPath.moveToPoint(CGPoint(x: 0.34, y: -9.49))
+        globeArcsPath.addCurveToPoint(CGPoint(x: 5, y: 0), controlPoint1: CGPoint(x: 3.18, y: -7.3), controlPoint2: CGPoint(x: 5, y: -3.86))
+        globeArcsPath.addCurveToPoint(CGPoint(x: 0.34, y: 9.49), controlPoint1: CGPoint(x: 5, y: 3.86), controlPoint2: CGPoint(x: 3.18, y: 7.3))
+        globeArcsPath.addCurveToPoint(CGPoint(x: -0, y: 9.5), controlPoint1: CGPoint(x: 0.23, y: 9.5), controlPoint2: CGPoint(x: 0.11, y: 9.5))
+        globeArcsPath.addCurveToPoint(CGPoint(x: -0.34, y: 9.49), controlPoint1: CGPoint(x: -0.11, y: 9.5), controlPoint2: CGPoint(x: -0.23, y: 9.5))
+        globeArcsPath.addCurveToPoint(CGPoint(x: -5, y: 0), controlPoint1: CGPoint(x: -3.18, y: 7.3), controlPoint2: CGPoint(x: -5, y: 3.86))
+        globeArcsPath.addCurveToPoint(CGPoint(x: -0.34, y: -9.49), controlPoint1: CGPoint(x: -5, y: -3.86), controlPoint2: CGPoint(x: -3.18, y: -7.3))
+        globeArcsPath.addCurveToPoint(CGPoint(x: -0, y: -9.5), controlPoint1: CGPoint(x: -0.23, y: -9.5), controlPoint2: CGPoint(x: -0.11, y: -9.5))
+        globeArcsPath.addCurveToPoint(CGPoint(x: 0.34, y: -9.49), controlPoint1: CGPoint(x: 0.11, y: -9.5), controlPoint2: CGPoint(x: 0.23, y: -9.5))
+        globeArcsPath.closePath()
+        globeArcsPath.moveToPoint(CGPoint(x: 7.09, y: 6.32))
+        globeArcsPath.addCurveToPoint(CGPoint(x: -0, y: 4), controlPoint1: CGPoint(x: 5.11, y: 4.86), controlPoint2: CGPoint(x: 2.65, y: 4))
+        globeArcsPath.addCurveToPoint(CGPoint(x: -7.09, y: 6.32), controlPoint1: CGPoint(x: -2.65, y: 4), controlPoint2: CGPoint(x: -5.11, y: 4.86))
+        globeArcsPath.moveToPoint(CGPoint(x: -7.09, y: -6.32))
+        globeArcsPath.addCurveToPoint(CGPoint(x: -0, y: -4), controlPoint1: CGPoint(x: -5.11, y: -4.86), controlPoint2: CGPoint(x: -2.65, y: -4))
+        globeArcsPath.addCurveToPoint(CGPoint(x: 7.09, y: -6.32), controlPoint1: CGPoint(x: 2.65, y: -4), controlPoint2: CGPoint(x: 5.11, y: -4.86))
+        color.setStroke()
+        globeArcsPath.lineWidth = 1
+        globeArcsPath.stroke()
     }
-}
-
-func drawGlobe(bounds: CGRect, color: UIColor) {
-    let factors = getFactors(CGSizeMake(41, 40), toRect: bounds)
-    let xScalingFactor = factors.xScalingFactor
-    let yScalingFactor = factors.yScalingFactor
-    let lineWidthScalingFactor = factors.lineWidthScalingFactor * 1.5
-
-    centerShape(CGSizeMake(41 * xScalingFactor, 40 * yScalingFactor), toRect: bounds)
-
-
-    //// Color Declarations
-    let color = color
-
-    //// Oval Drawing
-    let ovalPath = UIBezierPath(ovalInRect: CGRectMake(0 * xScalingFactor, 0 * yScalingFactor, 40 * xScalingFactor, 40 * yScalingFactor))
-    color.setStroke()
-    ovalPath.lineWidth = 1 * lineWidthScalingFactor
-    ovalPath.stroke()
-
-
-    //// Bezier Drawing
-    let bezierPath = UIBezierPath()
-    bezierPath.moveToPoint(CGPointMake(20 * xScalingFactor, -0 * yScalingFactor))
-    bezierPath.addLineToPoint(CGPointMake(20 * xScalingFactor, 40 * yScalingFactor))
-    bezierPath.addLineToPoint(CGPointMake(20 * xScalingFactor, -0 * yScalingFactor))
-    bezierPath.closePath()
-    color.setStroke()
-    bezierPath.lineWidth = 1 * lineWidthScalingFactor
-    bezierPath.stroke()
-
-
-    //// Bezier 2 Drawing
-    let bezier2Path = UIBezierPath()
-    bezier2Path.moveToPoint(CGPointMake(0.5 * xScalingFactor, 19.5 * yScalingFactor))
-    bezier2Path.addLineToPoint(CGPointMake(39.5 * xScalingFactor, 19.5 * yScalingFactor))
-    bezier2Path.addLineToPoint(CGPointMake(0.5 * xScalingFactor, 19.5 * yScalingFactor))
-    bezier2Path.closePath()
-    color.setStroke()
-    bezier2Path.lineWidth = 1 * lineWidthScalingFactor
-    bezier2Path.stroke()
-
-
-    //// Bezier 3 Drawing
-    let bezier3Path = UIBezierPath()
-    bezier3Path.moveToPoint(CGPointMake(21.63 * xScalingFactor, 0.42 * yScalingFactor))
-    bezier3Path.addCurveToPoint(CGPointMake(21.63 * xScalingFactor, 39.6 * yScalingFactor), controlPoint1: CGPointMake(21.63 * xScalingFactor, 0.42 * yScalingFactor), controlPoint2: CGPointMake(41 * xScalingFactor, 19 * yScalingFactor))
-    bezier3Path.lineCapStyle = .Round;
-
-    color.setStroke()
-    bezier3Path.lineWidth = 1 * lineWidthScalingFactor
-    bezier3Path.stroke()
-
-
-    //// Bezier 4 Drawing
-    let bezier4Path = UIBezierPath()
-    bezier4Path.moveToPoint(CGPointMake(17.76 * xScalingFactor, 0.74 * yScalingFactor))
-    bezier4Path.addCurveToPoint(CGPointMake(18.72 * xScalingFactor, 39.6 * yScalingFactor), controlPoint1: CGPointMake(17.76 * xScalingFactor, 0.74 * yScalingFactor), controlPoint2: CGPointMake(-2.5 * xScalingFactor, 19.04 * yScalingFactor))
-    bezier4Path.lineCapStyle = .Round;
-
-    color.setStroke()
-    bezier4Path.lineWidth = 1 * lineWidthScalingFactor
-    bezier4Path.stroke()
-
-
-    //// Bezier 5 Drawing
-    let bezier5Path = UIBezierPath()
-    bezier5Path.moveToPoint(CGPointMake(6 * xScalingFactor, 7 * yScalingFactor))
-    bezier5Path.addCurveToPoint(CGPointMake(34 * xScalingFactor, 7 * yScalingFactor), controlPoint1: CGPointMake(6 * xScalingFactor, 7 * yScalingFactor), controlPoint2: CGPointMake(19 * xScalingFactor, 21 * yScalingFactor))
-    bezier5Path.lineCapStyle = .Round;
-
-    color.setStroke()
-    bezier5Path.lineWidth = 1 * lineWidthScalingFactor
-    bezier5Path.stroke()
-
-
-    //// Bezier 6 Drawing
-    let bezier6Path = UIBezierPath()
-    bezier6Path.moveToPoint(CGPointMake(6 * xScalingFactor, 33 * yScalingFactor))
-    bezier6Path.addCurveToPoint(CGPointMake(34 * xScalingFactor, 33 * yScalingFactor), controlPoint1: CGPointMake(6 * xScalingFactor, 33 * yScalingFactor), controlPoint2: CGPointMake(19 * xScalingFactor, 22 * yScalingFactor))
-    bezier6Path.lineCapStyle = .Round;
-
-    color.setStroke()
-    bezier6Path.lineWidth = 1 * lineWidthScalingFactor
-    bezier6Path.stroke()
-
-    endCenter()
 }

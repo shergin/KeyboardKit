@@ -14,10 +14,9 @@ internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource 
     private let queue = dispatch_queue_create("com.keyboard-kit.spelling-suggestion-source", DISPATCH_QUEUE_SERIAL)
 
     private let sortingModel = KeyboardSuggestionGuessesSortingModel()
-    private let completionsSortingModel = KeyboardSuggestionComplitionsSortingModel()
     private var lastQuery: KeyboardSuggestionQuery?
     private let checker = UITextChecker()
-    
+
     private var replacementPhrases: [String: String] = [:]
     private var replacementNames: [String: String] = [:]
 
@@ -63,19 +62,17 @@ internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource 
             var replacementNames: [String: String] = [:]
 
             for entry in lexicon.entries {
-                guard entry.documentText != entry.documentText.lowercaseString else {
-                    continue
-                }
-
                 if entry.documentText == entry.userInput {
-                    replacementNames[entry.userInput.lowercaseString] = entry.documentText
+                    if entry.documentText.isCamelcase() {
+                        replacementNames[entry.userInput.lowercaseString] = entry.documentText
+                    }
                 }
                 else {
                     replacementPhrases[entry.userInput.lowercaseString] = entry.documentText
                 }
             }
 
-            // Move outside.
+            // TODO: Move outside.
             replacementPhrases["i"] = "I"
 
             self?.replacementPhrases = replacementPhrases
@@ -88,7 +85,6 @@ internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource 
 
         let checker = self.checker
         let sortingModel = self.sortingModel
-        let completionsSortingModel = self.completionsSortingModel
 
         dispatch_async(self.queue) { [weak self] in
             var guesses: [KeyboardSuggestionGuess] = []
@@ -99,55 +95,37 @@ internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource 
                 }
             }
 
+            guard let strongSelf = self else {
+                return
+            }
+
             guard self?.lastQuery == query else {
                 return
             }
-            
-            let isMisspelled =
-                checker.rangeOfMisspelledWordInString(
-                    query.context,
-                    range: query.range,
-                    startingAt: query.range.location,
-                    wrap: false,
-                    language: query.language
-                ).location != NSNotFound
 
-            var unsortedCompletions =
-                checker.completionsForPartialWordRange(
-                    query.range,
-                    inString: query.context,
-                    language: query.language
-                ) as? [String] ?? []
+            guard let vocabulary = KeyboardVocabulary.vocabulary(language: query.language) else {
+                return
+            }
 
-            unsortedCompletions.appendContentsOf(completionsSortingModel.completions(query))
-
-            unsortedCompletions = completionsSortingModel.removeObviousReplacements(unsortedCompletions, query: query)
-
-            let unsortedCorrections =
-                checker.guessesForWordRange(
-                    query.range,
-                    inString: query.context,
-                    language: query.language
-                ) as? [String] ?? []
-
-
+            let isSpellProperly = vocabulary.isSpellProperly(query)
+            let completions = vocabulary.completions(query)
+            let unsortedCorrections = vocabulary.corrections(query)
             let corrections = sortingModel.sortReplacements(unsortedCorrections, placement: query.placement)
-            let completions = completionsSortingModel.sortReplacements(unsortedCompletions, query: query)
 
-            var isPlacementLongEnough = query.placement.characters.count > 2
             var automatic = false
             var hasAutoreplacement = false
 
-            log("placement: \(query.placement), misspelled: \(isMisspelled), corrections: \(corrections), completions: \(completions)")
+            log("placement: \(query.placement), isSpellProperly: \(isSpellProperly), corrections: \(corrections), completions: \(completions)")
 
             var replacements = Set<String>()
 
             // Autoreplacement
-            if let replacementPhrase = self!.replacementPhrases[query.placement.lowercaseString] {
-                let replacement = replacementPhrase
+            if let replacement = strongSelf.replacementPhrases[query.placement.lowercaseString]
+                where !replacements.contains(replacement) && query.placement != replacement {
+
                 replacements.insert(replacement)
 
-                automatic = true//isPlacementLongEnough
+                automatic = true
 
                 guesses.append(
                     KeyboardSuggestionGuess(
@@ -161,12 +139,13 @@ internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource 
                 hasAutoreplacement = hasAutoreplacement || automatic
             }
 
-            // Capitalization
-            if let replacementName = self!.replacementNames[query.placement.lowercaseString] {
-                let replacement = replacementName
+            // Name Capitalization
+            if let replacement = strongSelf.replacementNames[query.placement.lowercaseString]
+                where !replacements.contains(replacement) && query.placement != replacement {
+
                 replacements.insert(replacement)
 
-                automatic = isPlacementLongEnough
+                automatic = vocabulary.score(replacement) == nil
 
                 guesses.append(
                     KeyboardSuggestionGuess(
@@ -189,7 +168,7 @@ internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource 
 
                 replacements.insert(replacement)
 
-                automatic = isMisspelled
+                automatic = !isSpellProperly
 
                 guesses.append(
                     KeyboardSuggestionGuess(
@@ -212,7 +191,7 @@ internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource 
 
                 replacements.insert(replacement)
 
-                automatic = isMisspelled
+                automatic = !isSpellProperly
                 guesses.append(
                     KeyboardSuggestionGuess(
                         query: query,
@@ -240,5 +219,5 @@ internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource 
             // `defer {}` will call `callback`.
         }
     }
-    
+
 }

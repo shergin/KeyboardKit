@@ -35,12 +35,19 @@ extension KeyboardKeyImage {
         }
     }
 
-    public var imageView: UIView {
+    public func view(keyboardMode keyboardMode: KeyboardMode, keyMode: KeyboardKeyMode) -> UIView {
         switch self {
         case .BackspaceImage:
             return KeyboardKeyBackspaceSymbolView()
         case .ShiftImage:
-            return KeyboardKeyShiftSymbolView()
+            switch keyboardMode.shiftMode {
+            case .Enabled:
+                return KeyboardKeyEnabledShiftSymbolView()
+            case .Disabled:
+                return KeyboardKeyDisabledShiftSymbolView()
+            case .Locked:
+                return KeyboardKeyLockedShiftSymbolView()
+            }
         case .AdvanceToNextInputModeImage:
             return KeyboardKeyAdvanceToNextInputModeSymbolView()
         case .Emoji:
