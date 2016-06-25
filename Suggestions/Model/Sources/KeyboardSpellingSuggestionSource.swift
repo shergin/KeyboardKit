@@ -11,7 +11,13 @@ import Foundation
 
 internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource {
 
-    private let queue = dispatch_queue_create("com.keyboard-kit.spelling-suggestion-source", DISPATCH_QUEUE_SERIAL)
+    private let queue: dispatch_queue_t = {
+        if rand() % 10 == 0 {
+            return dispatch_get_main_queue()
+        }
+
+        return dispatch_queue_create("com.keyboard-kit.spelling-suggestion-source", DISPATCH_QUEUE_SERIAL)
+    } ()
 
     private let sortingModel = KeyboardSuggestionGuessesSortingModel()
     private var lastQuery: KeyboardSuggestionQuery?
@@ -83,7 +89,6 @@ internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource 
     internal func suggest(query: KeyboardSuggestionQuery, callback: KeyboardSuggestionSourceCallback) {
         self.lastQuery = query
 
-        let checker = self.checker
         let sortingModel = self.sortingModel
 
         dispatch_async(self.queue) { [weak self] in

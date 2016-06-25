@@ -10,6 +10,39 @@ import Foundation
 import UIKit
 
 
+extension UITextChecker {
+    func completions(word: String, language: String) -> [String] {
+        let nsLanguage: NSString = language
+        let nsWord: NSString = word
+        let nsRange = NSRange(location: 0, length: nsWord.length)
+
+        return self.completionsForPartialWordRange(nsRange, inString: nsWord as? String, language: nsLanguage as String) as? [String] ?? []
+    }
+
+    func guesses(word: String, language: String) -> [String] {
+        let nsLanguage: NSString = language
+        let nsWord: NSString = word
+        let nsRange = NSRange(location: 0, length: nsWord.length)
+
+        return self.guessesForWordRange(nsRange, inString: nsWord as String, language: nsLanguage as String) as? [String] ?? []
+    }
+
+    func isMisspelled(word: String, language: String) -> Bool {
+        let nsLanguage: NSString = language
+        let nsWord: NSString = word
+        let nsRange = NSRange(location: 0, length: nsWord.length)
+
+        return self.rangeOfMisspelledWordInString(
+            nsWord as String,
+            range: nsRange,
+            startingAt: 0,
+            wrap: false,
+            language: nsLanguage as String
+        ).location == NSNotFound
+    }
+}
+
+
 internal class KeyboardVocabulary {
     internal let language: String
 
@@ -52,12 +85,17 @@ internal class KeyboardVocabulary {
             }
         }
 
+        /*
+        // This is crashing sometimes.
         var checkerCompletions =
             checker.completionsForPartialWordRange(
                 query.range,
                 inString: query.context,
                 language: self.language
             ) as? [String] ?? []
+        */
+
+        var checkerCompletions = checker.completions(query.placement, language: self.language)
 
         let scoredCheckerCompletions = checkerCompletions.map { (word: $0, score: self.words[$0] ?? (100000 + $0.characters.count) ) }
 
@@ -82,11 +120,14 @@ internal class KeyboardVocabulary {
     }
 
     internal func corrections(query: KeyboardSuggestionQuery) -> [String] {
+        /*
         return checker.guessesForWordRange(
                 query.range,
                 inString: query.context,
                 language: self.language
             ) as? [String] ?? []
+        */
+        return checker.guesses(query.placement, language: self.language)
     }
 
     internal func isSpellProperly(query: KeyboardSuggestionQuery) -> Bool {
@@ -94,6 +135,7 @@ internal class KeyboardVocabulary {
             return true
         }
 
+        /*
         return self.checker.rangeOfMisspelledWordInString(
                 query.context,
                 range: query.range,
@@ -101,6 +143,9 @@ internal class KeyboardVocabulary {
                 wrap: false,
                 language: self.language
             ).location == NSNotFound
+        */
+
+        return self.checker.isMisspelled(query.placement, language: self.language)
     }
 
 }
