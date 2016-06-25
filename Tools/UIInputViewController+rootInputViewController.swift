@@ -88,9 +88,11 @@ extension UIInputViewController {
             return inputViewController
         }
 
-        // FIXME: Ugly.
-        // FIXME: CRASHABLE!
-        return Array(storedInputViewControllers).first!
+        guard let rootInputViewController = Array(storedInputViewControllers).first else {
+            fatalError("UIInputViewController: `rootInputViewController` was requested but there is no any.")
+        }
+
+        return rootInputViewController
     }
 
     internal static var optionalRootInputViewController: UIInputViewController? {

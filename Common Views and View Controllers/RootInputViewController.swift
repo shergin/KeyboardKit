@@ -135,7 +135,7 @@ public class RootInputViewController: UIInputViewController {
         let screenSize = UIScreen.mainScreen().bounds.size
         let maximumKeyboardWidthOrHeight = max(screenSize.width, screenSize.height)
         let maximumKeyboardSize = CGSize(width: maximumKeyboardWidthOrHeight, height: maximumKeyboardWidthOrHeight)
-        self.backgroundView = UIView(frame: CGRect(origin: CGPointZero, size: maximumKeyboardSize))
+        self.backgroundView = UIView(frame: CGRect(origin: CGPoint.zero, size: maximumKeyboardSize))
         self.view.addSubview(self.backgroundView)
 
         // # `contentView`
@@ -156,7 +156,7 @@ public class RootInputViewController: UIInputViewController {
 
     public override func viewDidLayoutSubviews() {
         // That's important. We manage `size` throught auto-layout, but we manage `origin` manually.
-        self.contentView.frame.origin = CGPointZero
+        self.contentView.frame.origin = CGPoint.zero
         super.viewDidLayoutSubviews()
     }
 
