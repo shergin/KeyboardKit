@@ -72,11 +72,11 @@ public final class KeyboardSuggestionModel {
         let lastSeparatorRange = context.rangeOfCharacterFromSet(NSCharacterSet.separatorChracterSet(), options: .BackwardsSearch)
 
         if lastSeparatorRange.location == NSNotFound {
-            return NSMakeRange(0, context.length)
+            return NSRange(location: 0, length: context.length)
         }
 
         if lastSeparatorRange.location + lastSeparatorRange.length == context.length {
-            return NSMakeRange(context.length, 0)
+            return NSRange(location: context.length, length: 0)
             /*
             // Old policy and approach:
             var result =
@@ -90,7 +90,7 @@ public final class KeyboardSuggestionModel {
 
         let lastSeparatorIndex = lastSeparatorRange.location + lastSeparatorRange.length
 
-        return NSMakeRange(lastSeparatorIndex, context.length - lastSeparatorIndex)
+        return NSRange(location: lastSeparatorIndex, length: context.length - lastSeparatorIndex)
     }
 
     public func query() -> KeyboardSuggestionQuery {
@@ -104,7 +104,6 @@ public final class KeyboardSuggestionModel {
         query.range = range
         return query
     }
-
 
     internal func learnWord(word: String) {
         self.spellingSuggestionSource.learnWord(word.trim())
@@ -208,7 +207,7 @@ public final class KeyboardSuggestionModel {
         guard let item = (self.guesses.filter { $0.automatic }.first) else {
             return
         }
-        
+
         self.applyGuest(item)
     }
 }
