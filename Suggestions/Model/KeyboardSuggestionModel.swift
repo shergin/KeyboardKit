@@ -114,6 +114,8 @@ public final class KeyboardSuggestionModel {
         let query = self.query()
         self.lastQuery = query
 
+        self.delegate?.suggestionModelWillUpdateGuesses(query: query)
+
         self.generateGuesses(query) { guesses in
             guard self.lastQuery == query else {
                 return
@@ -121,7 +123,7 @@ public final class KeyboardSuggestionModel {
 
             self.lastQuery = nil
             self.guesses = guesses
-            self.delegate?.suggestionModelDidUpdateGuesses(guesses)
+            self.delegate?.suggestionModelDidUpdateGuesses(query: query, guesses: guesses)
         }
     }
 

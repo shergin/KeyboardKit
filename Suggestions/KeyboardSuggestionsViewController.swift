@@ -19,8 +19,8 @@ public class KeyboardSuggestionsViewController: UIViewController {
 
     public internal(set) var guesses: [KeyboardSuggestionGuess] = [] {
         didSet {
+            self.updateApperanceManager()
             self.itemsView.items = guesses
-            self.delegate?.suggestionsViewControllerDidUpdateSuggestionItems()
         }
     }
 
@@ -60,6 +60,7 @@ public class KeyboardSuggestionsViewController: UIViewController {
 
 
 extension KeyboardSuggestionsViewController: KeyboardSuggestionItemsViewDelegate {
+
     func itemWasActivated(guess: KeyboardSuggestionGuess) {
         self.suggestionModel.applyGuest(guess, addSpace: true)
     }
@@ -67,18 +68,20 @@ extension KeyboardSuggestionsViewController: KeyboardSuggestionItemsViewDelegate
 
 
 extension KeyboardSuggestionsViewController: KeyboardSuggestionModelDelegate {
-    public func suggestionModelDidUpdateGuesses(guesses: [KeyboardSuggestionGuess]) {
 
+    public func suggestionModelWillUpdateGuesses(query query: KeyboardSuggestionQuery) {
+        self.delegate?.suggestionsViewControllerWillUpdateSuggestionItems(query: query)
+    }
+
+    public func suggestionModelDidUpdateGuesses(query query: KeyboardSuggestionQuery, guesses: [KeyboardSuggestionGuess]) {
         if #available(iOS 9.0, *) {
             self.loadViewIfNeeded()
-        }
-        else {
+        } else {
             let _ = self.view
         }
 
-        // FIXME:
-        self.updateApperanceManager()
-
         self.guesses = guesses
+
+        self.delegate?.suggestionsViewControllerDidUpdateSuggestionItems(query: query)
     }
 }

@@ -10,11 +10,17 @@ import Foundation
 
 
 public protocol KeyboardSuggestionsViewControllerDelegate: class {
-    func suggestionsViewControllerDidUpdateSuggestionItems()
+    func suggestionsViewControllerWillUpdateSuggestionItems(query query: KeyboardSuggestionQuery)
+    func suggestionsViewControllerDidUpdateSuggestionItems(query query: KeyboardSuggestionQuery)
 }
 
+
+/*
+Looks like it is bad idea.
 
 // # Optional methods
 extension KeyboardSuggestionsViewControllerDelegate {
-    public func suggestionsViewControllerDidUpdateSuggestionItems() {}
+    public func suggestionsViewControllerDidUpdateSuggestionItems(query query: KeyboardSuggestionQuery) {}
+    public func suggestionsViewControllerWillUpdateSuggestionItems(query query: KeyboardSuggestionQuery) {}
 }
+*/

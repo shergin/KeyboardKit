@@ -68,6 +68,11 @@ internal class KeyboardVocabulary {
 
     internal func completions(query: KeyboardSuggestionQuery) -> [String] {
         let prefix = query.placement
+
+        guard !prefix.isEmpty else {
+            return []
+        }
+
         let lowercasePrefix = prefix.lowercaseString
         let prefixLength = prefix.characters.count
 
@@ -95,12 +100,11 @@ internal class KeyboardVocabulary {
             ) as? [String] ?? []
         */
 
-        var checkerCompletions = checker.completions(query.placement, language: self.language)
-
-        let scoredCheckerCompletions = checkerCompletions.map { (word: $0, score: self.words[$0] ?? (100000 + $0.characters.count) ) }
-
-        scoredComplitions.appendContentsOf(scoredCheckerCompletions)
-
+        if !prefix.isEmpty {
+            var checkerCompletions = checker.completions(prefix, language: self.language)
+            let scoredCheckerCompletions = checkerCompletions.map { (word: $0, score: self.words[$0] ?? (100000 + $0.characters.count) ) }
+            scoredComplitions.appendContentsOf(scoredCheckerCompletions)
+        }
 
         // Filter
 
@@ -127,11 +131,23 @@ internal class KeyboardVocabulary {
                 language: self.language
             ) as? [String] ?? []
         */
-        return checker.guesses(query.placement, language: self.language)
+        let placement = query.placement
+
+        guard !placement.isEmpty else {
+            return []
+        }
+
+        return checker.guesses(placement, language: self.language)
     }
 
     internal func isSpellProperly(query: KeyboardSuggestionQuery) -> Bool {
-        if self.words[query.placement] != nil {
+        let placement = query.placement
+
+        guard !placement.isEmpty else {
+            return true
+        }
+        
+        if self.words[placement] != nil {
             return true
         }
 
@@ -145,7 +161,7 @@ internal class KeyboardVocabulary {
             ).location == NSNotFound
         */
 
-        return self.checker.isMisspelled(query.placement, language: self.language)
+        return self.checker.isMisspelled(placement, language: self.language)
     }
 
 }

@@ -10,14 +10,14 @@ import Foundation
 
 
 public struct KeyboardSuggestionQuery {
-    var language: String = "en"
-    var context: String = ""
-    var range: NSRange = NSRange(location: 0, length: 0)
+    public var language: String = "en"
+    public var context: String = ""
+    public var range: NSRange = NSRange(location: 0, length: 0)
 }
 
 
 extension KeyboardSuggestionQuery {
-    var placement: String {
+    public var placement: String {
         return (context as NSString).substringWithRange(range) as String
     }
 }
