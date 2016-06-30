@@ -150,7 +150,7 @@ internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource 
 
                 replacements.insert(replacement)
 
-                automatic = vocabulary.score(replacement) == nil
+                automatic = vocabulary.score(replacement.lowercaseString) == nil
 
                 guesses.append(
                     KeyboardSuggestionGuess(

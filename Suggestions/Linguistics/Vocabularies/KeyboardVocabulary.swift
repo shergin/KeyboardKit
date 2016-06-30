@@ -137,7 +137,7 @@ internal class KeyboardVocabulary {
             return []
         }
 
-        return checker.guesses(placement, language: self.language)
+        return self.checker.guesses(placement, language: self.language)
     }
 
     internal func isSpellProperly(query: KeyboardSuggestionQuery) -> Bool {
