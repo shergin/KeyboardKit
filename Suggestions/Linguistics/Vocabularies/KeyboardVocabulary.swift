@@ -20,6 +20,10 @@ extension UITextChecker {
             return true
         }
 
+        guard nsWord.length > 2 else {
+            return false
+        }
+
         return nsWord.canBeConvertedToEncoding(NSASCIIStringEncoding)
     }
 
