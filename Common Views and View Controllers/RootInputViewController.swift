@@ -130,6 +130,7 @@ public class RootInputViewController: UIInputViewController {
 
     public override func loadView() {
         super.loadView()
+
         // # `backgroundView`
         // It's tricky, but we have to have `backgroundView` that cover all keyboard when any animation is performing.
         let screenSize = UIScreen.mainScreen().bounds.size
@@ -144,9 +145,24 @@ public class RootInputViewController: UIInputViewController {
         self.inputView!.addSubview(self.contentView)
     }
 
+    public override func viewDidLoad() {
+        log("`RootInputViewController` loaded its view.")
+        super.viewDidLoad()
+    }
+
+    public override func viewWillAppear(animated: Bool) {
+        log("`RootInputViewController` will appear.")
+        super.viewWillAppear(animated)
+    }
+
     public override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         self.updateKeyboardWindowHeight()
+    }
+
+    public override func viewDidDisappear(animated: Bool) {
+        log("`RootInputViewController` did disappear.")
+        super.viewDidDisappear(animated)
     }
 
     public override func viewWillLayoutSubviews() {
