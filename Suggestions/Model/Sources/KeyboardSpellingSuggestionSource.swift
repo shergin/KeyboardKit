@@ -92,14 +92,6 @@ internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource 
         let sortingModel = self.sortingModel
 
         dispatch_async(self.queue) { [weak self] in
-            var guesses: [KeyboardSuggestionGuess] = []
-
-            defer {
-                dispatch_async(dispatch_get_main_queue()) {
-                    callback(guesses)
-                }
-            }
-
             guard let strongSelf = self else {
                 return
             }
@@ -110,6 +102,15 @@ internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource 
 
             guard let vocabulary = KeyboardVocabulary.vocabulary(language: query.language) else {
                 return
+            }
+
+            var guesses: [KeyboardSuggestionGuess] = []
+
+            // `defer` block must be placed after all `guard`s.
+            defer {
+                dispatch_async(dispatch_get_main_queue()) {
+                    callback(guesses)
+                }
             }
 
             let isSpellProperly = vocabulary.isSpellProperly(query)

@@ -14,19 +14,20 @@ extension KeyboardSuggestionModel {
     public func generateGuesses(query: KeyboardSuggestionQuery, callback: ([KeyboardSuggestionGuess]) -> ()) {
         var results: (spellingGuesses: [KeyboardSuggestionGuess]?, emojiGuesses: [KeyboardSuggestionGuess]?) = (spellingGuesses: nil, emojiGuesses: nil)
 
-        let processResults = {
+        let processResults = { [weak self] in
             guard
                 let spellingGuesses = results.spellingGuesses,
-                let emojiGuesses = results.emojiGuesses
-                else {
-                    return
+                let emojiGuesses = results.emojiGuesses,
+                let strongSelf = self
+            else {
+                return
             }
 
             var guesses: [KeyboardSuggestionGuess] = []
             guesses.appendContentsOf(spellingGuesses)
             guesses.appendContentsOf(emojiGuesses)
 
-            callback(self.reduceGuesses(guesses))
+            callback(strongSelf.reduceGuesses(guesses))
         }
 
         if self.shouldSuggestSpelling() {
