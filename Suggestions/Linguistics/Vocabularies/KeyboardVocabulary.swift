@@ -183,7 +183,7 @@ internal class KeyboardVocabulary {
             return true
         }
 
-        if self.words[placement] != nil {
+        if self.words[placement.lowercaseString] != nil {
             return true
         }
 

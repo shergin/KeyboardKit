@@ -120,6 +120,7 @@ internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource 
 
             var automatic = false
             var hasAutoreplacement = false
+            let placementLength = query.placement.characters.count
 
             log("placement: \(query.placement), isSpellProperly: \(isSpellProperly), corrections: \(corrections), completions: \(completions)")
 
@@ -197,7 +198,7 @@ internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource 
 
                 replacements.insert(replacement)
 
-                automatic = !isSpellProperly
+                automatic = !isSpellProperly && placementLength > 1
                 guesses.append(
                     KeyboardSuggestionGuess(
                         query: query,
