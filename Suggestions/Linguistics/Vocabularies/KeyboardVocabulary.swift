@@ -11,10 +11,24 @@ import UIKit
 
 
 extension UITextChecker {
+    func isValidWord(nsWord nsWord: NSString, nsLanguage: NSString) -> Bool {
+        guard nsWord.rangeOfCharacterFromSet(cachedNonLetterCharacterSet).location == NSNotFound else {
+            return false
+        }
+
+        guard nsLanguage.isEqual("en") else {
+            return true
+        }
+
+        return nsWord.canBeConvertedToEncoding(NSASCIIStringEncoding)
+    }
+
     func completions(word: String, language: String) -> [String] {
         let nsLanguage: NSString = language
         let nsWord: NSString = word
         let nsRange = NSRange(location: 0, length: nsWord.length)
+
+        guard self.isValidWord(nsWord: nsWord, nsLanguage: nsLanguage) else { return [] }
 
         return self.completionsForPartialWordRange(nsRange, inString: nsWord as? String, language: nsLanguage as String) as? [String] ?? []
     }
@@ -24,6 +38,8 @@ extension UITextChecker {
         let nsWord: NSString = word
         let nsRange = NSRange(location: 0, length: nsWord.length)
 
+        guard self.isValidWord(nsWord: nsWord, nsLanguage: nsLanguage) else { return [] }
+
         return self.guessesForWordRange(nsRange, inString: nsWord as String, language: nsLanguage as String) as? [String] ?? []
     }
 
@@ -31,6 +47,8 @@ extension UITextChecker {
         let nsLanguage: NSString = language
         let nsWord: NSString = word
         let nsRange = NSRange(location: 0, length: nsWord.length)
+
+        guard self.isValidWord(nsWord: nsWord, nsLanguage: nsLanguage) else { return false }
 
         return self.rangeOfMisspelledWordInString(
             nsWord as String,
@@ -41,6 +59,10 @@ extension UITextChecker {
         ).location == NSNotFound
     }
 }
+
+
+private let maxCompletionsCount = 10
+private let maxCorrectionsCount = 100
 
 
 internal class KeyboardVocabulary {
@@ -115,6 +137,10 @@ internal class KeyboardVocabulary {
 
         var completions = scoredComplitions.map { $0.word }
 
+        if completions.count > maxCompletionsCount {
+            completions = Array(completions.prefix(maxCompletionsCount))
+        }
+
         // Applying all-caps if needed.
         if prefixLength > 1 && prefix == prefix.uppercaseString {
             completions = completions.map { $0.uppercaseString }
@@ -137,7 +163,13 @@ internal class KeyboardVocabulary {
             return []
         }
 
-        return self.checker.guesses(placement, language: self.language)
+        var corrections = self.checker.guesses(placement, language: self.language)
+
+        if corrections.count > maxCorrectionsCount {
+            corrections = Array(corrections.prefix(maxCorrectionsCount))
+        }
+
+        return corrections
     }
 
     internal func isSpellProperly(query: KeyboardSuggestionQuery) -> Bool {
@@ -146,7 +178,7 @@ internal class KeyboardVocabulary {
         guard !placement.isEmpty else {
             return true
         }
-        
+
         if self.words[placement] != nil {
             return true
         }

@@ -51,7 +51,7 @@ public final class KeyboardShiftStatusController {
             return
         }
 
-        let isLastCharacterUppercaseLetter = NSCharacterSet.uppercaseLetterCharacterSet().characterIsMember(lastCharacter)
+        let isLastCharacterUppercaseLetter = cachedUppercaseLetterCharacterSet.characterIsMember(lastCharacter)
 
         self.shiftMode = isLastCharacterUppercaseLetter ? .Enabled : .Disabled
     }

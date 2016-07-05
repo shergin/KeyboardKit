@@ -13,6 +13,8 @@ internal let cachedWhitespaceCharacterSet = NSCharacterSet.whitespaceCharacterSe
 
 internal let cachedLowercaseLetterCharacterSet = NSCharacterSet.lowercaseLetterCharacterSet()
 internal let cachedUppercaseLetterCharacterSet = NSCharacterSet.uppercaseLetterCharacterSet()
+internal let cachedLetterCharacterSet = NSCharacterSet.letterCharacterSet()
+internal let cachedNonLetterCharacterSet = cachedLetterCharacterSet.invertedSet
 
 internal let cachedSeparatorChracterSet: NSCharacterSet = {
     var characterSet = NSMutableCharacterSet()
