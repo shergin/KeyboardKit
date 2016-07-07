@@ -21,14 +21,18 @@ public let jcukenKeyboardLayout: KeyboardLayout = {
             ["й", "ц", "у", "к", "е", "н", "г", "ш", "щ", "з", "х"],
             ["ф", "ы", "в", "а", "п", "р", "о", "л", "д", "ж", "э"],
             ["я", "ч", "с", "м", "и", "т", "ь", "б", "ю"],
-            ]
+        ]
 
         let alternateCharactersMap: [Character: [Character]] = [
             "е": ["ё", "ѣ"],
-            "ь": ["ъ"],
+            "ь": ["ъ", "'"],
             "р": ["₽"],
-            "и": ["й"],
-            ]
+            "и": ["й", "ы", "і", "ї"],
+            "э": ["є"],
+            "г": ["ґ"],
+            "ы": ["i", "и"],
+            "ш": ["щ"]
+        ]
 
         for row in 0..<pageCharacters.count {
             for character in pageCharacters[row] {
@@ -51,6 +55,6 @@ public let jcukenKeyboardLayout: KeyboardLayout = {
     keyboardLayout.pages.append(lettersKeyboardPage())
     keyboardLayout.pages.append(numbersKeyboardPage(currencySymbol: "₽"))
     keyboardLayout.pages.append(specialKeyboardPage())
-    
+
     return keyboardLayout
 } ()

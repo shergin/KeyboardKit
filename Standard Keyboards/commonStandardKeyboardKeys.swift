@@ -16,6 +16,7 @@ public let standardSpaceKey: KeyboardKey = {
     return key
 } ()
 
+
 public let standardShiftKey: KeyboardKey = {
     var key = KeyboardKey(type: .Shift)
     return key

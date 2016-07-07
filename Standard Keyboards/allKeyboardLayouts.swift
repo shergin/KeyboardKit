@@ -12,6 +12,8 @@ import Foundation
 public let allKeyboardLayouts = [
     englishKeyboardLayout,
     russianKeyboardLayout,
+    ukrainianKeyboardLayout,
+    belarusianKeyboardLayout,
     arabicKeyboardLayout,
     turkishKeyboardLayout,
     germanKeyboardLayout,
@@ -20,7 +22,7 @@ public let allKeyboardLayouts = [
     italianKeyboardLayout,
     spanishKeyboardLayout,
     klingonKeyboardLayout,
-]
+].sort { $0.language < $1.language }
 
 public let allKeyboardLayoutsById: [String: KeyboardLayout] = {
     var keyboardLayoutsById: [String: KeyboardLayout] = [:]

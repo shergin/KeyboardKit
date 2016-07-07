@@ -147,6 +147,8 @@
 		A797F2101CAF061B005CB9CD /* allKeyboardLayouts.swift in Sources */ = {isa = PBXBuildFile; fileRef = A797F20F1CAF061B005CB9CD /* allKeyboardLayouts.swift */; };
 		A797F21F1CB31579005CB9CD /* KeyboardSpaceKeyContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A797F21E1CB31578005CB9CD /* KeyboardSpaceKeyContentView.swift */; };
 		A797F2211CB31A9E005CB9CD /* KeyboardKeyContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A797F2201CB31A9E005CB9CD /* KeyboardKeyContentView.swift */; };
+		A7992C951D2ECE7500EFEE26 /* ukrainianKeyboardLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7992C941D2ECE7500EFEE26 /* ukrainianKeyboardLayout.swift */; };
+		A7992C981D2ED76400EFEE26 /* belarusianKeyboardLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7992C971D2ED76400EFEE26 /* belarusianKeyboardLayout.swift */; };
 		A7A128DA1C7FDD5600E8625A /* KeyboardKit.h in Headers */ = {isa = PBXBuildFile; fileRef = A7A128D81C7FDD5600E8625A /* KeyboardKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A7A24FD71C8F6D4100E2ED18 /* KeyboardKeyAlternateKeysPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A24FD61C8F6D4100E2ED18 /* KeyboardKeyAlternateKeysPopupView.swift */; };
 		A7A24FD91C8F6DA100E2ED18 /* KeyboardKeyPreviewPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A24FD81C8F6DA100E2ED18 /* KeyboardKeyPreviewPopupView.swift */; };
@@ -307,6 +309,8 @@
 		A797F20F1CAF061B005CB9CD /* allKeyboardLayouts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = allKeyboardLayouts.swift; sourceTree = "<group>"; };
 		A797F21E1CB31578005CB9CD /* KeyboardSpaceKeyContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardSpaceKeyContentView.swift; sourceTree = "<group>"; };
 		A797F2201CB31A9E005CB9CD /* KeyboardKeyContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardKeyContentView.swift; sourceTree = "<group>"; };
+		A7992C941D2ECE7500EFEE26 /* ukrainianKeyboardLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ukrainianKeyboardLayout.swift; sourceTree = "<group>"; };
+		A7992C971D2ED76400EFEE26 /* belarusianKeyboardLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = belarusianKeyboardLayout.swift; sourceTree = "<group>"; };
 		A7A128D81C7FDD5600E8625A /* KeyboardKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyboardKit.h; sourceTree = "<group>"; };
 		A7A128DB1C7FDD7100E8625A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A7A24FD61C8F6D4100E2ED18 /* KeyboardKeyAlternateKeysPopupView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardKeyAlternateKeysPopupView.swift; sourceTree = "<group>"; };
@@ -722,7 +726,9 @@
 		A797F1F21CADE492005CB9CD /* Cyrrilic */ = {
 			isa = PBXGroup;
 			children = (
+				A7992C961D2ED75000EFEE26 /* Belarusian */,
 				A797F1DF1CADD9E3005CB9CD /* Russian */,
+				A7992C931D2DED9B00EFEE26 /* Ukrainian */,
 				A797F1F31CADE512005CB9CD /* jcukenKeyboardLayout.swift */,
 			);
 			path = Cyrrilic;
@@ -776,6 +782,22 @@
 				A797F21E1CB31578005CB9CD /* KeyboardSpaceKeyContentView.swift */,
 			);
 			path = "Content Views";
+			sourceTree = "<group>";
+		};
+		A7992C931D2DED9B00EFEE26 /* Ukrainian */ = {
+			isa = PBXGroup;
+			children = (
+				A7992C941D2ECE7500EFEE26 /* ukrainianKeyboardLayout.swift */,
+			);
+			path = Ukrainian;
+			sourceTree = "<group>";
+		};
+		A7992C961D2ED75000EFEE26 /* Belarusian */ = {
+			isa = PBXGroup;
+			children = (
+				A7992C971D2ED76400EFEE26 /* belarusianKeyboardLayout.swift */,
+			);
+			path = Belarusian;
 			sourceTree = "<group>";
 		};
 		A7CEC6051CFE4CD400DEDE0E /* Buttons */ = {
@@ -1035,6 +1057,7 @@
 				A73F256A1CF50718001AA92F /* KeyboardKeyListenerSet.swift in Sources */,
 				A78320FA1C7FD6C20099C307 /* KeyboardSuggestionItemView.swift in Sources */,
 				A7E4C56C1C8133B3006AF488 /* KeyboardTheme.swift in Sources */,
+				A7992C981D2ED76400EFEE26 /* belarusianKeyboardLayout.swift in Sources */,
 				A797F1EB1CADDB9B005CB9CD /* qwertyKeyboardLayout.swift in Sources */,
 				A78320CF1C7FD6C20099C307 /* KeyboardRectangleShape.swift in Sources */,
 				A70B412A1CE3CB2F00C80054 /* log.swift in Sources */,
@@ -1127,6 +1150,7 @@
 				A78320E61C7FD6C20099C307 /* KeyboardKeyHighlightController.swift in Sources */,
 				A78320C91C7FD6C20099C307 /* KeyboardEmojiViewController.swift in Sources */,
 				A78320DC1C7FD6C20099C307 /* KeyboardCharacterKeyListener.swift in Sources */,
+				A7992C951D2ECE7500EFEE26 /* ukrainianKeyboardLayout.swift in Sources */,
 				A78320C71C7FD6C20099C307 /* KeyboardEmojiCollectionViewLayout.swift in Sources */,
 				A78320BF1C7FD6C20099C307 /* KeyboardPage.swift in Sources */,
 				A78320C01C7FD6C20099C307 /* KeyboardRow.swift in Sources */,

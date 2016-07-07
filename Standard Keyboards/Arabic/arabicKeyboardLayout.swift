@@ -57,7 +57,7 @@ public let arabicKeyboardLayout: KeyboardLayout = {
     }
 
     keyboard.pages.append(lettersKeyboardPage())
-    keyboard.pages.append(numbersKeyboardPage(currencySymbol: "₽"))
+    keyboard.pages.append(numbersKeyboardPage(/* currencySymbol: "\u{062F}.\u{0625}" */))
     keyboard.pages.append(specialKeyboardPage())
 
     return keyboard
