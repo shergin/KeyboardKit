@@ -96,10 +96,12 @@ extension UIInputViewController {
     }
 
     internal static var optionalRootInputViewController: UIInputViewController? {
+        /*
+        // NB: This is too verbous.
         if storedInputViewController == nil {
             log("👻💥 `UIInputViewController.optionalRootInputViewController` was requested but it is nil.")
         }
-
+        */
         return storedInputViewController
     }
 
