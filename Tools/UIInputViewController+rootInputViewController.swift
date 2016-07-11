@@ -88,7 +88,7 @@ extension UIInputViewController {
             return inputViewController
         }
 
-        guard let rootInputViewController = Array(storedInputViewControllers).first else {
+        guard let rootInputViewController = storedInputViewControllers.first else {
             fatalError("UIInputViewController: `rootInputViewController` was requested but there is no any.")
         }
 
@@ -96,6 +96,10 @@ extension UIInputViewController {
     }
 
     internal static var optionalRootInputViewController: UIInputViewController? {
+        if optionalRootInputViewController == nil {
+            log("👻💥 `UIInputViewController.optionalRootInputViewController` was requested but it is nil.")
+        }
+
         return storedInputViewController
     }
 

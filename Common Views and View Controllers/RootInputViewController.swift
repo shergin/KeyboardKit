@@ -12,6 +12,10 @@ private var inputViewControllerCounter = 0
 
 public class RootInputViewController: UIInputViewController {
 
+    public static func invalidateKeyboardHeight() {
+        (UIInputViewController.optionalRootInputViewController as? RootInputViewController)?.updateKeyboardWindowHeight()
+    }
+
     public var contentView: UIView!
     public var backgroundView: UIView!
 

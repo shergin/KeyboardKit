@@ -39,8 +39,8 @@ public final class KeyboardSuggestionModel {
         KeyboardTextDocumentCoordinator.sharedInstance.addObserver(self)
     }
 
-    private var textDocumentProxy: UITextDocumentProxy {
-        return UIInputViewController.rootInputViewController.textDocumentProxy
+    private var textDocumentProxy: UITextDocumentProxy? {
+        return UIInputViewController.optionalRootInputViewController?.textDocumentProxy
     }
 
     internal func shouldSuggestEmoji() -> Bool {
@@ -51,21 +51,21 @@ public final class KeyboardSuggestionModel {
     internal func shouldSuggestSpelling() -> Bool {
         return
             self.isSpellingSuggestionsEnabled &&
-            self.textDocumentProxy.spellCheckingType != .No
+            self.textDocumentProxy?.spellCheckingType ?? .Default != .No
     }
 
     internal func shouldСorrectSpelling() -> Bool {
         return
             self.shouldSuggestSpelling() &&
             self.isSpellingAutocorrectionEnabled &&
-            self.textDocumentProxy.autocorrectionType != .No
+            self.textDocumentProxy?.autocorrectionType ?? .Default != .No
     }
 
     internal func shouldCapitalizeSpelling() -> Bool {
         return
             self.shouldSuggestSpelling() &&
             self.isSpellingCapitalizationEnabled &&
-            self.textDocumentProxy.autocorrectionType != .No
+            self.textDocumentProxy?.autocorrectionType ?? .Default != .No
     }
 
     private func lastWordFragmentRange(context: NSString) -> NSRange {
@@ -95,7 +95,7 @@ public final class KeyboardSuggestionModel {
 
     public func query() -> KeyboardSuggestionQuery {
         let language = self.keyboardViewController?.keyboardLayout.language ?? "en"
-        let context = self.textDocumentProxy.documentContextBeforeInput ?? ""
+        let context = self.textDocumentProxy?.documentContextBeforeInput ?? ""
         let range = self.lastWordFragmentRange(context)
 
         var query = KeyboardSuggestionQuery()
@@ -116,7 +116,9 @@ public final class KeyboardSuggestionModel {
 
         self.delegate?.suggestionModelWillUpdateGuesses(query: query)
 
-        self.generateGuesses(query) { guesses in
+        self.generateGuesses(query) { [weak self] guesses in
+            guard let `self` = self else { return }
+
             guard self.lastQuery == query else {
                 return
             }
@@ -141,14 +143,14 @@ public final class KeyboardSuggestionModel {
             KeyboardTextDocumentCoordinator.sharedInstance.dispatchTextDidChange()
         }
 
-        let textDocumentProxy = self.textDocumentProxy
+        if let textDocumentProxy = self.textDocumentProxy {
+            textDocumentProxy.performWithoutNotifications {
+                for _ in 0..<guess.query.placement.characters.count {
+                    textDocumentProxy.deleteBackward()
+                }
 
-        textDocumentProxy.performWithoutNotifications {
-            for _ in 0..<guess.query.placement.characters.count {
-                textDocumentProxy.deleteBackward()
+                textDocumentProxy.insertText(guess.replacement + (addSpace ? " " : ""))
             }
-
-            textDocumentProxy.insertText(guess.replacement + (addSpace ? " " : ""))
         }
 
         if guess.type == .Learning {
@@ -167,7 +169,7 @@ public final class KeyboardSuggestionModel {
             return
         }
 
-        let context = self.textDocumentProxy.documentContextBeforeInput ?? ""
+        let context = self.textDocumentProxy?.documentContextBeforeInput ?? ""
 
         var contextTailLength: Int = 0
 
@@ -189,17 +191,17 @@ public final class KeyboardSuggestionModel {
 
         self.lastAppliedGuess = nil
 
-        let textDocumentProxy = self.textDocumentProxy
+        if let textDocumentProxy = self.textDocumentProxy {
+            textDocumentProxy.performWithoutNotifications {
+                // TODO: Optimize replacement!
+                for _ in 0..<(guess.replacement.characters.count + contextTailLength) {
+                    textDocumentProxy.deleteBackward()
+                }
+                textDocumentProxy.insertText(guess.query.placement)
 
-        textDocumentProxy.performWithoutNotifications {
-            // TODO: Optimize replacement!
-            for _ in 0..<(guess.replacement.characters.count + contextTailLength) {
-                textDocumentProxy.deleteBackward()
+                textDocumentProxy.insertText(contextTail)
+                textDocumentProxy.insertText("\u{200B}") // ZERO WIDTH SPACE, fake symbol which will be removed by waiting backspace.
             }
-            textDocumentProxy.insertText(guess.query.placement)
-
-            textDocumentProxy.insertText(contextTail)
-            textDocumentProxy.insertText("\u{200B}") // ZERO WIDTH SPACE, fake symbol which will be removed by waiting backspace.
         }
 
         self.learnWord(guess.query.placement)

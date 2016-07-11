@@ -113,6 +113,8 @@ internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource 
                 }
             }
 
+            log("placement: \"\(query.placement)\"")
+
             let isSpellProperly = vocabulary.isSpellProperly(query)
             let completions = vocabulary.completions(query)
             let unsortedCorrections = vocabulary.corrections(query)
@@ -122,7 +124,7 @@ internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource 
             var hasAutoreplacement = false
             let placementLength = query.placement.characters.count
 
-            log("placement: \(query.placement), isSpellProperly: \(isSpellProperly), corrections: \(corrections), completions: \(completions)")
+            log("isSpellProperly: \(isSpellProperly), corrections: \(corrections), completions: \(completions)")
 
             var replacements = Set<String>()
 

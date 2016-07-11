@@ -78,7 +78,7 @@ public struct WeakSet<Element>: SequenceType {
         var generator = self.boxes.generate()
 
         return AnyGenerator {
-            while(true) {
+            while (true) {
                 guard let box = generator.next() else {
                     return nil
                 }

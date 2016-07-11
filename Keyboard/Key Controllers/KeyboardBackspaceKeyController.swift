@@ -32,7 +32,7 @@ public final class KeyboardBackspaceKeyController: KeyboardKeyListenerProtocol {
     }
 
     private func deleteBackward() {
-        UIInputViewController.rootInputViewController.textDocumentProxy.deleteBackward()
+        UIInputViewController.optionalRootInputViewController?.textDocumentProxy.deleteBackward()
     }
 
     private func keyDownHandler() {
