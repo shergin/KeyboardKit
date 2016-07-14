@@ -10,7 +10,6 @@ import Foundation
 
 
 public final class KeyboardShiftStatusController {
-    private var ignoresTextDocumentEvents: Bool = false
 
     private var textDocumentProxy: UITextDocumentProxy {
         return UIInputViewController.rootInputViewController.textDocumentProxy
@@ -22,8 +21,19 @@ public final class KeyboardShiftStatusController {
         }
     }
 
-    public var revertsShiftStateOnBackspace: Bool = true
-    public var enablesShiftStateAtSentenceBeginning: Bool = true
+    public var revertsShiftStateOnBackspace: Bool = true {
+        didSet {
+            guard self.revertsShiftStateOnBackspace != oldValue else { return }
+            self.resetState()
+        }
+    }
+
+    public var enablesShiftStateAtSentenceBeginning: Bool = true {
+        didSet {
+            guard self.enablesShiftStateAtSentenceBeginning != oldValue else { return }
+            self.resetState()
+        }
+    }
 
     internal init() {
         KeyboardTextDocumentCoordinator.sharedInstance.addObserver(self)
@@ -31,11 +41,16 @@ public final class KeyboardShiftStatusController {
 
     private var shiftMode: KeyboardShiftMode {
         get {
-            return self.keyboardViewController!.keyboardMode.shiftMode
+            return self.keyboardViewController?.keyboardMode.shiftMode ?? .Disabled
         }
         set {
-            self.keyboardViewController!.keyboardMode.shiftMode = newValue
+            self.keyboardViewController?.keyboardMode.shiftMode = newValue
         }
+    }
+
+    private func resetState() {
+        self.shiftMode = .Disabled
+        self.toggleShiftIfNeeded()
     }
 
     private func revertShiftStateOnBackspaceIfNeeded() {
@@ -79,7 +94,7 @@ public final class KeyboardShiftStatusController {
         var wantsEnableShift = !wasShiftEnable
         var wantsDisableShift = wasShiftEnable
 
-        guard let utf16View = self.textDocumentProxy.documentContextBeforeInput?.utf16 else {
+        guard let utf16View = self.textDocumentProxy.documentContextBeforeInput?.utf16 where utf16View.count > 0 else {
             // Case: Completely empty prefix.
             self.shiftMode = .Enabled
             return
@@ -171,8 +186,7 @@ extension KeyboardShiftStatusController: KeyboardTextDocumentObserver {
 
     public var observesTextDocumentEvents: Bool {
         return
-            !self.ignoresTextDocumentEvents &&
-            self.revertsShiftStateOnBackspace &&
+            self.revertsShiftStateOnBackspace ||
             self.enablesShiftStateAtSentenceBeginning
     }
 
