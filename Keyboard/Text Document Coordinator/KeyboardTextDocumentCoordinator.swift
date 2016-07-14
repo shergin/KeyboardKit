@@ -22,6 +22,7 @@ private var textDocumentDidDeleteBackward: (() -> Void)?
 private var textWillChange: (() -> Void)?
 private var textDidChange: (() -> Void)?
 
+private var isPreventingDefault: Bool = false
 
 extension UITextDocumentProxy {
 
@@ -75,6 +76,10 @@ public final class KeyboardTextDocumentCoordinator {
         enablesNotifications = true
     }
 
+    public func preventDefault() {
+        isPreventingDefault = true
+    }
+
     // # Dispatch
 
     // keyboardTextDocument(Will/Did)InsertText()
@@ -85,7 +90,7 @@ public final class KeyboardTextDocumentCoordinator {
             observer.keyboardTextDocumentWillInsertText(text)
         }
     }
-    
+
     internal func dispatchKeyboardTextDocumentDidInsertText(text: String) {
         log("keyboardTextDocumentDidInsertText(\"\(text)\")")
         for observer in self.observers {
@@ -93,7 +98,7 @@ public final class KeyboardTextDocumentCoordinator {
             observer.keyboardTextDocumentDidInsertText(text)
         }
     }
-    
+
     // keyboardTextDocument(Will/Did)DeleteBackward()
     internal func dispatchTextDocumentWillDeleteBackward() {
         log("dispatchTextDocumentWillDeleteBackward()")
@@ -164,6 +169,7 @@ public final class KeyboardTextDocumentCoordinator {
 
         let swizzledImplementation: @convention(c) (NSObject, Selector, String) -> Void = { (_self, _cmd, text) in
             textDocumentWillInsertText?(text: text)
+            if isPreventingDefault { isPreventingDefault = false; return }
             _self.performSelector("originalInsertText:", withObject: text)
             textDocumentDidInsertText?(text: text)
         }
@@ -199,6 +205,7 @@ public final class KeyboardTextDocumentCoordinator {
 
         let swizzledImplementation: @convention(c) (NSObject, Selector) -> Void = { (_self, _cmd) in
             textDocumentWillDeleteBackward?()
+            if isPreventingDefault { isPreventingDefault = false; return }
             _self.performSelector("originalDeleteBackward")
             textDocumentDidDeleteBackward?()
         }
