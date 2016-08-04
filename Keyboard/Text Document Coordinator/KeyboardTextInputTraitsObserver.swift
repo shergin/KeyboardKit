@@ -14,6 +14,7 @@ internal final class KeyboardTextInputTraitsObserver: NSObject {
 
     private var handler: Handler
     private var previousKeyboardAppearance: UIKeyboardAppearance!
+    private var previousKeyboardType: UIKeyboardType!
 
     private var pollingTimer: CADisplayLink?
 
@@ -51,13 +52,18 @@ internal final class KeyboardTextInputTraitsObserver: NSObject {
 
         let textInputTraits = inputViewController.textDocumentProxy as UITextInputTraits
 
-        if self.previousKeyboardAppearance != nil {
-            if self.previousKeyboardAppearance == textInputTraits.keyboardAppearance {
+        if self.previousKeyboardAppearance != nil && self.previousKeyboardType != nil {
+            // TODO: Rewrite this.
+            if
+                self.previousKeyboardAppearance == textInputTraits.keyboardAppearance &&
+                self.previousKeyboardType == textInputTraits.keyboardType
+            {
                 return
             }
         }
 
         self.previousKeyboardAppearance = textInputTraits.keyboardAppearance
+        self.previousKeyboardType = textInputTraits.keyboardType
 
         self.handler(textInputTraits)
     }

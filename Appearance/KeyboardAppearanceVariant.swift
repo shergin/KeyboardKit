@@ -17,7 +17,7 @@ public struct KeyboardAppearanceVariant {
 
 
 extension KeyboardAppearanceVariant {
-    func suitable() -> KeyboardAppearanceVariant {
+    static func suitable() -> KeyboardAppearanceVariant {
         var appearanceVariant = KeyboardAppearanceVariant()
         appearanceVariant.colorMode = KeyboardColorMode.suitable()
         appearanceVariant.sizeMode = KeyboardSizeMode.suitable()

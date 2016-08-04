@@ -8,7 +8,6 @@
 
 import UIKit
 
-private var defaultAppearanceManager = KeyboardAppearanceManager()
 private var kvoStateContext = 0
 
 public class KeyboardSimplifiedKeyView: KeyboardKeyView {

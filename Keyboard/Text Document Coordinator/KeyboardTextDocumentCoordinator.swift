@@ -51,10 +51,15 @@ public final class KeyboardTextDocumentCoordinator {
         self.inputViewController = inputViewController
 
         self.textInputTraitsObserver = KeyboardTextInputTraitsObserver(handler: { [unowned self] textInputTraits in
+            CATransaction.begin()
+            CATransaction.setDisableActions(true)
+
             for observer in self.observers {
                 guard observer.observesTextDocumentEvents else { continue }
                 observer.keyboardTextInputTraitsDidChange(textInputTraits)
             }
+
+            CATransaction.commit()
         })
 
         self.swizzleAll()
