@@ -35,6 +35,12 @@ public final class KeyboardShiftStatusController {
         }
     }
 
+    private var shouldEnableShiftStateAtSentenceBeginning: Bool {
+        return
+            self.enablesShiftStateAtSentenceBeginning &&
+            self.textDocumentProxy.autocapitalizationType == .Sentences
+    }
+
     internal init() {
         KeyboardTextDocumentCoordinator.sharedInstance.addObserver(self)
     }
@@ -72,7 +78,7 @@ public final class KeyboardShiftStatusController {
     }
 
     private func toggleShiftIfNeeded() {
-        guard self.enablesShiftStateAtSentenceBeginning else {
+        guard self.shouldEnableShiftStateAtSentenceBeginning else {
             return
         }
 
@@ -165,7 +171,7 @@ public final class KeyboardShiftStatusController {
     }
 
     private func textDocumentDidChanged() {
-        guard self.enablesShiftStateAtSentenceBeginning else {
+        guard self.shouldEnableShiftStateAtSentenceBeginning else {
             return
         }
 
@@ -187,7 +193,7 @@ extension KeyboardShiftStatusController: KeyboardTextDocumentObserver {
     public var observesTextDocumentEvents: Bool {
         return
             self.revertsShiftStateOnBackspace ||
-            self.enablesShiftStateAtSentenceBeginning
+            self.shouldEnableShiftStateAtSentenceBeginning
     }
 
     public func keyboardTextDocumentDidInsertText(text: String) {
